@@ -20,12 +20,18 @@
             </div>
             <div class="box-body">
                 <div class="tab-content">
-                    <ul class="nav nav-tabs">
+                    <ul class="nav nav-tabs" id="all_tab">
+                        <!--        highgtchart 视图 遍历循环 此处用php动态生成-->
                         <li id="tab_1" class="active"><a href="#box_tab1" data-toggle="tab"><i class="fa fa-bar-chart-o"></i> <span class="hidden-inline-mobile">新增激活和账户</span></a></li>
                         <li id="tab_2"><a href="#box_tab2" data-toggle="tab"><i class="fa fa-search-plus"></i> <span class="hidden-inline-mobile">玩家转化</span></a></li>
+                        <li id="tab_3"><a href="#box_tab2" data-toggle="tab"><i class="fa fa-search-plus"></i> <span class="hidden-inline-mobile">玩家转化</span></a></li>
                     </ul>
-                    <div id="container1" style="min-width: 200px;margin: 0 auto"></div>
-                    <div id="container2" style="min-width: 200px;width:893px;margin: 0 auto"></div>
+                    <div id="all_view_id">
+                        <!--        tab视图             遍历循环 此处用php动态生成-->
+                        <div id="container1" style="min-width: 200px;margin: 0 auto"></div>
+                        <div id="container2" style="min-width: 200px;margin: 0 auto"></div>
+                        <div id="container3" style="min-width: 200px;margin: 0 auto"></div>
+                   </div>
                 </div>
             </div>
         </div>
@@ -68,19 +74,78 @@
                                     <td class="center hidden-xs">C</td>
                                 </tr>
                             </table>
+                            <table id="datatable2"  style="display: none" cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Rendering engine2</th>
+                                    <th>Browser</th>
+                                    <th class="hidden-xs">Platform(s)</th>
+                                    <th>Engine version</th>
+                                    <th class="hidden-xs">CSS grade</th>
+                                </tr>
+                                </thead>
+                                <tr class="gradeX">
+                                    <td>Misc</td>
+                                    <td>Lynx</td>
+                                    <td class="hidden-xs">Text only</td>
+                                    <td class="center">-</td>
+                                    <td class="center hidden-xs">X</td>
+                                </tr>
+                                <tr class="gradeC">
+                                    <td>Misc</td>
+                                    <td>IE Mobile</td>
+                                    <td class="hidden-xs">Windows Mobile 6</td>
+                                    <td class="center">-</td>
+                                    <td class="center hidden-xs">C</td>
+                                </tr>
+                                <tr class="gradeC">
+                                    <td>Misc</td>
+                                    <td>PSP browser</td>
+                                    <td class="hidden-xs">PSP</td>
+                                    <td class="center">-</td>
+                                    <td class="center hidden-xs">C</td>
+                                </tr>
+                            </table>
+                            <table id="datatable3"  style="display: none" cellpadding="0" cellspacing="0" border="0" class="datatable table table-striped table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Rendering engine3</th>
+                                    <th>Browser</th>
+                                    <th class="hidden-xs">Platform(s)</th>
+                                    <th>Engine version</th>
+                                    <th class="hidden-xs">CSS grade</th>
+                                </tr>
+                                </thead>
+                                <tr class="gradeX">
+                                    <td>Misc</td>
+                                    <td>Lynx</td>
+                                    <td class="hidden-xs">Text only</td>
+                                    <td class="center">-</td>
+                                    <td class="center hidden-xs">X</td>
+                                </tr>
+                                <tr class="gradeC">
+                                    <td>Misc</td>
+                                    <td>IE Mobile</td>
+                                    <td class="hidden-xs">Windows Mobile 6</td>
+                                    <td class="center">-</td>
+                                    <td class="center hidden-xs">C</td>
+                                </tr>
+                                <tr class="gradeC">
+                                    <td>Misc</td>
+                                    <td>PSP browser</td>
+                                    <td class="hidden-xs">PSP</td>
+                                    <td class="center">-</td>
+                                    <td class="center hidden-xs">C</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
+
 
 </body>
 </html>
 
 <script src="/js/jquery/jquery-2.0.3.min.js"></script>
-
-
-
-
-
-
 
 <!-- 新 Bootstrap 核心 CSS 文件 -->
 <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
@@ -92,14 +157,12 @@
 <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
 <script src="http://cdn.hcharts.cn/highcharts/modules/exporting.js"></script>
 <!-- highcharts的ajax获取数据文件-->
-<script src="/js/hightcharts/comm_get_datas.js"> </script>
-
-
+<script src="/js/hightcharts/comm_get_highdatas.js"> </script>
 
 <script type="text/javascript">
     $(function () {
-        var all_data = "<?php echo $all_data?>";
-        createAllView(all_data)
+        var all_data = <?php echo 123?>;
+        initDatas(all_data) ;
     })
 </script>
 
