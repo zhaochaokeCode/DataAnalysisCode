@@ -30,7 +30,8 @@ class IndexController extends Controller
      * 展示相关数据
      */
     public function actionGetdatas(){
-        $testData = $this->createData() ;
+
+        $testData = json_encode($this->createData()) ;
         return $this->render('getdatas',array(
             'all_data'=>$testData
             )
@@ -49,20 +50,39 @@ class IndexController extends Controller
      *
      */
     private function createData(){
-        //配置相关数据
+        //配置相关参数
         $configDatas  = $this->getTabCon() ;
 
 
+        //游戏相关数据
+        $gameDatas    = $this->getData() ;
+        $gameDatasKey = 0 ;
 
+        //把游戏相关数据加到原来的配置数据结构中 ,key为新的series
+        //游戏数据是一条一条插进去的 所以每次$gameDatasKey 需要加一,取下一条 这个是难点
+        foreach($configDatas as $k=>$v){
+            foreach($v['dataName'] as $key1=>$val1){
+                $configDatas[$k]['series'][]=
+                            array('name' => $val1,
+                            'data' => $gameDatas[$gameDatasKey] ) ;
+                $gameDatasKey++ ;
+            }
+        }
+
+        return $configDatas ;
 
     }
 
     /**
      * 从配置文件中获取配置相关的数据
+     * 根据get参数判断
      */
 
     private function getTabCon(){
-//      echo   Yii::$app->params['adminEmail']; die ;
+        $conDatas = Yii::$app->params['tabConfig'] ;
+
+        return $conDatas['gamePlayer']['install'] ;
+
 
     }
 
@@ -71,11 +91,20 @@ class IndexController extends Controller
 
     /**
      * @param 游戏数据仓库相关数据
+     * 根据get参数判断
      */
-    private function getData($action){
-
-
-
+    private function getData(){
+//        $data1 = array(explode(',', '100.0,6.9,9.5,14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6' ));
+        $data1 = explode(',', '100.0,6.9,9.5,14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6' );
+//        $data1[] =  $data1[0] ;
+        $data2 = explode(',','-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5') ;
+        foreach($data1 as &$v){
+            $v =(double)$v ;
+        }
+        foreach($data2 as &$v){
+            $v =(double)$v ;
+        }
+        return array($data1,$data2,$data2) ;
 
     }
 
