@@ -7,7 +7,7 @@
 
     <!--table切换页面-->
     <link href="/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" type="text/css" href="/css/paginator/bootstrap.css" >
 
 </head>
 <body>
@@ -74,7 +74,7 @@
 
             ?>
 <!--            <div id="tabdata1"></div>-->
-<!--            <div id="tabdata2"></div>-->
+            <div id="example" style="marg"></div>
         </div>
     </div>
 </div>
@@ -99,7 +99,6 @@
 
 <!--分页和ajax动态生成表格-->
 <script src="/js/bootstrap-paginator.min.js"></script>
-<!--<script src="/js/table_data/cre_tab_datas.js"></script>-->
 
 <script type="text/javascript">
     $(function () {
@@ -107,6 +106,7 @@
         var tab_data = <?php echo $tab_data?>;
         initTabData(tab_data);
         initDatas(all_data);
+
     })
 </script>
 

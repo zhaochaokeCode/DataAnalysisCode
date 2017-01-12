@@ -29,14 +29,28 @@ class IndexController extends Controller
     /**
      * 展示相关数据
      */
-    public function actionGetdatas(){
-
-        $testData = json_encode($this->createData()) ;
-        return $this->render('getdatas',array(
-            'all_data'=>$testData
+    public function actionGetdatas()
+    {
+        $allData = $this->createData();
+        //
+        return $this->render('getdatas', array(
+                'view_arr'=>$allData[0] ,
+                'tab_arr'=> $allData[0] ,
+                'view_data' => json_encode($allData[0]),
+                'tab_data' => json_encode($allData[1]),
             )
         );
     }
+
+    /**
+     * 测试分页
+     */
+    public function actionPages()
+    {
+        return $this->render('pageshow');
+    }
+
+
 
     /**
      * 获取完整数据
@@ -49,27 +63,54 @@ class IndexController extends Controller
      * 第二部分为有游戏数据仓库生成的数据
      *
      */
-    private function createData(){
+    private function createData()
+    {
         //配置相关参数
-        $configDatas  = $this->getTabCon() ;
+        $configDatas = $this->getTabCon();
 
 
         //游戏相关数据
-        $gameDatas    = $this->getData() ;
-        $gameDatasKey = 0 ;
+        $gameDatas = $this->getData();
 
+        //--------视图hightcharts相关数据结构---------循环两次
         //把游戏相关数据加到原来的配置数据结构中 ,key为新的series
         //游戏数据是一条一条插进去的 所以每次$gameDatasKey 需要加一,取下一条 这个是难点
-        foreach($configDatas as $k=>$v){
-            foreach($v['dataName'] as $key1=>$val1){
-                $configDatas[$k]['series'][]=
-                            array('name' => $val1,
-                            'data' => $gameDatas[$gameDatasKey] ) ;
-                $gameDatasKey++ ;
+        foreach ($configDatas['tag'] as $k => $v) {
+
+            foreach ($v['dataName'] as $key1 => $val1) {
+                $configDatas[$k]['series'][] =
+                    array('name' => $val1,
+                        'data' => $gameDatas[$k][$key1]);
+            }
+            if($v['categories']){
+                $configDatas[$k]['categories'] = $v['categories'];
+            }else{
+                $configDatas[$k]['categories'] = '';
             }
         }
 
-        return $configDatas ;
+        //--------表格相关数据结构------不管tab多少数据  循环三次
+        $tabDataConf = $configDatas['tab_all'];
+
+        //首先是两个表格
+        foreach ($tabDataConf as $k => $v) {
+            //取得每个数组的第一个元素组成一个新数组
+
+            $columnNum = count($v['thred'])-1 ;//列数
+            $lineNum   = count($gameDatas[$k][0]); //行数
+            $newArr    = array() ;
+            for($m=0;$m<$lineNum;$m++){
+                $newArr[$m][] =  $v['dataname'][$m] ;//第一行是名称,不计入计算
+                for($j=0;$j<$columnNum;$j++){
+                    $newArr[$m][] = $gameDatas[$k][$j][$m] ;
+                }
+            }
+
+            array_unshift($newArr,$v['thred']) ;
+            $tabData[]= $newArr ;
+        }
+
+        return array($configDatas, $tabData);
 
     }
 
@@ -78,37 +119,34 @@ class IndexController extends Controller
      * 根据get参数判断
      */
 
-    private function getTabCon(){
-        $conDatas = Yii::$app->params['tabConfig'] ;
-
-        return $conDatas['gamePlayer']['install'] ;
+    private function getTabCon()
+    {
+        $conDatas = Yii::$app->params['tabConfig'];
+        return $conDatas['gamePlayer']['install'];
 
 
     }
-
-
 
 
     /**
      * @param 游戏数据仓库相关数据
      * 根据get参数判断
      */
-    private function getData(){
+    private function getData()
+    {
 //        $data1 = array(explode(',', '100.0,6.9,9.5,14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6' ));
-        $data1 = explode(',', '100.0,6.9,9.5,14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6' );
+        $data1 = explode(',', '100.0,6.9,9.5,14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6');
 //        $data1[] =  $data1[0] ;
-        $data2 = explode(',','-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5') ;
-        foreach($data1 as &$v){
-            $v =(double)$v ;
+        $data2 = explode(',', '-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5');
+        foreach ($data1 as &$v) {
+            $v = (double)$v;
         }
-        foreach($data2 as &$v){
-            $v =(double)$v ;
+        foreach ($data2 as &$v) {
+            $v = (double)$v;
         }
-        return array($data1,$data2,$data2) ;
+        return array(array($data1, $data2), array($data2),array($data2));
 
     }
-
-
 
 
 }

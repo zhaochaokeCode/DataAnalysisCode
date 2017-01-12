@@ -3,6 +3,11 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+
+    <link rel="stylesheet" type="text/css" href="/css/paginator/bootstrap.css" >
+
+    <!--日期时间样式-->
+    <link type="text/css" rel="stylesheet" href="/js/jedate/skin/jedate.css">
     <title>动态创建表格</title>
     <script src="/js/jquery/jquery-2.0.3.min.js"></script>
     <script type="text/javascript">
@@ -43,7 +48,17 @@
 <input type="button" value="添加表格" onClick="CreateTable(5,6)">
 <input type="button" value="添加行">
 
-<div id="createtable"></div>
+<div id="example"></div>
 <div id="createrow"></div>
+<script src="/js/jquery/jquery-2.0.3.min.js"></script>
+<script src="/js/bootstrap-paginator.min.js"></script>
+<script src="/js/hightcharts/comm_get_highdatas.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var all_data = 123;
+        initDatas(all_data);
+
+    })
+</script>
 </body>
 </html>
