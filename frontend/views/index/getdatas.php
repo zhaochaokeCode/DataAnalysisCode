@@ -21,20 +21,37 @@
             <div class="box-body">
                 <div class="tab-content">
                     <ul class="nav nav-tabs" id="all_tab">
-                        <!--        highgtchart 视图 遍历循环 此处用php动态生成-->
-                        <li id="tab_1" class="active"><a href="#box_tab1" data-toggle="tab"><i
-                                    class="fa fa-bar-chart-o"></i> <span class="hidden-inline-mobile">新增激活和账户</span></a>
-                        </li>
-                        <li id="tab_2"><a href="#box_tab2" data-toggle="tab"><i class="fa fa-search-plus"></i> <span
-                                    class="hidden-inline-mobile">玩家转化</span></a></li>
-                        <li id="tab_3"><a href="#box_tab2" data-toggle="tab"><i class="fa fa-search-plus"></i> <span
-                                    class="hidden-inline-mobile">玩家转化</span></a></li>
+                        <?php
+                        global $view_id ;
+                            if($view_arr){
+                                for($i=0;$i<count($view_arr['tag']);$i++){
+                                    $tagName = $view_arr['tag'][$i]['name'] ;
+                                    $key = $i+1 ;
+                                    $default = $i>0?'':"class=\"active\"" ;
+                                    echo "<li id=\"tab_$key\" $default ><a href=\"#box_tab$key\" data-toggle=\"tab\"><i
+                                    class=\"fa fa-bar-chart-o\"></i> <span class=\"hidden-inline-mobile\">$tagName</span></a>
+                                       </li>" ;
+                                    $view_id .=" <div id=\"container$key\" style=\"min-width: 200px;margin: 0 auto\"></div>";
+
+                                }
+                            }
+                        ?>
+
+<!--                                highgtchart 视图 遍历循环 此处用php动态生成-->
+<!--                        <li id="tab_1" class="active"><a href="#box_tab1" data-toggle="tab"><i-->
+<!--                                    class="fa fa-bar-chart-o"></i> <span class="hidden-inline-mobile">新增激活和账户</span></a>-->
+<!--                        </li>-->
+<!--                        <li id="tab_2"><a href="#box_tab2" data-toggle="tab"><i class="fa fa-search-plus"></i> <span-->
+<!--                                    class="hidden-inline-mobile">玩家转化</span></a></li>-->
+<!--                        <li id="tab_3"><a href="#box_tab2" data-toggle="tab"><i class="fa fa-search-plus"></i> <span-->
+<!--                                    class="hidden-inline-mobile">玩家转化</span></a></li>-->
                     </ul>
                     <div id="all_view_id">
                         <!--        tab视图             遍历循环 此处用php动态生成-->
-                        <div id="container1" style="min-width: 200px;margin: 0 auto"></div>
-                        <div id="container2" style="min-width: 200px;margin: 0 auto"></div>
-                        <div id="container3" style="min-width: 200px;margin: 0 auto"></div>
+                        <?php echo $view_id ;?>
+<!--                        <div id="container1" style="min-width: 200px;margin: 0 auto"></div>-->
+<!--                        <div id="container2" style="min-width: 200px;margin: 0 auto"></div>-->
+<!--                        <div id="container3" style="min-width: 200px;margin: 0 auto"></div>-->
                     </div>
                 </div>
             </div>
@@ -44,112 +61,23 @@
 <!-- PAGE HEADER-->
 <div class="box border orange">
     <div class="box-body">
-
         <div style="margin-left: 800px;margin-bottom: 2px;">
             <button class="btn btn-info">excel下载</button>
         </div>
-        <table id="datatable1" cellpadding="0" cellspacing="0" border="0"
-               class="datatable table table-striped table-bordered table-hover">
-            <thead>
-            <tr>
-                <th>Rendering engine</th>
-                <th>Browser</th>
-                <th class="hidden-xs">Platform(s)</th>
-                <th>Engine version</th>
-                <th class="hidden-xs">CSS grade</th>
-            </tr>
-            </thead>
-            <tr class="gradeX">
-                <td>Misc</td>
-                <td>Lynx</td>
-                <td class="hidden-xs">Text only</td>
-                <td class="center">-</td>
-                <td class="center hidden-xs">X</td>
-            </tr>
-            <tr class="gradeC">
-                <td>Misc</td>
-                <td>IE Mobile</td>
-                <td class="hidden-xs">Windows Mobile 6</td>
-                <td class="center">-</td>
-                <td class="center hidden-xs">C</td>
-            </tr>
-            <tr class="gradeC">
-                <td>Misc</td>
-                <td>PSP browser</td>
-                <td class="hidden-xs">PSP</td>
-                <td class="center">-</td>
-                <td class="center hidden-xs">C</td>
-            </tr>
-        </table>
-        <table id="datatable2" style="display: none" cellpadding="0" cellspacing="0" border="0"
-               class="datatable table table-striped table-bordered table-hover">
-            <thead>
-            <tr>
-                <th>Rendering engine2</th>
-                <th>Browser</th>
-                <th class="hidden-xs">Platform(s)</th>
-                <th>Engine version</th>
-                <th class="hidden-xs">CSS grade</th>
-            </tr>
-            </thead>
-            <tr class="gradeX">
-                <td>Misc</td>
-                <td>Lynx</td>
-                <td class="hidden-xs">Text only</td>
-                <td class="center">-</td>
-                <td class="center hidden-xs">X</td>
-            </tr>
-            <tr class="gradeC">
-                <td>Misc</td>
-                <td>IE Mobile</td>
-                <td class="hidden-xs">Windows Mobile 6</td>
-                <td class="center">-</td>
-                <td class="center hidden-xs">C</td>
-            </tr>
-            <tr class="gradeC">
-                <td>Misc</td>
-                <td>PSP browser</td>
-                <td class="hidden-xs">PSP</td>
-                <td class="center">-</td>
-                <td class="center hidden-xs">C</td>
-            </tr>
-        </table>
-        <table id="datatable3" style="display: none" cellpadding="0" cellspacing="0" border="0"
-               class="datatable table table-striped table-bordered table-hover">
-            <thead>
-            <tr>
-                <th>Rendering engine3</th>
-                <th>Browser</th>
-                <th class="hidden-xs">Platform(s)</th>
-                <th>Engine version</th>
-                <th class="hidden-xs">CSS grade</th>
-            </tr>
-            </thead>
-            <tr class="gradeX">
-                <td>Misc</td>
-                <td>Lynx</td>
-                <td class="hidden-xs">Text only</td>
-                <td class="center">-</td>
-                <td class="center hidden-xs">X</td>
-            </tr>
-            <tr class="gradeC">
-                <td>Misc</td>
-                <td>IE Mobile</td>
-                <td class="hidden-xs">Windows Mobile 6</td>
-                <td class="center">-</td>
-                <td class="center hidden-xs">C</td>
-            </tr>
-            <tr class="gradeC">
-                <td>Misc</td>
-                <td>PSP browser</td>
-                <td class="hidden-xs">PSP</td>
-                <td class="center">-</td>
-                <td class="center hidden-xs">C</td>
-            </tr>
-        </table>
+        <div id="tab_all">
+            <?php
+                if($tab_arr){
+                    for($i=1;$i<=count($tab_arr);$i++){
+                        echo " <div id=\"tabdata$i\"></div>" ;
+                    }
+                }
+
+            ?>
+<!--            <div id="tabdata1"></div>-->
+<!--            <div id="tabdata2"></div>-->
+        </div>
     </div>
 </div>
-
 
 </body>
 </html>
@@ -168,12 +96,20 @@
 <!-- highcharts的ajax获取数据文件-->
 <script src="/js/hightcharts/comm_get_highdatas.js"></script>
 
+
+<!--分页和ajax动态生成表格-->
+<script src="/js/bootstrap-paginator.min.js"></script>
+<!--<script src="/js/table_data/cre_tab_datas.js"></script>-->
+
 <script type="text/javascript">
     $(function () {
-        var all_data = <?php echo $all_data?>;
+        var all_data = <?php echo $view_data?>;
+        var tab_data = <?php echo $tab_data?>;
+        initTabData(tab_data);
         initDatas(all_data);
     })
 </script>
+
 
 <!-- 日期插件-->
 <script src="/js/jedate/jquery.jedate.min.js"></script>

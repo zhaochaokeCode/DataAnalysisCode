@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <title>中文百联 | 游戏数据分析后台</title>
+    <title>中联百文 | 游戏数据分析后台</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -35,7 +35,7 @@
     border:1px solid #cdd2d2;
     width:1200px;
     height: auto;
-    text-align:left
+    t  cext-align:left
     }
     </style>
 </head>
