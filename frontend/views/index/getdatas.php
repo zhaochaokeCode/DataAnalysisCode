@@ -74,7 +74,7 @@
 
             ?>
 <!--            <div id="tabdata1"></div>-->
-            <div id="example" style="marg"></div>
+            <div id="pages" style="marg"></div>
         </div>
     </div>
 </div>
@@ -104,7 +104,10 @@
     $(function () {
         var all_data = <?php echo $view_data?>;
         var tab_data = <?php echo $tab_data?>;
-        initTabData(tab_data);
+        var page = <?php echo $page?>;
+        var allpage = <?php echo $count?>;
+
+        initTabData(tab_data,page,allpage);
         initDatas(all_data);
 
     })

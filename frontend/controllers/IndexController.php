@@ -31,13 +31,27 @@ class IndexController extends Controller
      */
     public function actionGetdatas()
     {
+
         $allData = $this->createData();
+
         //
         return $this->render('getdatas', array(
-                'view_arr'=>$allData[0] ,
-                'tab_arr'=> $allData[0] ,
-                'view_data' => json_encode($allData[0]),
-                'tab_data' => json_encode($allData[1]),
+
+                //展示表格数据
+                'view_arr' => $allData[0], //php端数据 遍历生成表格和tab
+                'tab_arr' => $allData[0],//php端数据  遍历生成表格和tab
+
+
+                //分页
+                'page' => $allData[2],
+                'count' => $allData[3],
+
+
+                //视图数据
+                'view_data' => json_encode($allData[0]), //json端数据
+                'tab_data' => json_encode($allData[1]), //json端数据
+
+
             )
         );
     }
@@ -49,7 +63,6 @@ class IndexController extends Controller
     {
         return $this->render('pageshow');
     }
-
 
 
     /**
@@ -69,8 +82,10 @@ class IndexController extends Controller
         $configDatas = $this->getTabCon();
 
 
-        //游戏相关数据
-        $gameDatas = $this->getData();
+        //游戏相关数据 三个数据 游戏数据,当前第几页,总共多少页
+        $allGame = $this->getData();
+
+        $gameDatas = $allGame['tab_data'];
 
         //--------视图hightcharts相关数据结构---------循环两次
         //把游戏相关数据加到原来的配置数据结构中 ,key为新的series
@@ -82,9 +97,9 @@ class IndexController extends Controller
                     array('name' => $val1,
                         'data' => $gameDatas[$k][$key1]);
             }
-            if($v['categories']){
+            if ($v['categories']) {
                 $configDatas[$k]['categories'] = $v['categories'];
-            }else{
+            } else {
                 $configDatas[$k]['categories'] = '';
             }
         }
@@ -96,21 +111,22 @@ class IndexController extends Controller
         foreach ($tabDataConf as $k => $v) {
             //取得每个数组的第一个元素组成一个新数组
 
-            $columnNum = count($v['thred'])-1 ;//列数
-            $lineNum   = count($gameDatas[$k][0]); //行数
-            $newArr    = array() ;
-            for($m=0;$m<$lineNum;$m++){
-                $newArr[$m][] =  $v['dataname'][$m] ;//第一行是名称,不计入计算
-                for($j=0;$j<$columnNum;$j++){
-                    $newArr[$m][] = $gameDatas[$k][$j][$m] ;
+            $columnNum = count($v['thred']) - 1;//列数
+            $lineNum = count($gameDatas[$k][0]); //行数
+            $newArr = array();
+            for ($m = 0; $m < $lineNum; $m++) {
+                $newArr[$m][] = $v['dataname'][$m];//第一行是名称,不计入计算
+                for ($j = 0; $j < $columnNum; $j++) {
+                    $newArr[$m][] = $gameDatas[$k][$j][$m];
                 }
             }
 
-            array_unshift($newArr,$v['thred']) ;
-            $tabData[]= $newArr ;
+            array_unshift($newArr, $v['thred']);
+            $tabData[] = $newArr;
         }
 
-        return array($configDatas, $tabData);
+        return array($configDatas, $tabData,$allGame['pages'],
+            $allGame['count'],);
 
     }
 
@@ -144,7 +160,20 @@ class IndexController extends Controller
         foreach ($data2 as &$v) {
             $v = (double)$v;
         }
-        return array(array($data1, $data2), array($data2),array($data2));
+        $count = 10;
+        $pages = 10;
+
+        $ret = array(
+            'tab_data' => array(//所有table的数据
+                array($data1, $data2),
+                array($data2),
+                array($data2)
+            ),
+            'count' => $count,
+            'pages' => $pages
+
+        );
+        return $ret;
 
     }
 

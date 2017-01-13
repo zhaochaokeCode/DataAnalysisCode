@@ -4,7 +4,7 @@
  */
 function initDatas(all_data) {
     creAllData(all_data);//生成hightcharts 图表
-    pagesAjax();
+
 }
 
 
@@ -64,7 +64,8 @@ $("#all_tab li").click(function () {
 
 //----------生成table数据 TABLE START------------
 
-function initTabData(tab_data) {
+function initTabData(tab_data,pages,allpage) {
+    pagesAjax(pages,allpage);
     //生成tab
     $.each(tab_data, function(i, n){
         createTable(i, n) ;
@@ -100,11 +101,11 @@ function createTable(i, n){
     }
 
 }
-function pagesAjax(){
+function pagesAjax(pages,allpage){
     var options = {
         bootstrapMajorVersion: 2, //版本
-        currentPage: 10, //当前页数
-        totalPages: 10, //总页数
+        currentPage: pages, //当前页数
+        totalPages: allpage, //总页数
         alignment:"andright",
         itemTexts: function (type, page, current) {
             switch (type) {
@@ -123,7 +124,7 @@ function pagesAjax(){
         }
 
     }
-    $('#example').bootstrapPaginator(options);
+    $('#pages').bootstrapPaginator(options);
 }
 //----------------tableEND------------------
 
