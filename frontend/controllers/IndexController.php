@@ -160,7 +160,7 @@ class IndexController extends Controller
         foreach ($data2 as &$v) {
             $v = (double)$v;
         }
-        $count = 10;
+        $count = 100;
         $pages = 10;
 
         $ret = array(

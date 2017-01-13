@@ -7,7 +7,8 @@
 
     <!--table切换页面-->
     <link href="/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/paginator/bootstrap.css" >
+
+    <link type="text/css" rel="stylesheet" href="/js/SmartPaginator-master/smartpaginator.css">
 
 </head>
 <body>
@@ -74,7 +75,7 @@
 
             ?>
 <!--            <div id="tabdata1"></div>-->
-            <div id="pages" style="marg"></div>
+            <div id="smart-paginator" style="width: 800px" > </div>
         </div>
     </div>
 </div>
@@ -98,7 +99,7 @@
 
 
 <!--分页和ajax动态生成表格-->
-<script src="/js/bootstrap-paginator.min.js"></script>
+
 
 <script type="text/javascript">
     $(function () {
@@ -113,6 +114,7 @@
     })
 </script>
 
+<script src="/js/SmartPaginator-master/smartpaginator.js"></script>
 
 <!-- 日期插件-->
 <script src="/js/jedate/jquery.jedate.min.js"></script>

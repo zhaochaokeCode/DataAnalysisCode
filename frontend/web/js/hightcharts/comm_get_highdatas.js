@@ -33,7 +33,6 @@ function creAllData(all_data) {
 }
 
 
-
 //tab页面切换
 $("#all_tab li").click(function () {
 
@@ -64,76 +63,66 @@ $("#all_tab li").click(function () {
 
 //----------生成table数据 TABLE START------------
 
-function initTabData(tab_data,pages,allpage) {
-    pagesAjax(pages,allpage);
+function initTabData(tab_data, pages, allpage) {
+    pagesAjax(pages, allpage);
     //生成tab
-    $.each(tab_data, function(i, n){
-        createTable(i, n) ;
+    $.each(tab_data, function (i, n) {
+        createTable(i, n);
     })
     //分页
 
 }
-function createTable(i, n){
+function createTable(i, n) {
     var table = $("<table border=\"1\"    class=\"datatable table table-striped table-bordered table-hover\">");
-    var div_key = i+1 ;
+    var div_key = i + 1;
 
-    div_name = "#tabdata"+div_key.toString() ;
+    div_name = "#tabdata" + div_key.toString();
 
     table.appendTo($(div_name));
 
-    $.each(n, function(i1, n1){
+    $.each(n, function (i1, n1) {
         var tr = $("<tr></tr>");
-        if(i1==0){
+        if (i1 == 0) {
             var tr = $("<thead><tr></tr></thead>");
         }
         tr.appendTo(table);
-        $.each(n1, function(i2, n2) {
-            var td = $("<td>" + n2+ "</td>");
-            if(i1==0){
-                var td = $("<th style='height:38px'>" + n2+ "</th>");
+        $.each(n1, function (i2, n2) {
+            var td = $("<td>" + n2 + "</td>");
+            if (i1 == 0) {
+                var td = $("<th style='height:38px'>" + n2 + "</th>");
             }
             td.appendTo(tr);
         })
     })
     $("</table>").appendTo($("div_name"));
-    if(i!=1){
-        $(div_name).hide() ;
+    if (i != 1) {
+        $(div_name).hide();
     }
 
 }
-function pagesAjax(pages,allpage){
-    var options = {
-        bootstrapMajorVersion: 2, //版本
-        currentPage: pages, //当前页数
-        totalPages: allpage, //总页数
-        alignment:"andright",
-        itemTexts: function (type, page, current) {
-            switch (type) {
-                case "first":
-                    return "首页";
-                case "prev":
-                    return "上一页";
-                case "next":
-                    return "下一页";
-                case "last":
-                    return "末页";
-                case "page":
-                    return page;
-            }
+function pagesAjax(pages, allpage) {
+    var current_page = 5;
 
-        }
+    $('#smart-paginator').smartpaginator({
+        totalrecords: 100,
+        recordsperpage: 5,
+        next: '下一页',
+        prev: '上一页',
+        first: '首页',
+        last: '末页',
+        go: '前往',
+        theme: 'docloud-pagi',
+        initval: current_page,
 
-    }
-    $('#pages').bootstrapPaginator(options);
+    });
+    $("#smart-paginator input[type='text']").each(function () {
+        ////$(this).prev("div").attr("id", "test");
+        $(this).prepend("<div id='test'>");
+        $(this).append("</div>") ;
+    })
+
 }
 //----------------tableEND------------------
-
-
-
-
-
-
-
 
 
 /**
@@ -175,7 +164,7 @@ function createLineView(tab_id, all_data) {
             verticalAlign: 'middle',
             borderWidth: 0
         },
-        series:all_data.series
+        series: all_data.series
 
     });
 }
