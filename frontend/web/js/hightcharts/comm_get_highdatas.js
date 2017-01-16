@@ -113,13 +113,46 @@ function pagesAjax(pages, allpage) {
         go: '前往',
         theme: 'docloud-pagi',
         initval: current_page,
+        onchange: onPageChange
 
     });
-    $("#smart-paginator input[type='text']").each(function () {
-        ////$(this).prev("div").attr("id", "test");
-        $(this).prepend("<div id='test'>");
-        $(this).append("</div>") ;
-    })
+
+
+
+    function onPageChange(newPageValue) {
+        current_page = newPageValue;
+        //根据新的页码做一些改变，比如说页面更新操作
+        getPageList(newPageValue);
+    }
+    //分页更改
+    function getPageList(newPageValue){
+            var args=new Object();
+            var query=location.search.substring(1);//获取查询串
+            var pairs=query.split("&");//在逗号处断开
+            for(var i=0;i<pairs.length;i++)
+            {
+                var pos=pairs[i].indexOf('=');//查找name=value
+                if(pos==-1) continue;//如果没有找到就跳过
+                var argname=pairs[i].substring(0,pos);//提取name
+                var value=pairs[i].substring(pos+1);//提取value
+                args[argname]=unescape(value);//存为属性
+            }
+
+
+
+            data_url = window.location.pathname+"?action="+args['action']+"&page="+newPageValue;
+        //$.ajax({
+        //    type: "post",
+        //    url: "",
+        //    dataType: "json",
+        //    success: function (data) {
+        //        $("input#showTime").val(data[0].demoData);
+        //    },
+        //    error: function (XMLHttpRequest, textStatus, errorThrown) {
+        //        alert(errorThrown);
+        //    }
+        //});
+    }
 
 }
 //----------------tableEND------------------

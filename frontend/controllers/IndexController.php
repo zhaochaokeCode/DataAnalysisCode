@@ -31,10 +31,16 @@ class IndexController extends Controller
      */
     public function actionGetdatas()
     {
+        if($_GET['page']){//查询
+            $this->getData() ;
+        }
+
+
+
 
         $allData = $this->createData();
+        $url     = $_SERVER['PHP_SELF']."action=test";
 
-        //
         return $this->render('getdatas', array(
 
                 //展示表格数据
@@ -50,6 +56,9 @@ class IndexController extends Controller
                 //视图数据
                 'view_data' => json_encode($allData[0]), //json端数据
                 'tab_data' => json_encode($allData[1]), //json端数据
+
+                //url
+//                'url'=>$url
 
 
             )

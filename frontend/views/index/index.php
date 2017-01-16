@@ -36,7 +36,7 @@
             margin-left: auto;
             margin-right: auto;
             border: 1px solid #cdd2d2;
-            width: 1200px;
+            width: 2000px;
             height: auto;
             t cext-align: left
         }
@@ -204,17 +204,17 @@
                                 <!-- /BREADCRUMBS -->
                                 <div class="clearfix">
                                     <div><h3 class="content-title pull-left" style="margin-left:20px;">查询条件</h3></div>
-                                    <from>
+                                    <from id="search_cond">
                                         <div style="width:950px;height:70px ">
                                             <div style="margin-right:100px;margin-top:-25px;float:right;">
-                                                开始日期:<input class="datainp wicon" id="inpstart" type="text">
-                                                平台:<input class="datainp wicon" id="inpstart" type="text">
+                                                开始日期:<input class="datainp wicon" id="inpstart" name='start' type="text" value="123">
+                                                平台:<input class="datainp wicon" id="inpstart1" type="text" value="123123">
                                                 结束:<input class="" id="" type="text">
                                             </div>
                                             <div style="margin-right:100px;margin-top:10px;float:right;">
                                                 结束日期:<input class="datainp wicon" id="inpend" type="text">
-                                                结束:<input class="datainp wicon" id="inpend" type="text">
-                                                结束:<input class="datainp wicon" id="inpend" type="text">
+                                                结束:<input class="datainp wicon" id="inpend2" type="text">
+                                                结束:<input class="datainp wicon" id="inpend3" type="text">
                                             </div>
                                         </div>
                                     </from>
@@ -222,9 +222,6 @@
                                         <button class="btn  btn-info " style="height:30px;width: 80px">查询</button>
                                     </div>
 
-                                    <!-- DATE RANGE PICKER -->
-
-                                    <!-- /DATE RANGE PICKER -->
                                 </div>
                                 <div class="description"></div>
 
@@ -233,13 +230,13 @@
                     </div>
 
 
-                    <iframe frameborder=0 src="/index/getdatas" name="ifrm" id="ifrm"
-                            style="width:916px;height:800px; margin-top: -10px;"></iframe>
+                    <iframe frameborder=0 src="/index/getdatas?action=test&page=1" name="ifrm" id="ifrm"
+                            style="width:950px;height:1500px; margin-top: -10px;"></iframe>
                 </div>
             </div>
         </div>
     </div>
-</section>                          <!-- /BOX -->
+</section>            <!-- /BOX -->
 
 <script src="/js/jquery/jquery-2.0.3.min.js"></script>
 <!-- 新 Bootstrap 核心 CSS 文件 -->
@@ -256,9 +253,19 @@
 <script src="/js/jedate/jquery.jedate.min.js"></script>
 <script src="/js/jedate/comm_date.js"></script>
 
-
 <!--获取查询数据的js-->
 <script src="/js/create-data/init.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+        $('#inpstart').click(function(){
+
+        alert($('#search_cond').serialize())
+
+        })
+
+    })
+</script>
 
 </body>
 </html>

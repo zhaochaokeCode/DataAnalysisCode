@@ -1,0 +1,582 @@
+a1.sources = r1
+a1.sinks = k1 k2 battle-sinks battleuser-sinks muser-sinks battlelogin-sinks resourceinfo-sinks policyinfo-sinks chatinbattle-sinks userlevel-sinks armybuild-sinks userinfo-sinks marathon-sinks armydestroy-sinks usecdkeynew-sinks lobbyresource-sinks emailinfo-sinks  techlevel-sinks  occupygold-sinks  gangwar-sinks   personalrank-sinks   declarewinshutdown-sinks  declarewinnevervoter-sinks  battleovertype-sinks  votesituation-sinks  fightrank-sinks gangrank-sinks  gangcupcnt-sinks cleardirtydoingbattle-sinks   lobbybattleover-sinks   lobbycalcgang-sinks
+a1.channels = c1 c2 battle-channel battleuser-channel muser-channel battlelogin-channel resourceinfo-channel policyinfo-channel chatinbattle-channel userlevel-channel armybuild-channel userinfo-channel marathon-channel armydestroy-channel usecdkeynew-channel lobbyresource-channel emailinfo-channel techlevel-channel  occupygold-channel gangwar-channel  personalrank-channel  declarewinshutdown-channel  declarewinnevervoter-channel  battleovertype-channel  votesituation-channel  fightrank-channel  gangrank-channel gangcupcnt-channel cleardirtydoingbattle-channel  lobbybattleover-channel  lobbycalcgang-channel
+
+# Describe/configure the source
+a1.sources.r1.type = avro
+a1.sources.r1.bind = 0.0.0.0
+a1.sources.r1.port = 44444
+# mapping*
+a1.sources.r1.selector.type = multiplexing
+a1.sources.r1.channels = c1 c2 battle-channel battleuser-channel muser-channel battlelogin-channel resourceinfo-channel chatinbattle-channel policyinfo-channel userlevel-channel armybuild-channel userinfo-channel marathon-channel armydestroy-channel usecdkeynew-channel lobbyresource-channel emailinfo-channel techlevel-channel occupygold-channel gangwar-channel  personalrank-channel declarewinshutdown-channel declarewinnevervoter-channel  battleovertype-channel votesituation-channel  fightrank-channel  gangrank-channel gangcupcnt-channel cleardirtydoingbattle-channel lobbybattleover-channel  lobbycalcgang-channel
+a1.sources.r1.selector.header = state
+a1.sources.r1.selector.mapping.CZ = c1
+a1.sources.r1.selector.mapping.US = c2
+a1.sources.r1.selector.mapping.BATTLE = battle-channel
+a1.sources.r1.selector.mapping.BATTLEUSER= battleuser-channel
+a1.sources.r1.selector.mapping.MUSER = muser-channel
+a1.sources.r1.selector.mapping.battlelogin = battlelogin-channel
+a1.sources.r1.selector.mapping.resourceinfo = resourceinfo-channel
+a1.sources.r1.selector.mapping.policyinfo = policyinfo-channel
+a1.sources.r1.selector.mapping.chatinbattle = chatinbattle-channel
+a1.sources.r1.selector.mapping.userlevel = userlevel-channel
+a1.sources.r1.selector.mapping.armybuild = armybuild-channel
+a1.sources.r1.selector.mapping.userinfo = userinfo-channel
+a1.sources.r1.selector.mapping.marathon = marathon-channel
+a1.sources.r1.selector.mapping.armydestroy = armydestroy-channel
+a1.sources.r1.selector.mapping.usecdkey = usecdkeynew-channel
+a1.sources.r1.selector.mapping.lobbyresource = lobbyresource-channel
+a1.sources.r1.selector.mapping.emailinfo = emailinfo-channel
+a1.sources.r1.selector.mapping.techlevel = techlevel-channel
+a1.sources.r1.selector.mapping.occupygold = occupygold-channel
+a1.sources.r1.selector.mapping.gangwar = gangwar-channel
+a1.sources.r1.selector.mapping.personalrank = personalrank-channel
+a1.sources.r1.selector.mapping.declarewinshutdown = declarewinshutdown-channel
+a1.sources.r1.selector.mapping.declarewinnevervoter = declarewinnevervoter-channel
+a1.sources.r1.selector.mapping.battleovertype = battleovertype-channel
+a1.sources.r1.selector.mapping.votesituation = votesituation-channel
+a1.sources.r1.selector.mapping.fightrank = fightrank-channel
+a1.sources.r1.selector.mapping.gangrank = gangrank-channel
+a1.sources.r1.selector.mapping.gangcupcnt = gangcupcnt-channel
+a1.sources.r1.selector.mapping.cleardirtydoingbattle = cleardirtydoingbattle-channel
+a1.sources.r1.selector.mapping.lobbybattleover = lobbybattleover-channel
+a1.sources.r1.selector.mapping.lobbycalcgang = lobbycalcgang-channel
+
+
+a1.sources.r1.selector.default = c1
+
+a1.sources.r1.interceptors = i1 i2
+a1.sources.r1.interceptors.i1.type = host
+a1.sources.r1.interceptors.i1.preserveExisting = false
+a1.sources.r1.interceptors.i1.hostHeader = hostname
+a1.sources.r1.interceptors.i1.useIP = true
+a1.sources.r1.interceptors.i2.type = timestamp
+
+
+#file
+a1.channels.c1.type = file
+a1.channels.c1.checkpointDir = /usr/local/flume/checkpoint/c1
+a1.channels.c1.dataDirs =  /usr/local/flume/data/c1
+
+a1.channels.c2.type = file
+a1.channels.c2.checkpointDir = /usr/local/flume/checkpoint/c2
+a1.channels.c2.dataDirs =  /usr/local/flume/data/c2
+
+a1.channels.battle-channel.type = file
+a1.channels.battle-channel.checkpointDir = /usr/local/flume/checkpoint/battle
+a1.channels.battle-channel.dataDirs =  /usr/local/flume/data/battle
+
+
+a1.channels.battleuser-channel.type = file
+a1.channels.battleuser-channel.checkpointDir = /usr/local/flume/checkpoint/battleuser
+a1.channels.battleuser-channel.dataDirs =  /usr/local/flume/data/battleuser
+
+
+a1.channels.muser-channel.type = file
+a1.channels.muser-channel.checkpointDir = /usr/local/flume/checkpoint/muser
+a1.channels.muser-channel.dataDirs =  /usr/local/flume/data/muser
+
+
+a1.channels.battlelogin-channel.type = file
+a1.channels.battlelogin-channel.checkpointDir = /usr/local/flume/checkpoint/battlelogin
+a1.channels.battlelogin-channel.dataDirs = /usr/local/flume/data/battlelogin
+
+
+a1.channels.resourceinfo-channel.type = file
+a1.channels.resourceinfo-channel.checkpointDir = /usr/local/flume/checkpoint/resourceinfo
+a1.channels.resourceinfo-channel.dataDirs = /usr/local/flume/data/resourceinfo
+
+
+a1.channels.policyinfo-channel.type = file
+a1.channels.policyinfo-channel.checkpointDir = /usr/local/flume/checkpoint/policyinfo
+a1.channels.policyinfo-channel.dataDirs = /usr/local/flume/data/policyinfo
+
+
+a1.channels.chatinbattle-channel.type = file
+a1.channels.chatinbattle-channel.checkpointDir = /usr/local/flume/checkpoint/chatinbattle
+a1.channels.chatinbattle-channel.dataDirs = /usr/local/flume/data/chatinbattle
+
+a1.channels.userlevel-channel.type = file
+a1.channels.userlevel-channel.checkpointDir = /usr/local/flume/checkpoint/userlevel
+a1.channels.userlevel-channel.dataDirs = /usr/local/flume/data/userlevel
+
+a1.channels.armybuild-channel.type = file
+a1.channels.armybuild-channel.checkpointDir = /usr/local/flume/checkpoint/armybuild
+a1.channels.armybuild-channel.dataDirs = /usr/local/flume/data/armybuild
+
+
+a1.channels.userinfo-channel.type = file
+a1.channels.userinfo-channel.checkpointDir = /usr/local/flume/checkpoint/userinfo
+a1.channels.userinfo-channel.dataDirs = /usr/local/flume/data/userinfo
+
+
+a1.channels.marathon-channel.type = file
+a1.channels.marathon-channel.checkpointDir = /usr/local/flume/checkpoint/marathon
+a1.channels.marathon-channel.dataDirs = /usr/local/flume/data/marathon
+
+a1.channels.armydestroy-channel.type = file
+a1.channels.armydestroy-channel.checkpointDir = /usr/local/flume/checkpoint/armydestroy
+a1.channels.armydestroy-channel.dataDirs = /usr/local/flume/data/armydestroy
+
+
+a1.channels.usecdkeynew-channel.type = file
+a1.channels.usecdkeynew-channel.checkpointDir = /usr/local/flume/checkpoint/usecdkeynew
+a1.channels.usecdkeynew-channel.dataDirs = /usr/local/flume/data/usecdkeynew
+
+a1.channels.lobbyresource-channel.type = file
+a1.channels.lobbyresource-channel.checkpointDir = /usr/local/flume/checkpoint/lobbyresource
+a1.channels.lobbyresource-channel.dataDirs = /usr/local/flume/data/lobbyresource
+
+a1.channels.emailinfo-channel.type = file
+a1.channels.emailinfo-channel.checkpointDir = /usr/local/flume/checkpoint/emailinfo
+a1.channels.emailinfo-channel.dataDirs = /usr/local/flume/data/emailinfo-channel
+
+
+a1.channels.techlevel-channel.type = file
+a1.channels.techlevel-channel.checkpointDir = /usr/local/flume/checkpoint/techlevel
+a1.channels.techlevel-channel.dataDirs = /usr/local/flume/data/techlevel-channel
+
+
+a1.channels.occupygold-channel.type = file
+a1.channels.occupygold-channel.checkpointDir = /usr/local/flume/checkpoint/occupygold
+a1.channels.occupygold-channel.dataDirs = /usr/local/flume/data/occupygold-channel
+
+
+a1.channels.gangwar-channel.type = file
+a1.channels.gangwar-channel.checkpointDir = /usr/local/flume/checkpoint/gangwar
+a1.channels.gangwar-channel.dataDirs = /usr/local/flume/data/gangwar-channel
+
+
+
+a1.channels.personalrank-channel.type = file
+a1.channels.personalrank-channel.checkpointDir = /usr/local/flume/checkpoint/personalrank
+a1.channels.personalrank-channel.dataDirs = /usr/local/flume/data/personalrank
+
+
+
+a1.channels.declarewinshutdown-channel.type = file
+a1.channels.declarewinshutdown-channel.checkpointDir = /usr/local/flume/checkpoint/declarewinshutdown
+a1.channels.declarewinshutdown-channel.dataDirs = /usr/local/flume/data/declarewinshutdown
+
+
+a1.channels.declarewinnevervoter-channel.type = file
+a1.channels.declarewinnevervoter-channel.checkpointDir = /usr/local/flume/checkpoint/declarewinnevervoter
+a1.channels.declarewinnevervoter-channel.dataDirs = /usr/local/flume/data/declarewinnevervoter
+
+
+a1.channels.battleovertype-channel.type = file
+a1.channels.battleovertype-channel.checkpointDir = /usr/local/flume/checkpoint/battleovertype
+a1.channels.battleovertype-channel.dataDirs = /usr/local/flume/data/battleovertype
+
+
+a1.channels.votesituation-channel.type = file
+a1.channels.votesituation-channel.checkpointDir = /usr/local/flume/checkpoint/votesituation
+a1.channels.votesituation-channel.dataDirs = /usr/local/flume/data/votesituation
+
+a1.channels.fightrank-channel.type = file
+a1.channels.fightrank-channel.checkpointDir = /usr/local/flume/checkpoint/fightrank
+a1.channels.fightrank-channel.dataDirs = /usr/local/flume/data/fightrank
+
+
+a1.channels.gangrank-channel.type = file
+a1.channels.gangrank-channel.checkpointDir = /usr/local/flume/checkpoint/gangrank
+a1.channels.gangrank-channel.dataDirs = /usr/local/flume/data/gangrank
+
+
+a1.channels.gangcupcnt-channel.type = file
+a1.channels.gangcupcnt-channel.checkpointDir = /usr/local/flume/checkpoint/gangcupcnt
+a1.channels.gangcupcnt-channel.dataDirs = /usr/local/flume/data/gangcupcnt
+
+
+a1.channels.cleardirtydoingbattle-channel.type = file
+a1.channels.cleardirtydoingbattle-channel.checkpointDir = /usr/local/flume/checkpoint/cleardirtydoingbattle
+a1.channels.cleardirtydoingbattle-channel.dataDirs = /usr/local/flume/data/cleardirtydoingbattle
+
+
+a1.channels.lobbybattleover-channel.type = file
+a1.channels.lobbybattleover-channel.checkpointDir = /usr/local/flume/checkpoint/lobbybattleover
+a1.channels.lobbybattleover-channel.dataDirs = /usr/local/flume/data/lobbybattleover
+
+a1.channels.lobbycalcgang-channel.type = file
+a1.channels.lobbycalcgang-channel.checkpointDir = /usr/local/flume/checkpoint/lobbycalcgang
+a1.channels.lobbycalcgang-channel.dataDirs = /usr/local/flume/data/lobbycalcgang
+
+
+
+a1.sinks.k1.type = elasticsearch
+a1.sinks.k1.hostNames = 127.0.0.1:55555
+a1.sinks.k1.indexName = index_test
+a1.sinks.k1.indexType = test1
+a1.sinks.k1.clusterName = elasticsearch
+a1.sinks.k1.batchSize = 500
+a1.sinks.k1.ttl = 5d
+a1.sinks.k1.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.k1.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.k1.channel = c1
+
+
+a1.sinks.k2.type = elasticsearch
+a1.sinks.k2.hostNames = 127.0.0.1:55555
+a1.sinks.k2.indexName = index_test
+a1.sinks.k2.indexType = test2
+a1.sinks.k2.clusterName = elasticsearch
+a1.sinks.k2.batchSize = 500
+a1.sinks.k2.ttl = 5d
+a1.sinks.k2.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.k2.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.k2.channel = c2
+
+
+a1.sinks.battle-sinks.type = elasticsearch
+a1.sinks.battle-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.battle-sinks.indexName = index_war2ii
+a1.sinks.battle-sinks.indexType = battle
+a1.sinks.battle-sinks.clusterName = elasticsearch
+a1.sinks.battle-sinks.batchSize = 500
+a1.sinks.battle-sinks.ttl = 5d
+a1.sinks.battle-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.battle-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.battle-sinks.channel = battle-channel
+
+
+
+a1.sinks.battleuser-sinks.type = elasticsearch
+a1.sinks.battleuser-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.battleuser-sinks.indexName = index_war2ii
+a1.sinks.battleuser-sinks.indexType = battleuser
+a1.sinks.battleuser-sinks.clusterName = elasticsearch
+a1.sinks.battleuser-sinks.batchSize = 500
+a1.sinks.battleuser-sinks.ttl = 5d
+a1.sinks.battleuser-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.battleuser-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.battleuser-sinks.channel = battleuser-channel
+
+a1.sinks.muser-sinks.type = elasticsearch
+a1.sinks.muser-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.muser-sinks.indexName = index_war2ii
+a1.sinks.muser-sinks.indexType = muser
+a1.sinks.muser-sinks.clusterName = elasticsearch
+a1.sinks.muser-sinks.batchSize = 500
+a1.sinks.muser-sinks.ttl = 5d
+a1.sinks.muser-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.muser-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.muser-sinks.channel = muser-channel
+
+
+a1.sinks.battlelogin-sinks.type = elasticsearch
+a1.sinks.battlelogin-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.battlelogin-sinks.indexName = index_war2ii
+a1.sinks.battlelogin-sinks.indexType = battlelogin
+a1.sinks.battlelogin-sinks.clusterName = elasticsearch
+a1.sinks.battlelogin-sinks.batchSize = 500
+a1.sinks.battlelogin-sinks.ttl = 5d
+a1.sinks.battlelogin-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.battlelogin-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.battlelogin-sinks.channel = battlelogin-channel
+
+
+a1.sinks.resourceinfo-sinks.type = elasticsearch
+a1.sinks.resourceinfo-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.resourceinfo-sinks.indexName = index_war2ii
+a1.sinks.resourceinfo-sinks.indexType = resourceinfo
+a1.sinks.resourceinfo-sinks.clusterName = elasticsearch
+a1.sinks.resourceinfo-sinks.batchSize = 500
+a1.sinks.resourceinfo-sinks.ttl = 5d
+a1.sinks.resourceinfo-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.resourceinfo-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.resourceinfo-sinks.channel = resourceinfo-channel
+
+
+a1.sinks.policyinfo-sinks.type = elasticsearch
+a1.sinks.policyinfo-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.policyinfo-sinks.indexName = index_war2ii
+a1.sinks.policyinfo-sinks.indexType = policyinfo
+a1.sinks.policyinfo-sinks.clusterName = elasticsearch
+a1.sinks.policyinfo-sinks.batchSize = 500
+a1.sinks.policyinfo-sinks.ttl = 5d
+a1.sinks.policyinfo-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.policyinfo-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.policyinfo-sinks.channel = policyinfo-channel
+
+
+a1.sinks.chatinbattle-sinks.type = elasticsearch
+a1.sinks.chatinbattle-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.chatinbattle-sinks.indexName = index_war2ii
+a1.sinks.chatinbattle-sinks.indexType = chatinbattle
+a1.sinks.chatinbattle-sinks.clusterName = elasticsearch
+a1.sinks.chatinbattle-sinks.batchSize = 500
+a1.sinks.chatinbattle-sinks.ttl = 5d
+a1.sinks.chatinbattle-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.chatinbattle-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.chatinbattle-sinks.channel = chatinbattle-channel
+
+
+a1.sinks.userlevel-sinks.type = elasticsearch
+a1.sinks.userlevel-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.userlevel-sinks.indexName = index_war2ii
+a1.sinks.userlevel-sinks.indexType = userlevel
+a1.sinks.userlevel-sinks.clusterName = elasticsearch
+a1.sinks.userlevel-sinks.batchSize = 500
+a1.sinks.userlevel-sinks.ttl = 5d
+a1.sinks.userlevel-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.userlevel-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.userlevel-sinks.channel = userlevel-channel
+
+a1.sinks.armybuild-sinks.type = elasticsearch
+a1.sinks.armybuild-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.armybuild-sinks.indexName = index_war2ii
+a1.sinks.armybuild-sinks.indexType = armybuild
+a1.sinks.armybuild-sinks.clusterName = elasticsearch
+a1.sinks.armybuild-sinks.batchSize = 500
+a1.sinks.armybuild-sinks.ttl = 5d
+a1.sinks.armybuild-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.armybuild-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.armybuild-sinks.channel = armybuild-channel
+
+
+
+a1.sinks.userinfo-sinks.type = elasticsearch
+a1.sinks.userinfo-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.userinfo-sinks.indexName = index_war2ii
+a1.sinks.userinfo-sinks.indexType = userinfo
+a1.sinks.userinfo-sinks.clusterName = elasticsearch
+a1.sinks.userinfo-sinks.batchSize = 500
+a1.sinks.userinfo-sinks.ttl = 5d
+a1.sinks.userinfo-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.userinfo-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.userinfo-sinks.channel = userinfo-channel
+
+
+a1.sinks.marathon-sinks.type = elasticsearch
+a1.sinks.marathon-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.marathon-sinks.indexName = index_war2ii
+a1.sinks.marathon-sinks.indexType = marathon
+a1.sinks.marathon-sinks.clusterName = elasticsearch
+a1.sinks.marathon-sinks.batchSize = 500
+a1.sinks.marathon-sinks.ttl = 5d
+a1.sinks.marathon-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.marathon-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.marathon-sinks.channel = marathon-channel
+
+
+a1.sinks.armydestroy-sinks.type = elasticsearch
+a1.sinks.armydestroy-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.armydestroy-sinks.indexName = index_war2ii
+a1.sinks.armydestroy-sinks.indexType = armydestroy
+a1.sinks.armydestroy-sinks.clusterName = elasticsearch
+a1.sinks.armydestroy-sinks.batchSize = 500
+a1.sinks.armydestroy-sinks.ttl = 5d
+a1.sinks.armydestroy-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.armydestroy-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.armydestroy-sinks.channel = armydestroy-channel
+
+
+a1.sinks.usecdkeynew-sinks.type = elasticsearch
+a1.sinks.usecdkeynew-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.usecdkeynew-sinks.indexName = index_war2ii
+a1.sinks.usecdkeynew-sinks.indexType = usecdkeynew
+a1.sinks.usecdkeynew-sinks.clusterName = elasticsearch
+a1.sinks.usecdkeynew-sinks.batchSize = 500
+a1.sinks.usecdkeynew-sinks.ttl = 5d
+a1.sinks.usecdkeynew-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.usecdkeynew-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.usecdkeynew-sinks.channel = usecdkeynew-channel
+
+
+a1.sinks.lobbyresource-sinks.type = elasticsearch
+a1.sinks.lobbyresource-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.lobbyresource-sinks.indexName = index_war2ii
+a1.sinks.lobbyresource-sinks.indexType = lobbyresource
+a1.sinks.lobbyresource-sinks.clusterName = elasticsearch
+a1.sinks.lobbyresource-sinks.batchSize = 500
+a1.sinks.lobbyresource-sinks.ttl = 5d
+a1.sinks.lobbyresource-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.lobbyresource-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.lobbyresource-sinks.channel = lobbyresource-channel
+
+
+a1.sinks.emailinfo-sinks.type = elasticsearch
+a1.sinks.emailinfo-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.emailinfo-sinks.indexName = index_war2ii
+a1.sinks.emailinfo-sinks.indexType = emailinfo
+a1.sinks.emailinfo-sinks.clusterName = elasticsearch
+a1.sinks.emailinfo-sinks.batchSize = 500
+a1.sinks.emailinfo-sinks.ttl = 5d
+a1.sinks.emailinfo-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.emailinfo-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.emailinfo-sinks.channel = emailinfo-channel
+
+
+a1.sinks.techlevel-sinks.type = elasticsearch
+a1.sinks.techlevel-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.techlevel-sinks.indexName = index_war2ii
+a1.sinks.techlevel-sinks.indexType = techlevel
+a1.sinks.techlevel-sinks.clusterName = elasticsearch
+a1.sinks.techlevel-sinks.batchSize = 500
+a1.sinks.techlevel-sinks.ttl = 5d
+a1.sinks.techlevel-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.techlevel-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.techlevel-sinks.channel = techlevel-channel
+
+
+a1.sinks.occupygold-sinks.type = elasticsearch
+a1.sinks.occupygold-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.occupygold-sinks.indexName = index_war2ii
+a1.sinks.occupygold-sinks.indexType = occupygold
+a1.sinks.occupygold-sinks.clusterName = elasticsearch
+a1.sinks.occupygold-sinks.batchSize = 500
+a1.sinks.occupygold-sinks.ttl = 5d
+a1.sinks.occupygold-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.occupygold-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.occupygold-sinks.channel = occupygold-channel
+
+
+
+a1.sinks.gangwar-sinks.type = elasticsearch
+a1.sinks.gangwar-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.gangwar-sinks.indexName = index_war2ii
+a1.sinks.gangwar-sinks.indexType = gangwar
+a1.sinks.gangwar-sinks.clusterName = elasticsearch
+a1.sinks.gangwar-sinks.batchSize = 500
+a1.sinks.gangwar-sinks.ttl = 5d
+a1.sinks.gangwar-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.gangwar-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.gangwar-sinks.channel = gangwar-channel
+
+
+
+a1.sinks.personalrank-sinks.type = elasticsearch
+a1.sinks.personalrank-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.personalrank-sinks.indexName = index_war2ii
+a1.sinks.personalrank-sinks.indexType = personalrank
+a1.sinks.personalrank-sinks.clusterName = elasticsearch
+a1.sinks.personalrank-sinks.batchSize = 500
+a1.sinks.personalrank-sinks.ttl = 5d
+a1.sinks.personalrank-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.personalrank-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.personalrank-sinks.channel = personalrank-channel
+
+
+
+a1.sinks.declarewinshutdown-sinks.type = elasticsearch
+a1.sinks.declarewinshutdown-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.declarewinshutdown-sinks.indexName = index_war2ii
+a1.sinks.declarewinshutdown-sinks.indexType = declarewinshutdown
+a1.sinks.declarewinshutdown-sinks.clusterName = elasticsearch
+a1.sinks.declarewinshutdown-sinks.batchSize = 500
+a1.sinks.declarewinshutdown-sinks.ttl = 5d
+a1.sinks.declarewinshutdown-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.declarewinshutdown-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.declarewinshutdown-sinks.channel = declarewinshutdown-channel
+
+
+
+a1.sinks.declarewinnevervoter-sinks.type = elasticsearch
+a1.sinks.declarewinnevervoter-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.declarewinnevervoter-sinks.indexName = index_war2ii
+a1.sinks.declarewinnevervoter-sinks.indexType = declarewinnevervoter
+a1.sinks.declarewinnevervoter-sinks.clusterName = elasticsearch
+a1.sinks.declarewinnevervoter-sinks.batchSize = 500
+a1.sinks.declarewinnevervoter-sinks.ttl = 5d
+a1.sinks.declarewinnevervoter-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.declarewinnevervoter-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.declarewinnevervoter-sinks.channel = declarewinnevervoter-channel
+
+
+
+a1.sinks.battleovertype-sinks.type = elasticsearch
+a1.sinks.battleovertype-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.battleovertype-sinks.indexName = index_war2ii
+a1.sinks.battleovertype-sinks.indexType = battleovertype
+a1.sinks.battleovertype-sinks.clusterName = elasticsearch
+a1.sinks.battleovertype-sinks.batchSize = 500
+a1.sinks.battleovertype-sinks.ttl = 5d
+a1.sinks.battleovertype-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.battleovertype-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.battleovertype-sinks.channel = battleovertype-channel
+
+
+a1.sinks.votesituation-sinks.type = elasticsearch
+a1.sinks.votesituation-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.votesituation-sinks.indexName = index_war2ii
+a1.sinks.votesituation-sinks.indexType = votesituation
+a1.sinks.votesituation-sinks.clusterName = elasticsearch
+a1.sinks.votesituation-sinks.batchSize = 500
+a1.sinks.votesituation-sinks.ttl = 5d
+a1.sinks.votesituation-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.votesituation-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.votesituation-sinks.channel = votesituation-channel
+
+
+a1.sinks.fightrank-sinks.type = elasticsearch
+a1.sinks.fightrank-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.fightrank-sinks.indexName = index_war2ii
+a1.sinks.fightrank-sinks.indexType = fightrank
+a1.sinks.fightrank-sinks.clusterName = elasticsearch
+a1.sinks.fightrank-sinks.batchSize = 500
+a1.sinks.fightrank-sinks.ttl = 5d
+a1.sinks.fightrank-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.fightrank-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.fightrank-sinks.channel = fightrank-channel
+
+
+a1.sinks.gangrank-sinks.type = elasticsearch
+a1.sinks.gangrank-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.gangrank-sinks.indexName = index_war2ii
+a1.sinks.gangrank-sinks.indexType = gangrank
+a1.sinks.gangrank-sinks.clusterName = elasticsearch
+a1.sinks.gangrank-sinks.batchSize = 500
+a1.sinks.gangrank-sinks.ttl = 5d
+a1.sinks.gangrank-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.gangrank-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.gangrank-sinks.channel = gangrank-channel
+
+
+a1.sinks.gangcupcnt-sinks.type = elasticsearch
+a1.sinks.gangcupcnt-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.gangcupcnt-sinks.indexName = index_war2ii
+a1.sinks.gangcupcnt-sinks.indexType = gangcupcnt
+a1.sinks.gangcupcnt-sinks.clusterName = elasticsearch
+a1.sinks.gangcupcnt-sinks.batchSize = 500
+a1.sinks.gangcupcnt-sinks.ttl = 5d
+a1.sinks.gangcupcnt-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.gangcupcnt-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.gangcupcnt-sinks.channel = gangcupcnt-channel
+
+
+
+a1.sinks.cleardirtydoingbattle-sinks.type = elasticsearch
+a1.sinks.cleardirtydoingbattle-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.cleardirtydoingbattle-sinks.indexName = index_war2ii
+a1.sinks.cleardirtydoingbattle-sinks.indexType = cleardirtydoingbattle
+a1.sinks.cleardirtydoingbattle-sinks.clusterName = elasticsearch
+a1.sinks.cleardirtydoingbattle-sinks.batchSize = 500
+a1.sinks.cleardirtydoingbattle-sinks.ttl = 5d
+a1.sinks.cleardirtydoingbattle-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.cleardirtydoingbattle-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.cleardirtydoingbattle-sinks.channel = cleardirtydoingbattle-channel
+
+
+a1.sinks.lobbybattleover-sinks.type = elasticsearch
+a1.sinks.lobbybattleover-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.lobbybattleover-sinks.indexName = index_war2ii
+a1.sinks.lobbybattleover-sinks.indexType = lobbybattleover
+a1.sinks.lobbybattleover-sinks.clusterName = elasticsearch
+a1.sinks.lobbybattleover-sinks.batchSize = 500
+a1.sinks.lobbybattleover-sinks.ttl = 5d
+a1.sinks.lobbybattleover-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.lobbybattleover-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.lobbybattleover-sinks.channel = lobbybattleover-channel
+
+
+
+a1.sinks.lobbycalcgang-sinks.type = elasticsearch
+a1.sinks.lobbycalcgang-sinks.hostNames = 127.0.0.1:55555
+a1.sinks.lobbycalcgang-sinks.indexName = index_war2ii
+a1.sinks.lobbycalcgang-sinks.indexType = lobbycalcgang
+a1.sinks.lobbycalcgang-sinks.clusterName = elasticsearch
+a1.sinks.lobbycalcgang-sinks.batchSize = 500
+a1.sinks.lobbycalcgang-sinks.ttl = 5d
+a1.sinks.lobbycalcgang-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#a1.sinks.lobbycalcgang-sinks.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer
+a1.sinks.lobbycalcgang-sinks.channel = lobbycalcgang-channel

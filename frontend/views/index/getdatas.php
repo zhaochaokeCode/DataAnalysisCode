@@ -107,7 +107,7 @@
         var tab_data = <?php echo $tab_data?>;
         var page = <?php echo $page?>;
         var allpage = <?php echo $count?>;
-
+//        var url_val = <?php //echo $url?>//;
         initTabData(tab_data,page,allpage);
         initDatas(all_data);
 
