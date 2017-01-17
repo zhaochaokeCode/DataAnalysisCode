@@ -212,7 +212,7 @@
                                                 平台:<input class="datainp wicon" id="inpstart1" type="text" value=>
                                                 结束:<input class="" id="" type="text">
                                             </div>
-                                            <div style="margin-right:100px;margin-top:10px;float:right;">
+                                            <div style="margin-right:100px;margin-top:10px;float:right;"> 
                                                 结束日期:<input class="datainp wicon" id="inpend" name="end" type="text" >
                                                 结束:<input class="datainp wicon" id="inpend2" type="text">
                                                 结束:<input class="datainp wicon" id="inpend3" type="text">
