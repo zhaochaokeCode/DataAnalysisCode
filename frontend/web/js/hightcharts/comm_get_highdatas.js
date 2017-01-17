@@ -129,18 +129,43 @@ function pagesAjax(pages, allpage) {
             var args=new Object();
             var query=location.search.substring(1);//获取查询串
             var pairs=query.split("&");//在逗号处断开
+
+            data_url = window.location.pathname ;
             for(var i=0;i<pairs.length;i++)
             {
                 var pos=pairs[i].indexOf('=');//查找name=value
                 if(pos==-1) continue;//如果没有找到就跳过
                 var argname=pairs[i].substring(0,pos);//提取name
                 var value=pairs[i].substring(pos+1);//提取value
-                args[argname]=unescape(value);//存为属性
+                if(value){
+                    args[argname]=unescape(value);//存为属性
+                    if(argname=='page'){
+                        args[argname]=newPageValue ;
+                    }
+                }
+
             }
+            i=0;
+            if(args) {
+                $.each(args, function (n, value) {
+                    if(i==0){
+                        data_url+="?"+n+"="+value ;
+                        i++;
+                    }else{
+                        data_url+="&"+n+"="+value ;
+                    }
+                })
+            }
+        alert(data_url) ;
+        window.location.href=data_url;
+            //data_url = winw.location.pathname+"?action="+args['action']+"&page="+newPageValue;
 
 
 
-            data_url = window.location.pathname+"?action="+args['action']+"&page="+newPageValue;
+            //txt = $("#serach",parent.document).serialize();
+            //alert(txt) ;
+
+
         //$.ajax({
         //    type: "post",
         //    url: "",

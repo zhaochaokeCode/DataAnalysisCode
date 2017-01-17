@@ -36,7 +36,7 @@
             margin-left: auto;
             margin-right: auto;
             border: 1px solid #cdd2d2;
-            width: 2000px;
+            width: 1230px;
             height: auto;
             t cext-align: left
         }
@@ -204,29 +204,26 @@
                                 <!-- /BREADCRUMBS -->
                                 <div class="clearfix">
                                     <div><h3 class="content-title pull-left" style="margin-left:20px;">查询条件</h3></div>
-                                    <form id="serach" name="test" value="333">
-                                        <div id="aa">
-                                        <p>First name: <input type="text" name="fname" /></p>
-                                        <p>Last name: <input type="text" name="lname" /></p>
-                                        <input type="submit" value="Submit" id="sear" />
+                                    <form id="serach">
+                                        <div style="width:950px;height:70px ">
+                                            <div style="margin-right:100px;margin-top:-25px;float:right;">
+                                                开始日期:<input class="datainp wicon" id="inpstart" name='start' type="text"
+                                                            value="">
+                                                平台:<input class="datainp wicon" id="inpstart1" type="text" value=>
+                                                结束:<input class="" id="" type="text">
+                                            </div>
+                                            <div style="margin-right:100px;margin-top:10px;float:right;">
+                                                结束日期:<input class="datainp wicon" id="inpend" name="end" type="text" >
+                                                结束:<input class="datainp wicon" id="inpend2" type="text">
+                                                结束:<input class="datainp wicon" id="inpend3" type="text">
+                                            </div>
                                         </div>
-                                                                                <div style="width:950px;height:70px " id="sear">
-<!--                                            <div style="margin-right:100px;margin-top:-25px;float:right;">-->
-<!--                                                开始日期:<input class="datainp wicon" id="inpstart" name='start' type="text" value="">-->
-<!--                                                平台:<input class="datainp wicon" id="inpstart1" type="text" value=123>-->
-<!--                                                结束:<input class="" id="" type="text">-->
-<!--                                            </div>-->
-<!--                                            <div style="margin-right:100px;margin-top:10px;float:right;">-->
-<!--                                                结束日期:<input class="datainp wicon" id="inpend" type="text">-->
-<!--                                                结束:<input class="datainp wicon" id="inpend2" type="text">-->
-<!--                                                结束:<input class="datainp wicon" id="inpend3" type="text">-->
-<!--                                            </div>-->
-<!--                                        </div>-->
                                     </form>
-<!--                                    <div style="margin-right:400px;margin-top:-25px;margin-bottom:5px;float:right;">-->
-<!--                                        <button id="sear" class="btn  btn-info " style="height:30px;width: 80px">查询</button>-->
-<!--                                    </div>-->
 
+
+                                </div>
+                                <div style="margin-right:400px;margin-top:-25px;margin-bottom:5px;">
+                                    <button id="sear" class="btn  btn-info " style="height:30px;width: 80px;float: right;margin-bottom:5px;margin-right:-300px">查询</button>
                                 </div>
                                 <div class="description"></div>
 
@@ -260,17 +257,6 @@
 
 <!--获取查询数据的js-->
 <script src="/js/create-data/init.js"></script>
-<script type="text/javascript">
-    $(function () {
-
-        $('#sear').click(function(){
-            txt = $("#serach").serialize() ;
-            alert(txt) ;
-
-        })
-
-    })
-</script>
 
 </body>
 </html>
