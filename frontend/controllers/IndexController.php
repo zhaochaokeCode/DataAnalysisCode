@@ -22,7 +22,7 @@ class IndexController extends Controller
      */
     public function actionIndex()
     {
-        $action = $_GET['action']?$_GET['action']:'install' ;
+        $action = isset($_GET['action'])?$_GET['action']:'install' ;
         return $this->render('index',
                         array('action'=>$action));
     }
