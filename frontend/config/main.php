@@ -19,7 +19,7 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=172.16.67.180;dbname=datanalysis',
+            'dsn' => 'mysql:host=116.62.100.98;dbname=data_analysis',
             'username' => 'root',
             'password' => '123456',
             'charset' => 'utf8',

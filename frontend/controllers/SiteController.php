@@ -71,6 +71,7 @@ class SiteController extends Controller
         $path = Yii::$app->params['logPath'];
         $current_dir = opendir($path);
         $logType = array() ;
+        $ret    = array() ;
 
         while(($file = readdir($current_dir)) !== false) {
             if($file == '.' || $file == '..') {
@@ -85,9 +86,11 @@ class SiteController extends Controller
                         $tmp = array_keys($logType) ;
                         if(!in_array($json->f_log_name,$tmp)){
                             $logType[$json->f_log_name ]=1;
+                            $ret[]=$v ;
                         }else{
                             $logType[$json->f_log_name ]++ ;
                         }
+
                     }
                 }
 
@@ -95,7 +98,9 @@ class SiteController extends Controller
             }
         }
         closedir($current_dir) ;
-        var_dump($logType) ;
+        var_dump($logType) ;echo"</br>" ;
+        var_dump($ret) ;
+
     }
 
 
