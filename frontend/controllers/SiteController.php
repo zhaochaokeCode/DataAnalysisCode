@@ -68,7 +68,7 @@ class SiteController extends Controller
 
     public function actionIndex(){
 
-        $path = "/home/wwwlogs";
+        $path = Yii::$app->params['logPath'];
         $current_dir = opendir($path);
         $logType = array() ;
 
