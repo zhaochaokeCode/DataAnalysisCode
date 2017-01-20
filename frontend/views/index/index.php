@@ -98,8 +98,8 @@
                         <span class="arrow"></span>
                     </a>
                     <ul class="sub" id="player">
-                        <li><a id="tab_player_new" href="#"><span class="sub-menu-text">新增玩家</span></a></li>
-                        <li><a id="tab_player_active" href="#"><span class="sub-menu-text">活跃玩家</span></a></li>
+                        <li><a id="tab_player_new" href="?action=install"><span class="sub-menu-text">新增玩家</span></a></li>
+                        <li><a id="tab_player_active" href="?action=active"><span class="sub-menu-text">活跃玩家</span></a></li>
                         <li><a id="tab_player_remain" href="#"><span class="sub-menu-text">玩家留存</span></a></li>
                         <li><a id="tab_player_trans" href="#"><span class="sub-menu-text">付费转化</span></a></li>
                         <li><a id="tab_player_leave" href="#"><span class="sub-menu-text">玩家流失</span></a></li>
@@ -212,7 +212,7 @@
                                                 平台:<input class="datainp wicon" id="inpstart1" type="text" value=>
                                                 结束:<input class="" id="" type="text">
                                             </div>
-                                            <div style="margin-right:100px;margin-top:10px;float:right;"> 
+                                            <div style="margin-right:100px;margin-top:10px;float:right;">
                                                 结束日期:<input class="datainp wicon" id="inpend" name="end" type="text" >
                                                 结束:<input class="datainp wicon" id="inpend2" type="text">
                                                 结束:<input class="datainp wicon" id="inpend3" type="text">
@@ -232,7 +232,7 @@
                     </div>
 
 
-                    <iframe frameborder=0 src="/index/getdatas?action=test&page=1" name="ifrm" id="ifrm"
+                    <iframe frameborder=0 src="/index/getdatas?action=<?php echo $action?>&page=1" name="ifrm" id="ifrm"
                             style="width:950px;height:1500px; margin-top: -10px;"></iframe>
                 </div>
             </div>
