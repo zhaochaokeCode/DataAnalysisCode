@@ -94,7 +94,7 @@ class SiteController extends Controller
                                 $logType[$json->f_log_name]++;
                             }
                         } else {
-                            echo $v;
+//                            echo $v;
                             echo "<br/>";
                             echo "<br/>";
                         }
@@ -105,10 +105,11 @@ class SiteController extends Controller
             }
         }
         foreach($ret as $v){
-            echo $v[1]."   :  " .$v[0]."<br/>";
+//            echo $v[1]."   :  " .$v[0]."<br/>";
+            echo $v[0] ;
             echo "<br/>"; echo "<br/>";
         }
-
+        print_r($logType) ;
         closedir($current_dir);
     }
 
