@@ -84,13 +84,19 @@ class SiteController extends Controller
                 foreach($datas as $v){
                     if($json = json_decode($v)){
                         $tmp = array_keys($logType) ;
-                        if(!in_array($json->f_log_name,$tmp)){
-                            $logType[$json->f_log_name ]=1;
-                            $ret[]=$v ;
-                        }else{
-                            $logType[$json->f_log_name ]++ ;
-                        }
+                        if(isset($json->f_log_name)) {
+                            if (!in_array($json->f_log_name, $tmp)) {
+                                $logType[$json->f_log_name] = 1;
+                                $logType['fileName'] = $fileName;
 
+                                $ret[] = $v;
+                            } else {
+                                $logType[$json->f_log_name]++;
+                            }
+                        }else{
+                            var_dump($v) ;
+                            echo "</br>" ;
+                        }
                     }
                 }
 
@@ -100,7 +106,6 @@ class SiteController extends Controller
         closedir($current_dir) ;
         var_dump($logType) ;echo"</br>" ;
         var_dump($ret) ;
-
     }
 
 
