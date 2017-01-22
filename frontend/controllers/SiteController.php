@@ -113,7 +113,7 @@ class SiteController extends Controller
         foreach($type as $v){
 //            echo $v[1]."   :  " .$v[0]."<br/>";
             echo $v ;
-            echo "<br/>";
+            echo "<br/>"; echo "<br/>";
         }
         print_r($logType) ;
         closedir($current_dir);
