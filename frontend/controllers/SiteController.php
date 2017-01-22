@@ -90,6 +90,7 @@ class SiteController extends Controller
                             if (!in_array($json->f_log_name, $tmp)) {
                                 $logType[$json->f_log_name] = 1;
                                 $ret[] = array($json->f_log_name, $fileName);
+                                $type[] = $v ;
                             } else {
                                 $logType[$json->f_log_name]++;
                             }
@@ -108,6 +109,11 @@ class SiteController extends Controller
 //            echo $v[1]."   :  " .$v[0]."<br/>";
             echo $v[0] ;
             echo "<br/>"; echo "<br/>";
+        }
+        foreach($type as $v){
+//            echo $v[1]."   :  " .$v[0]."<br/>";
+            echo $v ;
+            echo "<br/>";
         }
         print_r($logType) ;
         closedir($current_dir);
