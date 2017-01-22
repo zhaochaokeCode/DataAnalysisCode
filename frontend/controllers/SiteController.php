@@ -18,7 +18,8 @@ use frontend\models\ContactForm;
  */
 class SiteController extends Controller
 {
-    public $layout = false ;
+    public $layout = false;
+
     /**
      * @inheritdoc
      */
@@ -66,36 +67,35 @@ class SiteController extends Controller
         ];
     }
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
 
         $path = Yii::$app->params['logPath'];
         $current_dir = opendir($path);
-        $logType = array() ;
-        $ret    = array() ;
+        $logType = array();
+        $ret = array();
 
-        while(($file = readdir($current_dir)) !== false) {
-            if($file == '.' || $file == '..') {
+        while (($file = readdir($current_dir)) !== false) {
+            if ($file == '.' || $file == '..') {
                 continue;
-            } else if(is_dir($file)) {    //如果是目录,进行递归
+            } else if (is_dir($file)) {    //如果是目录,进行递归
             } else {
-                $fileName =  $path.'/'.$file ;
-                $cont = file_get_contents($fileName) ;
-                $datas = explode("\n",$cont) ;
-                foreach($datas as $v){
-                    if($json = json_decode($v)){
-                        $tmp = array_keys($logType) ;
-                        if(isset($json->f_log_name)) {
+                $fileName = $path . '/' . $file;
+                $cont = file_get_contents($fileName);
+                $datas = explode("\n", $cont);
+                foreach ($datas as $v) {
+                    if ($json = json_decode($v)) {
+                        $tmp = array_keys($logType);
+                        if (isset($json->f_log_name)) {
                             if (!in_array($json->f_log_name, $tmp)) {
                                 $logType[$json->f_log_name] = 1;
-                                $logType['fileName'] = $fileName;
-
-                                $ret[] = $v;
+                                $ret[] = array($v, $fileName);
                             } else {
                                 $logType[$json->f_log_name]++;
                             }
-                        }else{
-                            var_dump($v) ;
-                            echo "</br>" ;
+                        } else {
+                            echo $v;
+                            echo "</br>";
                         }
                     }
                 }
@@ -103,11 +103,12 @@ class SiteController extends Controller
 
             }
         }
-        closedir($current_dir) ;
-        var_dump($logType) ;echo"</br>" ;
-        var_dump($ret) ;
-    }
+        foreach($ret as $v){
+            echo $v[1]."   :  " .$v[0];
+        }
 
+        closedir($current_dir);
+    }
 
 
 }
