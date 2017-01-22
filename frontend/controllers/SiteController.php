@@ -95,7 +95,7 @@ class SiteController extends Controller
                             }
                         } else {
                             echo $v;
-                            echo "</br>";
+                            echo "<br/>";
                         }
                     }
                 }
@@ -104,7 +104,7 @@ class SiteController extends Controller
             }
         }
         foreach($ret as $v){
-            echo $v[1]."   :  " .$v[0];
+            echo $v[1]."   :  " .$v[0]."<br/>";
         }
 
         closedir($current_dir);
