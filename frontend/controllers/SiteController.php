@@ -89,7 +89,7 @@ class SiteController extends Controller
                         if (isset($json->f_log_name)) {
                             if (!in_array($json->f_log_name, $tmp)) {
                                 $logType[$json->f_log_name] = 1;
-                                $ret[] = array($v, $fileName);
+                                $ret[] = array($json->f_log_name, $fileName);
                             } else {
                                 $logType[$json->f_log_name]++;
                             }
