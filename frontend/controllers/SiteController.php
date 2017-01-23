@@ -115,7 +115,8 @@ class SiteController extends Controller
 //                            print_r($tmpData) ;die;
 //                        }
 //                        continue ;
-                        $sqlData = $this->createSqlData($tmpData, $lessArr,$tag);
+                        $moreArr =array() ;
+                        $sqlData = $this->createSqlData($tmpData, $lessArr,$tag,$moreArr);
 
                         continue;
                         $tmp = array_keys($logType);
@@ -197,7 +198,7 @@ class SiteController extends Controller
      * @param $ret      一维数据 数据表要插入的数据字段值
      *
      */
-    public function createSqlData($tmpData,&$lessArr,$tag)
+    public function createSqlData($tmpData,&$lessArr,$tag,&$moreArr)
     {
 
         if (!isset($tmpData['f_log_name'])) {
@@ -229,7 +230,7 @@ class SiteController extends Controller
 
 
 
-        $moreArr = array();
+
         foreach ($tmpData as $key => $val) {
             if ($key == 'f_log_name' || $key == 'f_params') continue;
             if (is_array($val)) {
