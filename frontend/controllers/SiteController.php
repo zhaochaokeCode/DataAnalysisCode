@@ -111,8 +111,6 @@ class SiteController extends Controller
                             }
 
                         }
-
-                        continue ;
 //                        if($tmpData['f_log_name']=='log_online_character_cnt'){
 //                            print_r($tmpData) ;die;
 //                        }
