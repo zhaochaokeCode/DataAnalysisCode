@@ -189,6 +189,7 @@ class SiteController extends Controller
      */
     public function createSqlData($tmpData){
         $tabName = $tmpData['f_log_name'];
+
         $sql = "DESC bi_$tabName " ;
         $command=Yii::$app->db->createCommand($sql);
         $columns = $command->queryAll();
@@ -197,9 +198,10 @@ class SiteController extends Controller
         }
 
         foreach($tmpData as $key=>$val){
-            if($key=='f_log_name') continue ;
+            if($key=='f_log_name'||$key=='f_params') continue ;
             if(is_array($val)){
                 foreach($val as $k1=> $v1){
+                    if($key=='f_log_name'||$key=='f_params') continue ;
                     if(!in_array($k1,$useColu)){
 
                         echo $tabName.":".$k1."<br/><br/>" ;
