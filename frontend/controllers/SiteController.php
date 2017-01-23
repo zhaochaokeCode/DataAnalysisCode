@@ -163,10 +163,12 @@ class SiteController extends Controller
             foreach ($object as $key => $value) {
                 if(is_object($value)){
                     if($value) {
-                        $value = $this->objeToArr($value);
+                        $array = array_merge($array,$this->objeToArr($value));
                     }
+                }else{
+                    $array[$key] = $value;
                 }
-                $array[$key] = $value;
+
 
             }
         }
@@ -206,7 +208,6 @@ class SiteController extends Controller
                 foreach($val as $k1=> $v1){
                     if($key=='f_log_name'||$key=='f_params') continue ;
                     if(!in_array($k1,$useColu)){
-
                         echo $tabName.":".$k1."<br/><br/>" ;
                     }
                 }
