@@ -150,12 +150,6 @@ class SiteController extends Controller
         closedir($current_dir);
     }
 
-    public function createTab($object,$tabName){
-        //对象先转换成为数据
-        $data = $this->objeToArr($object) ;
-        var_dump($data) ;die;
-
-    }
 
     public function objeToArr($object){
         $array=array();
@@ -200,7 +194,11 @@ class SiteController extends Controller
         $columns = $command->queryAll();
         foreach($columns as $v){
             $useColu[] =$v['Field'] ;
+            if(!in_array($v['Field'] ,$tmpData)){
+                echo $tabName.":".$v['Field'] ;
+            }
         }
+
 
         foreach($tmpData as $key=>$val){
             if($key=='f_log_name'||$key=='f_params') continue ;
@@ -219,7 +217,6 @@ class SiteController extends Controller
         }
 
     }
-
 
 
 
