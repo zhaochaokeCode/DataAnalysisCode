@@ -97,6 +97,10 @@ class SiteController extends Controller
                 foreach ($datas as $v) {
                     if ($json = json_decode($v)) {
                         $tmpData = $this->objeToArr($json) ;
+//                        if($tmpData['f_log_name']=='log_online_character_cnt'){
+//                            print_r($tmpData) ;die;
+//                        }
+//                        continue ;
                         $sqlData = $this->createSqlData($tmpData);
 
                         continue ;
@@ -153,12 +157,16 @@ class SiteController extends Controller
 
     public function objeToArr($object){
         $array=array();
+        $tag = true ;
         if (is_object($object)) {
             foreach ($object as $key => $value) {
-                if(is_object($value)){
+                if($key=='f_params'){
                     if($value) {
                         $array = array_merge($array,$this->objeToArr($value));
+                    }else{
+                        $tag = false ;
                     }
+
                 }else{
                     $array[$key] = $value;
                 }
@@ -172,7 +180,7 @@ class SiteController extends Controller
         }
 
 //        print_r($array) ;die;
-        return $array;
+        return array($array,$tag);
 
     }
 
@@ -183,7 +191,11 @@ class SiteController extends Controller
      * @param $ret      一维数据 数据表要插入的数据字段值
      *
      */
-    public function createSqlData($tmpData){
+    public function createSqlData($allData){
+
+        $tmpData = $allData[0] ;
+        $tag = $allData[1] ;
+
         if(!isset($tmpData['f_log_name'])){
             var_dump($tmpData) ;return;
         }
@@ -192,26 +204,42 @@ class SiteController extends Controller
         $sql = "DESC bi_$tabName " ;
         $command=Yii::$app->db->createCommand($sql);
         $columns = $command->queryAll();
+
+        $lessArr = array() ;
         foreach($columns as $v){
             $useColu[] =$v['Field'] ;
             if(!in_array($v['Field'] ,$tmpData)){
-                echo $tabName.":".$v['Field']."<br/><br/>" ;
+                if(!in_array($v['Field'],$lessArr)){
+                    $lessArr[]=$v['Field'] ;
+                    if(!$tag){
+                        continue ;
+                    }
+                    echo '缺少的字段:'.$tabName.":".$v['Field']."<br/><br/>" ;
+                }
+
             }
         }
 
-
+        $moreArr = array() ;
         foreach($tmpData as $key=>$val){
             if($key=='f_log_name'||$key=='f_params') continue ;
             if(is_array($val)){
                 foreach($val as $k1=> $v1){
                     if($key=='f_log_name'||$key=='f_params') continue ;
                     if(!in_array($k1,$useColu)){
-                        echo $tabName.":".$k1."<br/><br/>" ;
+                        if(!in_array($k1,$moreArr)) {
+                            $moreArr[]=$k1;
+                            echo $tabName . ":" . $k1 . "<br/><br/>";
+                        }
                     }
                 }
             }else{
                 if(!in_array($key,$useColu)){
-                    echo  $tabName.":".$key."<br/><br/>" ;
+                    if(!in_array($key,$moreArr)) {
+                        $moreArr[]=$key;
+                        echo '多出的字段:'.$tabName . ":" . $key . "<br/><br/>";
+                    }
+
                 }
             }
         }
