@@ -74,7 +74,13 @@ class SiteController extends Controller
         $current_dir = opendir($path);
         $logType = array();
         $ret = array();
-
+        //获取mysql的表名
+        $sql= "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'data_analysis'";
+        $command=Yii::$app->db->createCommand($sql);
+        $posts = $command->queryAll();
+        foreach($posts as $v){
+            $tabArr[] =$v['TABLE_NAME'] ;
+        }
         while (($file = readdir($current_dir)) !== false) {
             if ($file == '.' || $file == '..') {
                 continue;
@@ -86,11 +92,18 @@ class SiteController extends Controller
                 foreach ($datas as $v) {
                     if ($json = json_decode($v)) {
                         $tmp = array_keys($logType);
+
                         if (isset($json->f_log_name)) {
                             if (!in_array($json->f_log_name, $tmp)) {
                                 $logType[$json->f_log_name] = 1;
                                 $ret[] = array($json->f_log_name, $fileName);
                                 $type[] = $v ;
+                                if(in_array($json->f_log_name,$tabArr)){
+                                    echo 'in'.$json->f_log_name."<br/>"."<br/>"  ;
+                                }else{
+                                    echo 'not in'.$json->f_log_name."<br/>"."<br/>"  ;
+                                }
+
                             } else {
                                 $logType[$json->f_log_name]++;
                             }
@@ -110,12 +123,12 @@ class SiteController extends Controller
             echo $v[0] ;
             echo "<br/>"; echo "<br/>";
         }
-        foreach($type as $v){
-//            echo $v[1]."   :  " .$v[0]."<br/>";
-            echo $v ;
-            echo "<br/>"; echo "<br/>";
-        }
-        print_r($logType) ;
+//        foreach($type as $v){
+////            echo $v[1]."   :  " .$v[0]."<br/>";
+//            echo $v ;
+//            echo "<br/>"; echo "<br/>";
+//        }
+//        print_r($logType) ;
         closedir($current_dir);
     }
 
