@@ -77,11 +77,11 @@ class SiteController extends Controller
 
 
         //获取mysql的表名
-        $sql= "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'data_analysis'";
-        $command=Yii::$app->db->createCommand($sql);
+        $sql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'data_analysis'";
+        $command = Yii::$app->db->createCommand($sql);
         $posts = $command->queryAll();
-        foreach($posts as $v){
-            $tabArr[] =$v['TABLE_NAME'] ;
+        foreach ($posts as $v) {
+            $tabArr[] = $v['TABLE_NAME'];
         }
 
 
@@ -94,22 +94,37 @@ class SiteController extends Controller
                 $cont = file_get_contents($fileName);
                 $datas = explode("\n", $cont);
 
+
+                $lessArr = array() ;
                 foreach ($datas as $v) {
                     if ($json = json_decode($v)) {
-                        $tmpData = $this->objeToArr($json) ;
+                        $tmpData = $this->objeToArr($json);
+                        $tag = true;
+                        if (isset($json->f_params)){
+                            $tmp2=array() ;
+                                foreach($json->f_params as $k=>$v){
+                                        $tmp2[$k] =$v;
+                                }
+                            if(!$tmp2) $tag=false ;
+                            $tmp1 = $this->objeToArr($json->f_params);
+                            if (count($tmp1) > 5) {
+                            }
+
+                        }
+
+                        continue ;
 //                        if($tmpData['f_log_name']=='log_online_character_cnt'){
 //                            print_r($tmpData) ;die;
 //                        }
 //                        continue ;
-                        $sqlData = $this->createSqlData($tmpData);
+                        $sqlData = $this->createSqlData($tmpData, $lessArr,$tag);
 
-                        continue ;
+                        continue;
                         $tmp = array_keys($logType);
 
-                        if (($name=$useData['f_log_name'])) {
-                            if($name=='log_online_character_cnt') $name='log_onlineinfo';
-                            $tabName ='bi_'.$name ;
-
+                        if (($name = $useData['f_log_name'])) {
+                            if ($name == 'log_online_character_cnt') $name = 'log_onlineinfo';
+                            $tabName = 'bi_' . $name;
 
 
 //                            if (!in_array($tabName, $tmp)) {
@@ -155,32 +170,25 @@ class SiteController extends Controller
     }
 
 
-    public function objeToArr($object){
-        $array=array();
-        $tag = true ;
+    public function objeToArr($object)
+    {
+        $array = array();
         if (is_object($object)) {
             foreach ($object as $key => $value) {
-                if($key=='f_params'){
-                    if($value) {
-                        $array = array_merge($array,$this->objeToArr($value));
-                    }else{
-                        $tag = false ;
+                if ($key == 'f_params') {
+                    if ($value) {
+                        $array = array_merge($array, $this->objeToArr($value));
                     }
-
-                }else{
+                } else {
                     $array[$key] = $value;
                 }
-
-
             }
-        }
-        else {
-
+        } else {
             $array = $object;
         }
 
 //        print_r($array) ;die;
-        return array($array,$tag);
+        return $array;
 
     }
 
@@ -191,53 +199,56 @@ class SiteController extends Controller
      * @param $ret      一维数据 数据表要插入的数据字段值
      *
      */
-    public function createSqlData($allData){
+    public function createSqlData($tmpData,&$lessArr,$tag)
+    {
 
-        $tmpData = $allData[0] ;
-        $tag = $allData[1] ;
-
-        if(!isset($tmpData['f_log_name'])){
-            var_dump($tmpData) ;return;
+        if (!isset($tmpData['f_log_name'])) {
+            var_dump($tmpData);
+            die;
+            return;
         }
         $tabName = $tmpData['f_log_name'];
 
-        $sql = "DESC bi_$tabName " ;
-        $command=Yii::$app->db->createCommand($sql);
+        $sql = "DESC bi_$tabName ";
+        $command = Yii::$app->db->createCommand($sql);
         $columns = $command->queryAll();
+        $tpadArr = array('id','f_type','f_other');
 
-        $lessArr = array() ;
-        foreach($columns as $v){
-            $useColu[] =$v['Field'] ;
-            if(!in_array($v['Field'] ,$tmpData)){
-                if(!in_array($v['Field'],$lessArr)){
-                    $lessArr[]=$v['Field'] ;
-                    if(!$tag){
-                        continue ;
+
+
+        foreach ($columns as $v) {
+            $useColu[] = $v['Field'];
+            if (!in_array($v['Field'], $tmpData)) {
+
+                if(!in_array($v['Field'],$tpadArr )&&!$tag) {
+                    if (!in_array($v['Field'], $lessArr)) {
+                        $lessArr[] = $v['Field'];
+                        echo "缺少的字段:" . $tabName.":" . $v['Field']."<br/><br/>";
                     }
-                    echo '缺少的字段:'.$tabName.":".$v['Field']."<br/><br/>" ;
                 }
-
             }
         }
 
-        $moreArr = array() ;
-        foreach($tmpData as $key=>$val){
-            if($key=='f_log_name'||$key=='f_params') continue ;
-            if(is_array($val)){
-                foreach($val as $k1=> $v1){
-                    if($key=='f_log_name'||$key=='f_params') continue ;
-                    if(!in_array($k1,$useColu)){
-                        if(!in_array($k1,$moreArr)) {
-                            $moreArr[]=$k1;
+
+
+        $moreArr = array();
+        foreach ($tmpData as $key => $val) {
+            if ($key == 'f_log_name' || $key == 'f_params') continue;
+            if (is_array($val)) {
+                foreach ($val as $k1 => $v1) {
+                    if ($key == 'f_log_name' || $key == 'f_params') continue;
+                    if (!in_array($k1, $useColu)) {
+                        if (!in_array($k1, $moreArr)) {
+                            $moreArr[] = $k1;
                             echo $tabName . ":" . $k1 . "<br/><br/>";
                         }
                     }
                 }
-            }else{
-                if(!in_array($key,$useColu)){
-                    if(!in_array($key,$moreArr)) {
-                        $moreArr[]=$key;
-                        echo '多出的字段:'.$tabName . ":" . $key . "<br/><br/>";
+            } else {
+                if (!in_array($key, $useColu)) {
+                    if (!in_array($key, $moreArr)) {
+                        $moreArr[] = $key;
+                        echo '多出的字段:' . $tabName . ":" . $key . "<br/><br/>";
                     }
 
                 }
@@ -245,7 +256,6 @@ class SiteController extends Controller
         }
 
     }
-
 
 
 }
