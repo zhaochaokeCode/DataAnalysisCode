@@ -98,10 +98,10 @@ class SiteController extends Controller
                                 $logType[$json->f_log_name] = 1;
                                 $ret[] = array($json->f_log_name, $fileName);
                                 $type[] = $v ;
-                                if(in_array($json->f_log_name,$tabArr)){
-                                    echo 'in'.$json->f_log_name."<br/>"."<br/>"  ;
+                                if(in_array('bi_'.$json->f_log_name,$tabArr)){
+                                    echo 'in '.$json->f_log_name."<br/>"."<br/>"  ;
                                 }else{
-                                    echo 'not in'.$json->f_log_name."<br/>"."<br/>"  ;
+                                    echo '------ not in'.$json->f_log_name."<br/>"."<br/>"  ;
                                 }
 
                             } else {
