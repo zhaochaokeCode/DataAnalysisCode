@@ -195,7 +195,7 @@ class SiteController extends Controller
         foreach($columns as $v){
             $useColu[] =$v['Field'] ;
             if(!in_array($v['Field'] ,$tmpData)){
-                echo $tabName.":".$v['Field'] ;
+                echo $tabName.":".$v['Field']."<br/><br/>" ;
             }
         }
 
