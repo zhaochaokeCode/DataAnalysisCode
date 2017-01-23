@@ -188,6 +188,9 @@ class SiteController extends Controller
      *
      */
     public function createSqlData($tmpData){
+        if(!isset($tmpData['f_log_name'])){
+            var_dump($tmpData) ;return;
+        }
         $tabName = $tmpData['f_log_name'];
 
         $sql = "DESC bi_$tabName " ;
