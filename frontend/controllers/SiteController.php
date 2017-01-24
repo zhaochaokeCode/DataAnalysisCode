@@ -225,7 +225,7 @@ class SiteController extends Controller
 
                     }
                 }
-                if($tmpData[$colName]=="2017"){
+                if(stristr($tmpData[$colName],'2017')){
                     echo $tmpData[$colName] ; die;
                 }
                 $data[$colName] = $tmpData[$colName] ;
