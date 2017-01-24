@@ -106,22 +106,18 @@
         <?php
        foreach($all_data as $k=>$v){
        ?>
-        var tab_data = <?php echo $v['tab']?> ;
-        var page = <?php echo $v['page']?> ;;
-        var allpage = <?php echo $v['count']?> ;;
-        var tab_key =<?php echo $k?> ;
+        var tab_data =      <?php echo $v['tab']?> ;
+        var page =          <?php echo $v['page']?> ;;
+        var allpage =       <?php echo $v['count']?> ;;
+        var tab_key =       <?php echo $k?> ;
+        initTabData(tab_data,page,allpage,tab_key);
+
+        var series =        <?php echo $v['series']?> ;
+        var categories =    <?php echo $v['categories']?> ;
+
+        initViewDatas(series,categories,tab_key);
 
         <?php }?>
-        initTabData(tab_data,page,allpage,tab_key);
-//        var all_data = <?php //echo $view_data?>//;
-//        var tab_data = <?php //echo $tab_data?>//;
-//        var page = <?php //echo $page?>//;
-//        var allpage = <?php //echo $count?>//;
-//        var url_val = <?php //echo $url?>//;
-//        initTabData(tab_data,page,allpage);
-        initViewDatas(all_data);
-
-
     })
 </script>
 

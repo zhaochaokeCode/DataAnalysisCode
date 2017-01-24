@@ -1,35 +1,14 @@
-/**
- * 初始化数据
- * @param all_data
- */
-function initViewDatas(all_data) {
-    creAllData(all_data);//生成hightcharts 图表
 
-}
 
 
 /**
  * 初始化 js函数
  * 生成各种图表结构
  */
-function creAllData(all_data) {
-    var num = 0;
-    $("#all_view_id div").each(function () {
-        id_text = "#" + this.id;
-        //if(id_text.indexOf("container") > -1){
-        //// 传递给相应的数组结构
-        //$.each(all_data['tag_all'], function(i, n){
-        //    alert(i+':'+n)
-        //})
-        createLineView(id_text, all_data[num]);
-
-        //其它的隐藏掉
-        if (num != 0) {
-            $(id_text).hide();
-        }
-        num++;
-    })
-
+function initViewDatas(series,categories,tab_key) {
+    var num = tab_key+1;
+    id_text = "#container"+String(num);
+    createLineView(id_text, series,categories);
 }
 
 
@@ -185,7 +164,7 @@ function pagesAjax(page, allpage) {
  * @param tab_id
  * @param all_data
  */
-function createLineView(tab_id, all_data) {
+function createLineView(tab_id,series,categories) {
 
 
     $(tab_id).highcharts({
@@ -198,7 +177,7 @@ function createLineView(tab_id, all_data) {
             x: -20 //center
         },
         xAxis: {
-            categories: all_data.categories
+            categories:categories
         },
         yAxis: {
             title: {
@@ -219,7 +198,7 @@ function createLineView(tab_id, all_data) {
             verticalAlign: 'middle',
             borderWidth: 0
         },
-        series: all_data.series
+        series:series
 
     });
 }
