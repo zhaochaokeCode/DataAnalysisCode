@@ -207,6 +207,10 @@ class SiteController extends Controller
             return;
         }
         $tabName = $tmpData['f_log_name'];
+        $sql = 
+
+
+
 
         $sql = "DESC bi_$tabName ";
         $command = Yii::$app->db->createCommand($sql);
