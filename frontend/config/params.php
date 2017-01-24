@@ -12,35 +12,34 @@ return [
             //----新增玩家----
             'character' => array(
                 'tag' => array( //tag标签信息
-                    array(//新增激活和账户
-                        'name' => '新增激活和账户',
-                        'categories' => $mouthName,
-                        'dataName' => array('设备激活', '新增玩家'),
-                    ),
-                    array(//玩家转化
-                        'name' => '玩家转化',
-                        'categories' => $numArr,
-                        'dataName' => array('玩家转化'),
-                    ),
-                     array(//玩家转化
-                         'name' => '测试数据',
-                         'categories' => $numArr,
-                         'dataName' => array('测试数据'),
+                    array(//新增注册用户
+                        'name' => '新增注册用户',
+//                        'categories' => $mouthName,
+                        'dataName' => array('新增注册用户'),
+//                    ),
+//                    array(//玩家转化
+//                        'name' => '玩家转化',
+//                        'categories' => $numArr,
+//                        'dataName' => array('玩家转化'),
+//                    ),
+//                     array(//玩家转化
+//                         'name' => '测试数据',
+//                         'categories' => $numArr,
+//                         'dataName' => array('测试数据'),
                      )
                 ),
                 'tab_all'=>array(
                     array(
-                        'thred'=>array($dateName,'设备激活', '新增玩家') ,
-                        'dataname'=>$mouthName,
-                    ),
-                    array(
-                        'thred'=>array($dateName,'玩家转化',) ,
-                        'dataname'=>$mouthName,
-                    ),
-                    array(
-                        'thred'=>array($dateName,'测试数据',) ,
-                        'dataname'=>$mouthName,
-                    ),
+                        'thred'=>array($dateName,'新增注册用户',) ,
+//                        'dataname'=>$mouthName,
+                    )
+//                    array(
+//                        'dataname'=>$mouthName,
+//                    ),
+//                    array(
+//                        'thred'=>array($dateName,'测试数据',) ,
+//                        'dataname'=>$mouthName,
+//                    ),
                 )
 
             ),

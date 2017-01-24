@@ -224,11 +224,12 @@ class SiteController extends Controller
                         $tmpData[$colName] = strtotime($tmpArr[0]) ;
 
                     }
+                    if(strlen($tmpData[$colName])>11){
+                        echo $tmpData[$colName]."<br/><br/>";
+                        continue ;
+                    }
                 }
-                if(strlen($tmpData[$colName])>11){
-                    echo $tmpData[$colName] ;
-                    continue ;
-                }
+
                 $data[$colName] = $tmpData[$colName] ;
             }
         }

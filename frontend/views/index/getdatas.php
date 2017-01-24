@@ -24,9 +24,9 @@
                     <ul class="nav nav-tabs" id="all_tab">
                         <?php
                         global $view_id ;
-                            if($view_arr){
-                                for($i=0;$i<count($view_arr['tag']);$i++){
-                                    $tagName = $view_arr['tag'][$i]['name'] ;
+                            if($all_data){
+                                for($i=0;$i<count($all_data);$i++){
+                                    $tagName = $all_data[$i]['tag']['name'] ;
                                     $key = $i+1 ;
                                     $default = $i>0?'':"class=\"active\"" ;
                                     echo "<li id=\"tab_$key\" $default ><a href=\"#box_tab$key\" data-toggle=\"tab\"><i
@@ -67,8 +67,8 @@
         </div>
         <div id="tab_all">
             <?php
-                if($tab_arr){
-                    for($i=1;$i<=count($tab_arr);$i++){
+                if($all_data){
+                    for($i=1;$i<=count($all_data);$i++){
                         echo " <div id=\"tabdata$i\"></div>" ;
                     }
                 }
@@ -103,13 +103,23 @@
 
 <script type="text/javascript">
     $(function () {
-        var all_data = <?php echo $view_data?>;
-        var tab_data = <?php echo $tab_data?>;
-        var page = <?php echo $page?>;
-        var allpage = <?php echo $count?>;
+        <?php
+       foreach($all_data as $k=>$v){
+       ?>
+        var tab_data = <?php echo $v['tab']?> ;
+        var page = <?php echo $v['page']?> ;;
+        var allpage = <?php echo $v['count']?> ;;
+        var tab_key =<?php echo $k?> ;
+
+        <?php }?>
+        initTabData(tab_data,page,allpage,tab_key);
+//        var all_data = <?php //echo $view_data?>//;
+//        var tab_data = <?php //echo $tab_data?>//;
+//        var page = <?php //echo $page?>//;
+//        var allpage = <?php //echo $count?>//;
 //        var url_val = <?php //echo $url?>//;
-        initTabData(tab_data,page,allpage);
-        initDatas(all_data);
+//        initTabData(tab_data,page,allpage);
+        initViewDatas(all_data);
 
 
     })
