@@ -219,12 +219,15 @@ class SiteController extends Controller
             if(isset($tmpData[$colName])){
                 if($colName=="f_time"){
                     $time = $tmpData[$colName] ;
-                    if(stristr($time,':')){
+                    if(stristr($time,'.')){
                         $tmpArr = explode('.',$time);
                         $tmpData[$colName] = strtotime($tmpArr[0]) ;
+
                     }
                 }
-
+                if($tmpData[$colName]=="2017"){
+                    echo $tmpData[$colName] ; die;
+                }
                 $data[$colName] = $tmpData[$colName] ;
             }
         }
