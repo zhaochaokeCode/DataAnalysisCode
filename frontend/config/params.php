@@ -10,7 +10,7 @@ return [
         //-----游戏玩家-----
         "gamePlayer" => array(
             //----新增玩家----
-            'install' => array(
+            'character' => array(
                 'tag' => array( //tag标签信息
                     array(//新增激活和账户
                         'name' => '新增激活和账户',

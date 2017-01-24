@@ -98,7 +98,7 @@
                         <span class="arrow"></span>
                     </a>
                     <ul class="sub" id="player">
-                        <li><a id="tab_player_new" href="?action=install"><span class="sub-menu-text">新增玩家</span></a></li>
+                        <li><a id="tab_player_new" href="?action=character"><span class="sub-menu-text">新增玩家</span></a></li>
                         <li><a id="tab_player_active" href="?action=active"><span class="sub-menu-text">活跃玩家</span></a></li>
                         <li><a id="tab_player_remain" href="#"><span class="sub-menu-text">玩家留存</span></a></li>
                         <li><a id="tab_player_trans" href="#"><span class="sub-menu-text">付费转化</span></a></li>

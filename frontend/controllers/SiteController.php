@@ -203,7 +203,6 @@ class SiteController extends Controller
 
         if (!isset($tmpData['f_log_name'])) {
             var_dump($tmpData);
-            die;
             return;
         }
         $tabName =  "bi_".$tmpData['f_log_name'];
@@ -220,8 +219,10 @@ class SiteController extends Controller
             if(isset($tmpData[$colName])){
                 if($colName=="f_time"){
                     $time = $tmpData[$colName] ;
-                    $tmpArr = explode('.',$time);
-                    $tmpData[$colName] = $tmpArr[0];
+                    if(stristr($time,':')){
+                        $tmpArr = explode('.',$time);
+                        $tmpData[$colName] = strtotime($tmpArr[0]) ;
+                    }
                 }
 
                 $data[$colName] = $tmpData[$colName] ;

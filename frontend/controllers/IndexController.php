@@ -22,7 +22,7 @@ class IndexController extends Controller
      */
     public function actionIndex()
     {
-        $action = isset($_GET['action'])?$_GET['action']:'install' ;
+        $action = isset($_GET['action'])?$_GET['action']:'character' ;
         return $this->render('index',
                         array('action'=>$action));
     }
@@ -65,7 +65,6 @@ class IndexController extends Controller
      */
     public function actionPages()
     {
-
         return $this->render('pageshow');
     }
 
@@ -84,6 +83,12 @@ class IndexController extends Controller
     private function createData()
     {
         //配置相关参数
+
+
+
+
+
+
 
         $conDatas = Yii::$app->params['tabConfig'];
         $key = $_GET['action'];
@@ -146,6 +151,16 @@ class IndexController extends Controller
      */
     private function getData()
     {
+
+        $tabName =  "bi_log_".$_GET['action'] ;
+
+        $connection = Yii::$app->db ;
+        $command = $connection->createCommand("SELECT * FROM  $tabName");
+        $posts = $command->queryAll();
+
+        var_dump($posts) ;
+
+
 //        $data1 = array(explode(',', '100.0,6.9,9.5,14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6' ));
         $data1 = explode(',', '100.0,6.9,9.5,14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6');
 //        $data1[] =  $data1[0] ;
