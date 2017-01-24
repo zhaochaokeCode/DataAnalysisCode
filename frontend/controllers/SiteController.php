@@ -206,16 +206,43 @@ class SiteController extends Controller
             die;
             return;
         }
-        $tabName = $tmpData['f_log_name'];
-        $sql = 
+        $tabName =  "bi_".$tmpData['f_log_name'];
 
 
 
 
-        $sql = "DESC bi_$tabName ";
+        $sql = "DESC $tabName ";
         $command = Yii::$app->db->createCommand($sql);
         $columns = $command->queryAll();
         $tpadArr = array('id','f_type','f_other');
+        foreach ($columns as $v) {
+            $colName = $v['Field'];
+            if(isset($tmpData[$colName])){
+                if($colName=="f_time"){
+                    $time = $tmpData[$colName] ;
+                    $tmpArr = explode('.',$time);
+                    $tmpData[$colName] = $tmpArr[0];
+                }
+
+                $data[$colName] = $tmpData[$colName] ;
+            }
+        }
+
+        Yii::$app->db->createCommand()->insert($tabName,$data)->execute();
+        return ;
+
+
+//        Yii::$app->db->createCommand()->batchInsert(UserModel::$tabName(), ['user_id','username'], [
+//            ['1','test1'],
+//            ['2','test2'],
+//            ['3','test3'],
+//        ])->execute();
+//
+//
+
+
+
+
 
 
 
