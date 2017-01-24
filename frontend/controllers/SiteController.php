@@ -225,8 +225,9 @@ class SiteController extends Controller
 
                     }
                 }
-                if(stristr($tmpData[$colName],'2017')){
-                    echo $tmpData[$colName] ; die;
+                if(strlen($tmpData[$colName])>11){
+                    echo $tmpData[$colName] ;
+                    continue ;
                 }
                 $data[$colName] = $tmpData[$colName] ;
             }
