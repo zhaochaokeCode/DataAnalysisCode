@@ -2,7 +2,7 @@
  * 初始化数据
  * @param all_data
  */
-function initDatas(all_data) {
+function initViewDatas(all_data) {
     creAllData(all_data);//生成hightcharts 图表
 
 }
@@ -63,24 +63,21 @@ $("#all_tab li").click(function () {
 
 //----------生成table数据 TABLE START------------
 
-function initTabData(tab_data, pages, allpage) {
+function initTabData(tab_data, pages, allpage,key) {
     pagesAjax(pages, allpage);
     //生成tab
-    $.each(tab_data, function (i, n) {
-        createTable(i, n);
-    })
+    createTable(tab_data,key);
     //分页
 
 }
-function createTable(i, n) {
+function createTable(tab_data, key) {
     var table = $("<table border=\"1\"    class=\"datatable table table-striped table-bordered table-hover\">");
-    var div_key = i + 1;
+    var div_key = key + 1;
 
     div_name = "#tabdata" + div_key.toString();
-
     table.appendTo($(div_name));
 
-    $.each(n, function (i1, n1) {
+    $.each(tab_data, function (i1, n1) {
         var tr = $("<tr></tr>");
         if (i1 == 0) {
             var tr = $("<thead><tr></tr></thead>");
@@ -95,17 +92,17 @@ function createTable(i, n) {
         })
     })
     $("</table>").appendTo($("div_name"));
-    if (i != 1) {
+    if (key != 0) {
         $(div_name).hide();
     }
 
 }
-function pagesAjax(pages, allpage) {
+function pagesAjax(page, allpage) {
     var current_page = 5;
 
     $('#smart-paginator').smartpaginator({
-        totalrecords: 100,
-        recordsperpage: 5,
+        totalrecords: allpage,
+        recordsperpage: page,
         next: '下一页',
         prev: '上一页',
         first: '首页',
