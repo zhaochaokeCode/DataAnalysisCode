@@ -100,7 +100,6 @@ class IndexController extends Controller
      */
     private function getData()
     {
-
         $tabName =  "bi_log_".$_GET['action'] ;
 
         $connection = Yii::$app->db ;

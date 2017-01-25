@@ -66,10 +66,10 @@ class SiteController extends Controller
             ],
         ];
     }
-
     public function actionIndex()
     {
-
+        echo 123 ;
+        if(!isset($_GET['create']));return ;
         $path = Yii::$app->params['logPath'];
         $current_dir = opendir($path);
         $logType = array();
