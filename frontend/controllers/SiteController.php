@@ -91,6 +91,8 @@ class SiteController extends Controller
         $contFile = file_get_contents($sinkFile);
         $fileArr = explode("\n", $contFile);
         $lessArr = array();
+        var_dump($fileArr) ;
+
 
         //读取每个文件并保存到数据库
         foreach ($fileArr as $v) {
