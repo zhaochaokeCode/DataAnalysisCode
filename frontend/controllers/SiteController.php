@@ -73,8 +73,7 @@ class SiteController extends Controller
         if (!isset($_GET['create'])) ;  return;
 
         $sinkFile = Yii::$app->params['skillPath'];//中间通道数据文件路径
-        $filePath = Yii::$app->params['filePath'];
-        $current_dir = opendir($path);
+        $path = Yii::$app->params['filePath']; //文件保存目录
         $logType = array();
         $ret = array();
 
