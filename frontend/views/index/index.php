@@ -94,15 +94,21 @@
                 <li class="has-sub">
                     <a href="javascript:;" class="">
                         <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">游戏玩家<span
-                                class="badge pull-right">5</span></span>
+                                class="badge pull-right">9</span></span>
                         <span class="arrow"></span>
                     </a>
                     <ul class="sub" id="player">
-                        <li><a id="tab_player_new" href="?action=character"><span class="sub-menu-text">新增玩家</span></a></li>
-                        <li><a id="tab_player_active" href="?action=active"><span class="sub-menu-text">活跃玩家</span></a></li>
-                        <li><a id="tab_player_remain" href="#"><span class="sub-menu-text">玩家留存</span></a></li>
-                        <li><a id="tab_player_trans" href="#"><span class="sub-menu-text">付费转化</span></a></li>
-                        <li><a id="tab_player_leave" href="#"><span class="sub-menu-text">玩家流失</span></a></li>
+                        <li><a id="tab_character" href="#"><span class="sub-menu-text">新增玩家</span></a></li>
+                        <li><a id="tab_recharge" href="#"><span class="sub-menu-text">充值玩家</span></a></li>
+                        <li><a id="tab_jinbi" href="#"><span class="sub-menu-text">金币消耗</span></a></li>
+                        <li><a id="tab_card_train" href="#"><span class="sub-menu-text">灵偶培养消耗经验</span></a></li>
+                        <li><a id="tab_skill_up" href="#"><span class="sub-menu-text">驭风培养消耗经验</span></a></li>
+                        <li><a id="tab_jingjie_up" href="#"><span class="sub-menu-text">境界升级消耗经验</span></a></li>
+                        <li><a id="tab_killboss" href="#"><span class="sub-menu-text">每日击杀boss数量</span></a></li>
+
+                        <li><a id="tab_yuanbao" href="#"><span class="sub-menu-text">每日获得元宝数量</span></a></li>
+<!--                        <li><a id="tab_killboss" href="#"><span class="sub-menu-text">每日击杀boss数量</span></a></li>-->
+
                     </ul>
                 </li>
                 <li class="has-sub">
@@ -257,6 +263,9 @@
 
 <!--获取查询数据的js-->
 <script src="/js/create-data/init.js"></script>
+<script type="text/javascript">
+
+</script>
 
 </body>
 </html>

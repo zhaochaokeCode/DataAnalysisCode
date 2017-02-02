@@ -32,7 +32,7 @@ class IndexController extends Controller
      */
     public function actionGetdatas()
     {
-        if($_GET['page']){//查询
+        if(isset($_GET['page'])){//查询
             $this->getData() ;
         }
         $allData = $this->createData();
@@ -101,11 +101,10 @@ class IndexController extends Controller
     private function getData()
     {
         $tabName =  "bi_log_".$_GET['action'] ;
-
         $connection = Yii::$app->db ;
         $command = $connection->createCommand("SELECT * FROM  $tabName order BY f_time asc");
         $allDatas = $command->queryAll();
-//        var_dump($allDatas) ;
+//        var_dump($allDatas[0]) ;die;
 //        if($_GET['action']=='character')
         $numArr = array() ;
         $dateArr= array() ;
@@ -114,28 +113,78 @@ class IndexController extends Controller
             if($k1=='f_time'){
                 $v1 = date("Y-m-d",$v1) ;
                 if(in_array($v1,$dateArr)){
-                    $numArr[$v1]++;
+                    switch ($_GET['action']){
+                        case 'character' :
+                            $numArr[$v1]++;
+                            break;
+                        case 'recharge':
+                            $numArr[$v1]+=$v['f_recharge_yuanbao'] ;
+                            break;
+                        case 'jinbi':
+                            $numArr[$v1]+=$v['f_jinbi'] ;
+                            break;
+                        case 'card_train':
+                            $numArr[$v1]+=$v['f_jingyan_num'] ;
+                            break;
+                        case 'skill_up'://技能功法消耗日志
+                            $numArr[$v1]+=$v['f_goods_num'] ;
+                            break;
+                        case 'jingjie_up'://境界修练日志
+                            $numArr[$v1]+=$v['f_jingjie_num'] ;
+                            break;
+                        case 'killboss'://boss击杀数量
+                            $numArr[$v1]++;
+                            break;
+                        case 'yuanbao'://boss击杀数量
+                            $numArr[$v1]+=$v['f_yuanbao'] ;
+                            break;
+                    }
+
                 }else {
-                    $numArr[$v1] = 0;
+                    switch ($_GET['action']){
+                        case 'character' :
+                            $numArr[$v1] = 0;
+                            break;
+                        case 'recharge':
+                            $numArr[$v1]=$v['f_recharge_yuanbao'] ;
+                            break;
+                        case 'jinbi':
+                            $numArr[$v1]=$v['f_jinbi'] ;
+                            break;
+                        case 'card_train':
+                            $numArr[$v1]=$v['f_jingyan_num'] ;
+                            break;
+                        case 'skill_up'://技能功法消耗日志
+                            $numArr[$v1]=$v['f_goods_num'] ;
+                            break;
+                        case 'jingjie_up'://境界修练日志
+                            $numArr[$v1]=$v['f_jingjie_num'] ;
+                            break;
+                        case 'killboss'://boss击杀数量
+                            $numArr[$v1] = 0;
+                            break;
+                        case 'yuanbao'://元宝获得数量
+                            $numArr[$v1] = $v['f_yuanbao'] ;
+                            break;
+                    }
                     $dateArr[] = $v1;
                 }
             }
 
         }
         $count = count($numArr) ;
-        $page = $_GET['page']?$_GET['page']:1;
+        $page = isset($_GET['page'])?$_GET['page']:1;
 
         foreach($numArr as $k=>$v){
             $tabArr[] = array($k,$v) ;
+            $serArr[] = doubleval($v) ;
         }
-
-
         //一个表格配置一个视图
         return  $allTableData  = array( array(
                                 'count' => $count,
                                 'page' => $page,
                                 'categories'=>json_encode($dateArr),
-                                'series'=>array_values($numArr), //这个还需要重新分配数组,如果是多维度
+                                'series'=>$serArr, //这个还需要重新分配数组,如果是多维度
                                 'tab'=>$tabArr
                                 ));
 

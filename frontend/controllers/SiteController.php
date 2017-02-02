@@ -69,11 +69,11 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        echo 123;
-        if (!isset($_GET['create'])) ;  return;
+//        echo 123;
+//        if (!isset($_GET['create'])) ;  return;
 
-        $sinkFile = Yii::$app->params['skillPath'];//中间通道数据文件路径
-        $path = Yii::$app->params['filePath']; //文件保存目录
+        $sinkFile = Yii::$app->params['runFile'];//中间通道数据文件路径
+        $logPath = Yii::$app->params['tmpFilePath']; //文件保存目录
         $logType = array();
         $ret = array();
 
@@ -90,12 +90,14 @@ class SiteController extends Controller
         $contFile = file_get_contents($sinkFile);
         $fileArr = explode("\n", $contFile);
         $lessArr = array();
-        var_dump($fileArr) ;
+//        var_dump($fileArr) ;
 
 
         //读取每个文件并保存到数据库
         foreach ($fileArr as $v) {
-            $fileName = $path . $v;
+            $fileName = $logPath . $v;
+            $cont = file_get_contents($fileName);
+
             $datas = explode("\n", $cont);
             $lessArr = array();
             foreach ($datas as $v) {
@@ -114,10 +116,11 @@ class SiteController extends Controller
 
                     }
                     $moreArr = array();
-//                    $sqlData = $this->createSqlData($tmpData, $lessArr, $tag, $moreArr);
+                    $sqlData = $this->createSqlData($tmpData, $lessArr, $tag, $moreArr);
                 }
             }
         }
+    }
 
 //            while (($file = readdir($current_dir)) !== false) {
 //                if ($file == '.' || $file == '..') {
@@ -149,7 +152,7 @@ class SiteController extends Controller
 //                            print_r($tmpData) ;die;
 //                        }
 //                        continue ;
-                            $moreArr = array();
+//                            $moreArr = array();
 //                            $sqlData = $this->createSqlData($tmpData, $lessArr, $tag, $moreArr);
 //                        }
 //                    }
@@ -203,8 +206,8 @@ class SiteController extends Controller
 ////            echo "<br/>"; echo "<br/>";
 ////        }
 //        print_r($logType) ;
-            closedir($current_dir);
-        }
+//            closedir($current_dir);
+//        }
 
 
         function objeToArr($object)
@@ -236,8 +239,7 @@ class SiteController extends Controller
          * @param $ret      一维数据 数据表要插入的数据字段值
          *
          */
-        public
-        function createSqlData($tmpData, &$lessArr, $tag, &$moreArr)
+        public function createSqlData($tmpData, &$lessArr, $tag, &$moreArr)
         {
 
             if (!isset($tmpData['f_log_name'])) {
@@ -259,7 +261,6 @@ class SiteController extends Controller
                         if (stristr($time, '.')) {
                             $tmpArr = explode('.', $time);
                             $tmpData[$colName] = strtotime($tmpArr[0]);
-
                         }
                         if (strlen($tmpData[$colName]) > 11) {
                             echo $tmpData[$colName] . "<br/><br/>";
@@ -271,7 +272,7 @@ class SiteController extends Controller
                 }
             }
 
-            Yii::$app->db->createCommand()->insert($tabName, $data)->execute();
+//            Yii::$app->db->createCommand()->insert($tabName, $data)->execute();
             return;
 
 

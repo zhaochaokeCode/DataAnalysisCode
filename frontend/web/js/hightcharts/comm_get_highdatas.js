@@ -121,19 +121,17 @@ function pagesAjax(page, allpage) {
                 }
 
             }
-            i=0;
+            k=0;
             if(args) {
                 $.each(args, function (n, value) {
-                    if(i==0){
+                    if(k==0){
                         data_url+="?"+n+"="+value ;
-                        i++;
+                        k++;
                     }else{
                         data_url+="&"+n+"="+value ;
                     }
                 })
             }
-        alert(data_url) ;
-        window.location.href=data_url;
             //data_url = winw.location.pathname+"?action="+args['action']+"&page="+newPageValue;
 
 
