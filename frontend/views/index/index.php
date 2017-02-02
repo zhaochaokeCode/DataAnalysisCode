@@ -102,7 +102,7 @@
                         <li><a id="tab_recharge" href="#"><span class="sub-menu-text">充值玩家</span></a></li>
                         <li><a id="tab_jinbi" href="#"><span class="sub-menu-text">金币消耗</span></a></li>
                         <li><a id="tab_card_train" href="#"><span class="sub-menu-text">灵偶培养消耗经验</span></a></li>
-                        <li><a id="tab_skill_up" href="#"><span class="sub-menu-text">驭风培养消耗经验</span></a></li>
+                        <li><a id="tab_skill_up" href="#"><span class="sub-menu-text">技能功法消耗经验</span></a></li>
                         <li><a id="tab_jingjie_up" href="#"><span class="sub-menu-text">境界升级消耗经验</span></a></li>
                         <li><a id="tab_killboss" href="#"><span class="sub-menu-text">每日击杀boss数量</span></a></li>
 
