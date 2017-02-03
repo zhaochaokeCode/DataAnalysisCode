@@ -223,6 +223,7 @@
                                                 结束:<input class="datainp wicon" id="inpend2" type="text">
                                                 结束:<input class="datainp wicon" id="inpend3" type="text">
                                             </div>
+                                            <div id="hide_action" name="<?php echo $action?>" ></div>
                                         </div>
                                     </form>
 
@@ -261,8 +262,8 @@
 <script src="/js/jedate/jquery.jedate.min.js"></script>
 <script src="/js/jedate/comm_date.js"></script>
 
-<!--获取查询数据的js-->
-<script src="/js/create-data/init.js"></script>
+<!--搜索条件的js-->
+<script src="/js/controller-js/index.js"></script>
 <script type="text/javascript">
 
 </script>

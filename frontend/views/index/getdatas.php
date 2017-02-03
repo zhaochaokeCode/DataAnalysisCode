@@ -24,7 +24,7 @@
                     <ul class="nav nav-tabs" id="all_tab">
                         <?php
                         global $view_id ;
-                            if($all_data){
+                            if($all_data[0]){
                                 for($i=0;$i<count($all_data);$i++){
                                     $tagName = $all_data[$i]['tag']['name'] ;
                                     $key = $i+1 ;
@@ -35,51 +35,42 @@
                                     $view_id .=" <div id=\"container$key\" style=\"min-width: 200px;margin: 0 auto\"></div>";
 
                                 }
+                            }else{
+                                echo '<h1 align="center">对不起,没有数据</h1>';
                             }
                         ?>
 
-<!--                                highgtchart 视图 遍历循环 此处用php动态生成-->
-<!--                        <li id="tab_1" class="active"><a href="#box_tab1" data-toggle="tab"><i-->
-<!--                                    class="fa fa-bar-chart-o"></i> <span class="hidden-inline-mobile">新增激活和账户</span></a>-->
-<!--                        </li>-->
-<!--                        <li id="tab_2"><a href="#box_tab2" data-toggle="tab"><i class="fa fa-search-plus"></i> <span-->
-<!--                                    class="hidden-inline-mobile">玩家转化</span></a></li>-->
-<!--                        <li id="tab_3"><a href="#box_tab2" data-toggle="tab"><i class="fa fa-search-plus"></i> <span-->
-<!--                                    class="hidden-inline-mobile">玩家转化</span></a></li>-->
                     </ul>
                     <div id="all_view_id">
                         <!--        tab视图             遍历循环 此处用php动态生成-->
                         <?php echo $view_id ;?>
-<!--                        <div id="container1" style="min-width: 200px;margin: 0 auto"></div>-->
-<!--                        <div id="container2" style="min-width: 200px;margin: 0 auto"></div>-->
-<!--                        <div id="container3" style="min-width: 200px;margin: 0 auto"></div>-->
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<?php
+if($all_data[0]){
+?>
 <!-- PAGE HEADER-->
 <div class="box border orange">
     <div class="box-body">
+
         <div style="margin-left: 800px;margin-bottom: 2px;">
             <button class="btn btn-info">excel下载</button>
         </div>
         <div id="tab_all">
             <?php
-                if($all_data){
-                    for($i=1;$i<=count($all_data);$i++){
-                        echo " <div id=\"tabdata$i\"></div>" ;
-                    }
+                for($i=1;$i<=count($all_data);$i++){
+                    echo " <div id=\"tabdata$i\"></div>" ;
                 }
-
             ?>
-<!--            <div id="tabdata1"></div>-->
             <div id="smart-paginator" style="width: 800px" > </div>
         </div>
     </div>
 </div>
-
+<?php }?>
 </body>
 </html>
 
@@ -107,7 +98,7 @@
        foreach($all_data as $k=>$v){
        ?>
         var tab_data =      <?php echo $v['tab']?> ;
-        var page =          <?php echo $v['page']?> ;;
+        var page =          <?php echo ceil($v['page']/10)?> ;;
         var allpage =       <?php echo $v['count']?> ;;
         var tab_key =       <?php echo $k?> ;
         initTabData(tab_data,page,allpage,tab_key);

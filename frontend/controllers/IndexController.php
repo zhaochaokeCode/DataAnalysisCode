@@ -68,7 +68,7 @@ class IndexController extends CommController
 
         //游戏相关数据 三个数据 游戏数据,当前第几页,总共多少页
         $allGame = $this->getData();
-
+        if(!$allGame[0]) return $allGame ;
         //增加表格数据和tag标签名称
         foreach ($configDatas['tab_all'] as $k=>$v) {
             array_unshift($allGame[$k]['tab'], $v['thred']);
@@ -101,8 +101,22 @@ class IndexController extends CommController
     {
         $tabName =  "bi_log_".$_GET['action'] ;
         $connection = Yii::$app->db ;
-        $command = $connection->createCommand("SELECT * FROM  $tabName order BY f_time asc");
+
+        $where = 'where 1' ;
+
+        if($_GET['starttime']){
+            $where.= ' and f_time>='.strtotime($_GET['starttime']);
+        }
+
+        if($_GET['endtime']){
+            $where.= ' and f_time<='.strtotime($_GET['endtime']);
+        }
+
+
+        $command = $connection->createCommand("SELECT * FROM  $tabName $where order BY f_time asc");
+
         $allDatas = $command->queryAll();
+        if(!$allDatas) return array(array()) ;
 //        var_dump($allDatas[0]) ;die;
 //        if($_GET['action']=='character')
         $numArr = array() ;

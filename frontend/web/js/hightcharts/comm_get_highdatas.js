@@ -77,18 +77,17 @@ function createTable(tab_data, key) {
 
 }
 function pagesAjax(page, allpage) {
-    var current_page = 5;
 
     $('#smart-paginator').smartpaginator({
-        totalrecords: allpage,
-        recordsperpage: page,
+        totalrecords:page ,
+        recordsperpage:10,
         next: '下一页',
         prev: '上一页',
         first: '首页',
         last: '末页',
         go: '前往',
         theme: 'docloud-pagi',
-        initval: current_page,
+        initval: 1,
         onchange: onPageChange
 
     });
