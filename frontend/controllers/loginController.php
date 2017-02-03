@@ -19,10 +19,10 @@ class LoginController extends Controller{
     public function actionIndex(){
 
         $session = Yii::$app->session;
-        if(isset( $session['user_name'])){
-            echo $session['user_name'] ;
-            $this->redirect("http://172.16.67.180");  die;
-        }
+//        if(isset( $session['user_name'])){
+//            echo $session['user_name'] ;
+//            $this->redirect("http://172.16.67.180");  die;
+//        }
 
         //登录检查
         if(isset($_POST['name'])&&isset($_POST['password'])){
