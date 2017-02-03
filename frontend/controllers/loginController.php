@@ -23,16 +23,18 @@ class LoginController extends Controller{
 //            echo $session['user_name'] ;
 //            $this->redirect("http://172.16.67.180");  die;
 //        }
-
+        var_dump($_POST) ;
         //登录检查
         if(isset($_POST['name'])&&isset($_POST['password'])){
-            if($_POST['name']&&$_POST['password']){
-                $session['user_name']= $_POST['name'] ;
-                echo true ;
-            }else{
-                echo false ;
-            }
-            return ;
+
+            echo 1;die ;
+//            if($_POST['name']&&$_POST['password']){
+//                $session['user_name']= $_POST['name'] ;
+//                echo true ;
+//            }else{
+//                echo false ;
+//            }
+//            return ;
         }
 
         $this->render('index') ;
