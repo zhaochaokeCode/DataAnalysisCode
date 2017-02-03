@@ -36,7 +36,7 @@ class LoginController extends Controller{
 //            }
 //            return ;
         }
-
+        echo 33 ;die;
         $this->render('index') ;
 
 
