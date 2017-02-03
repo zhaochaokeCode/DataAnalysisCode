@@ -8,6 +8,7 @@ function submitBut(id_var){
         success: function(data2) {
             alert(data2) ;
             if(data2==1){
+                
                 alert('验证成功') ;
             //location.href = "http://172.16.67.180" ;
             }else{
