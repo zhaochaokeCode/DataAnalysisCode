@@ -9,6 +9,7 @@ namespace frontend\controllers;
 
 
 use Yii;
+
 /**
  * Index     controller
  */
@@ -21,9 +22,9 @@ class IndexController extends CommController
      */
     public function actionIndex()
     {
-        $action = isset($_GET['action'])?$_GET['action']:'character' ;
+        $action = isset($_GET['action']) ? $_GET['action'] : 'character';
         return $this->render('index',
-                        array('action'=>$action));
+            array('action' => $action));
     }
 
     /**
@@ -31,11 +32,11 @@ class IndexController extends CommController
      */
     public function actionGetdatas()
     {
-        if(isset($_GET['page'])){//查询
-            $this->getData() ;
+        if (isset($_GET['page'])) {//查询
+            $this->getData();
         }
         $allData = $this->createData();
-        return $this->render('getdatas', array('all_data'=>$allData));
+        return $this->render('getdatas', array('all_data' => $allData));
     }
 
     /**
@@ -68,27 +69,25 @@ class IndexController extends CommController
 
         //游戏相关数据 三个数据 游戏数据,当前第几页,总共多少页
         $allGame = $this->getData();
-        if(!$allGame[0]) return $allGame ;
+        if (!$allGame[0]) return $allGame;
         //增加表格数据和tag标签名称
-        foreach ($configDatas['tab_all'] as $k=>$v) {
+        foreach ($configDatas['tab_all'] as $k => $v) {
             array_unshift($allGame[$k]['tab'], $v['thred']);
-            $allGame[$k]['tab'] = json_encode( $allGame[$k]['tab']) ;
+            $allGame[$k]['tab'] = json_encode($allGame[$k]['tab']); //tab的时间标示
             //这个还得去大数组中去取
-            $allGame[$k]['tag'] =$configDatas['tag'][$k] ;
+            $allGame[$k]['tag'] = $configDatas['tag'][$k];
             $allGame[$k]['series'] = json_encode(array(
-                                        array(
-                                            'name'=>$configDatas['tag'][$k]['name'] ,
-                                            'data'=>$allGame[$k]['series']
-                                        )
+                    array(
+                        'name' => $configDatas['tag'][$k]['name'],//视图的时间标示
+                        'data' => $allGame[$k]['series']
+                    )
                 )
-                                 ) ;
+            );
 
         }
-        return $allGame ;
+        return $allGame;
 
     }
-
-
 
 
     /**
@@ -99,110 +98,191 @@ class IndexController extends CommController
      */
     private function getData()
     {
-        $tabName =  "bi_log_".$_GET['action'] ;
-        $connection = Yii::$app->db ;
+        $tabName = "bi_log_" . $_GET['action'];
+        $connection = Yii::$app->db;
 
-        $where = 'where 1' ;
+        $where = 'where 1';
 
-        if($_GET['starttime']){
-            $where.= ' and f_time>='.strtotime($_GET['starttime']);
+        if ($_GET['starttime']) {
+            $where .= ' and f_time>=' . strtotime($_GET['starttime']);
         }
 
-        if($_GET['endtime']){
-            $where.= ' and f_time<='.strtotime($_GET['endtime']);
+        if ($_GET['endtime']) {
+            $where .= ' and f_time<=' . strtotime($_GET['endtime']);
         }
 
+        //每日登录
+        if ($tabName== 'bi_log_login') {
+            return $this->createLoginData($connection,$where);
+        } else {
+            $sql = "SELECT * FROM  $tabName $where order BY f_time asc";
+            $command = $connection->createCommand($sql);
+            $allDatas = $command->queryAll();
 
-        $command = $connection->createCommand("SELECT * FROM  $tabName $where order BY f_time asc");
 
-        $allDatas = $command->queryAll();
-        if(!$allDatas) return array(array()) ;
+            if (!$allDatas) return array(array());
 //        var_dump($allDatas[0]) ;die;
 //        if($_GET['action']=='character')
-        $numArr = array() ;
-        $dateArr= array() ;
-        foreach($allDatas as $k=>$v){
-            foreach($v as $k1=>$v1)
-            if($k1=='f_time'){
-                $v1 = date("Y-m-d",$v1) ;
-                if(in_array($v1,$dateArr)){
-                    switch ($_GET['action']){
-                        case 'character' :
-                            $numArr[$v1]++;
-                            break;
-                        case 'recharge':
-                            $numArr[$v1]+=$v['f_recharge_yuanbao'] ;
-                            break;
-                        case 'jinbi':
-                            $numArr[$v1]+=$v['f_jinbi'] ;
-                            break;
-                        case 'card_train':
-                            $numArr[$v1]+=$v['f_jingyan_num'] ;
-                            break;
-                        case 'skill_up'://技能功法消耗日志
-                            $numArr[$v1]+=$v['f_goods_num'] ;
-                            break;
-                        case 'jingjie_up'://境界修练日志
-                            $numArr[$v1]+=$v['f_jingjie_num'] ;
-                            break;
-                        case 'killboss'://boss击杀数量
-                            $numArr[$v1]++;
-                            break;
-                        case 'yuanbao'://boss击杀数量
-                            $numArr[$v1]+=$v['f_yuanbao'] ;
-                            break;
+            $numArr = array();
+            $dateArr = array();
+            foreach ($allDatas as $k => $v) {
+                foreach ($v as $k1 => $v1)
+                    if ($k1 == 'f_time') {
+                        $v1 = date("Y-m-d", $v1);
+                        if (in_array($v1, $dateArr)) {
+                            switch ($_GET['action']) {
+                                case 'character' :
+                                    $numArr[$v1]++;
+                                    break;
+                                case 'recharge':
+                                    $numArr[$v1] += $v['f_recharge_yuanbao'];
+                                    break;
+                                case 'jinbi':
+                                    $numArr[$v1] += $v['f_jinbi'];
+                                    break;
+                                case 'card_train':
+                                    $numArr[$v1] += $v['f_jingyan_num'];
+                                    break;
+                                case 'skill_up'://技能功法消耗日志
+                                    $numArr[$v1] += $v['f_goods_num'];
+                                    break;
+                                case 'jingjie_up'://境界修练日志
+                                    $numArr[$v1] += $v['f_jingjie_num'];
+                                    break;
+                                case 'killboss'://boss击杀数量
+                                    $numArr[$v1]++;
+                                    break;
+                                case 'yuanbao'://boss击杀数量
+                                    $numArr[$v1] += $v['f_yuanbao'];
+                                    break;
+                            }
+
+                        } else {
+                            switch ($_GET['action']) {
+                                case 'character' :
+                                    $numArr[$v1] = 0;
+                                    break;
+                                case 'recharge':
+                                    $numArr[$v1] = $v['f_recharge_yuanbao'];
+                                    break;
+                                case 'jinbi':
+                                    $numArr[$v1] = $v['f_jinbi'];
+                                    break;
+                                case 'card_train':
+                                    $numArr[$v1] = $v['f_jingyan_num'];
+                                    break;
+                                case 'skill_up'://技能功法消耗日志
+                                    $numArr[$v1] = $v['f_goods_num'];
+                                    break;
+                                case 'jingjie_up'://境界修练日志
+                                    $numArr[$v1] = $v['f_jingjie_num'];
+                                    break;
+                                case 'killboss'://boss击杀数量
+                                    $numArr[$v1] = 0;
+                                    break;
+                                case 'yuanbao'://元宝获得数量
+                                    $numArr[$v1] = $v['f_yuanbao'];
+                                    break;
+                            }
+                            $dateArr[] = $v1;
+                        }
                     }
 
-                }else {
-                    switch ($_GET['action']){
-                        case 'character' :
-                            $numArr[$v1] = 0;
-                            break;
-                        case 'recharge':
-                            $numArr[$v1]=$v['f_recharge_yuanbao'] ;
-                            break;
-                        case 'jinbi':
-                            $numArr[$v1]=$v['f_jinbi'] ;
-                            break;
-                        case 'card_train':
-                            $numArr[$v1]=$v['f_jingyan_num'] ;
-                            break;
-                        case 'skill_up'://技能功法消耗日志
-                            $numArr[$v1]=$v['f_goods_num'] ;
-                            break;
-                        case 'jingjie_up'://境界修练日志
-                            $numArr[$v1]=$v['f_jingjie_num'] ;
-                            break;
-                        case 'killboss'://boss击杀数量
-                            $numArr[$v1] = 0;
-                            break;
-                        case 'yuanbao'://元宝获得数量
-                            $numArr[$v1] = $v['f_yuanbao'] ;
-                            break;
-                    }
-                    $dateArr[] = $v1;
-                }
             }
-
+            $count = count($numArr);
         }
-        $count = count($numArr) ;
-        $page = isset($_GET['page'])?$_GET['page']:1;
 
-        foreach($numArr as $k=>$v){
-            $tabArr[] = array($k,$v) ;
-            $serArr[] = doubleval($v) ;
+        foreach ($numArr as $k => $v) {
+            $tabArr[] = array($k, $v);
+            $serArr[] = doubleval($v);
         }
         //一个表格配置一个视图
-        return  $allTableData  = array( array(
-                                'count' => $count,
-                                'page' => $page,
-                                'categories'=>json_encode($dateArr),
-                                'series'=>$serArr, //这个还需要重新分配数组,如果是多维度
-                                'tab'=>$tabArr
-                                ));
+        return $allTableData = array(array(
+            'count' => $count,
+            'categories' => json_encode($dateArr),//纯日期
+            'series' => $serArr, //这个还需要重新分配数组,如果是多维度
+            'tab' => $tabArr
+        ));
+
+    }
+
+    /**
+     * 生成每日登陆的二级数据
+     */
+    public function createLoginData($connection,$where)
+    {
+        $sql = "SELECT f_time from bi_count_login order by id desc limit 1";
+        $command = $connection->createCommand($sql);
+        $allDatas = $command->queryOne();
+        if ($allDatas) {
+            $sql = "SELECT f_time,num from bi_count_login $where" ;
+            $command = $connection->createCommand($sql);
+            $allDatas = $command->queryAll  ();
+            $count = count($allDatas);
+            foreach ($allDatas as $k => $v) {
+                $date = date('Y-m-d',$v['f_time']) ;
+                $categories[] =$date ; //视图日期
+                $serArr[] = doubleval($v['num']) ; //视图数据
+                $tabArr[] = array($date,$v['num']); //表格数据
+            }
+
+
+            return  array(array(
+                'count' => $count,
+                'categories' => json_encode($categories),
+                'series' => $serArr, //这个还需要重新分配数组,如果是多维度
+                'tab' => $tabArr
+            ));
+
+        } else {//初始化数据表
+            //把昨天之前的数据写到数据库仓库
+            //今天的数据实时生成
+            $this->insertDb($connection);
+        }
 
 
     }
 
+    /**
+     * 生成统计数据,写入数据库
+     */
+    public function insertDb($connection)
+    {
 
+        switch ($_GET['action']) {
+            case "login":
+                for($i=0;$i<30;$i++){
+                    $start = strtotime(date("Y-m-d",strtotime("-$i day")));
+                    $end   = strtotime(date("Y-m-d",time()-86400*($i-1)));
+//                    $sql = "SELECT f_character_id, count(DISTINCT(f_character_id)) num from bi_log_login
+//                            WHERE f_time>=$start AND f_time<$end  group by f_character_id
+//                        " ;
+                    $sql = "SELECT count(DISTINCT(f_character_id)) num from bi_log_login
+                            WHERE f_time>=$start AND f_time<$end
+                        " ;
+                    $command = $connection->createCommand($sql);
+                    $allDatas = $command->queryAll();
+                    if($allDatas){
+                        echo date("Y-m-d",$start).$sql."<br><br>" ;
+                        foreach($allDatas as $v){
+                            $tabName = "bi_count_login" ;
+                            if($v['num']){
+                                $data = array(
+                                    'f_time'=>$start,
+                                    'num'=>$v['num'],
+                                );
+                                $connection->createCommand()->insert($tabName, $data)->execute();
+                            }
+                        }
+
+                    }
+
+                }
+                break;
+        }
+
+
+
+
+    }
 }

@@ -263,7 +263,7 @@ class SiteController extends CommController
                 }
             }
 
-//            Yii::$app->db->createCommand()->insert($tabName, $data)->execute();
+            Yii::$app->db->createCommand()->insert($tabName, $data)->execute();
             return;
 
 

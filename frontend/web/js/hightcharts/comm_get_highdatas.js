@@ -42,8 +42,8 @@ $("#all_tab li").click(function () {
 
 //----------生成table数据 TABLE START------------
 
-function initTabData(tab_data, pages, allpage,key) {
-    pagesAjax(pages, allpage);
+function initTabData(tab_data,allpage,key) {
+    pagesAjax(allpage);
     //生成tab
     createTable(tab_data,key);
     //分页
@@ -76,10 +76,10 @@ function createTable(tab_data, key) {
     }
 
 }
-function pagesAjax(page, allpage) {
+function pagesAjax(page) {
 
     $('#smart-paginator').smartpaginator({
-        totalrecords:page ,
+        totalrecords:page ,//总的分页数
         recordsperpage:10,
         next: '下一页',
         prev: '上一页',

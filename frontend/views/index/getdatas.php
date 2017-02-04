@@ -98,10 +98,9 @@ if($all_data[0]){
        foreach($all_data as $k=>$v){
        ?>
         var tab_data =      <?php echo $v['tab']?> ;
-        var page =          <?php echo ceil($v['page']/10)?> ;;
-        var allpage =       <?php echo $v['count']?> ;;
+        var allpage =       <?php echo ceil($v['count']/10)?> ; //总共多少页
         var tab_key =       <?php echo $k?> ;
-        initTabData(tab_data,page,allpage,tab_key);
+        initTabData(tab_data,allpage,tab_key);
 
         var series =        <?php echo $v['series']?> ;
         var categories =    <?php echo $v['categories']?> ;

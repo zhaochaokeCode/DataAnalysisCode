@@ -136,6 +136,46 @@ return [
                 )
 
             ),
+            //----每日获得元宝日志----
+            'login' => array(
+                'tag' => array( //tag标签信息
+                    array(//每日登录人数
+                        'name' => '每日登录人数',
+                        'dataName' => array('每日登录人数'),
+                    )
+                ),
+                'tab_all' => array(
+                    array(
+                        'thred' => array($dateName, '每日登录人数',),
+                        'dataname' => $mouthName,
+                    )
+                )
+
+            ),
+            //----留存----
+            'retention' => array(
+                'tag' => array( //tag标签信息
+                    array(//三日留存
+                        'name' => '每日登录人数',
+                        'dataName' => array('每日登录人数'),
+                    ),
+                    array(//三日留存
+                        'name' => '每日登录人数',
+                        'dataName' => array('每日登录人数'),
+                    )
+                ),
+                'tab_all' => array(
+                    array(
+                        'thred' => array($dateName, '每日登录人数',),
+                        'dataname' => $mouthName,
+                    ),
+                    array(//三日留存
+                        'name' => '每日登录人数',
+                        'dataName' => array('每日登录人数'),
+                    )
+                )
+
+            ),
 
         )
     )

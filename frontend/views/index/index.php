@@ -113,12 +113,12 @@
                 </li>
                 <li class="has-sub">
                     <a href="javascript:;" class="">
-                        <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">数据报表3<span
+                        <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">登录和留存<span
                                 class="badge pull-right">1</span></span>
                         <span class="arrow"></span>
                     </a>
                     <ul class="sub">
-                        <li><a class="" href="search_results.html"><span class="sub-menu-text">Search Results</span></a>
+                        <li><a id="tab_login" href="#"><span class="sub-menu-text">每日登录用户</span></a>
                         </li>
                     </ul>
                 </li>
@@ -216,7 +216,7 @@
                                                 开始日期:<input class="datainp wicon" id="inpstart" name='start' type="text"
                                                             value="">
                                                 平台:<input class="datainp wicon" id="inpstart1" type="text" value=>
-                                                结束:<input class="" id="" type="text">
+                                                角色id:<input class="" id="" type="text">
                                             </div>
                                             <div style="margin-right:100px;margin-top:10px;float:right;">
                                                 结束日期:<input class="datainp wicon" id="inpend" name="end" type="text" >
