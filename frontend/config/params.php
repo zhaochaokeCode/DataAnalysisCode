@@ -166,7 +166,7 @@ return [
                 'tag' => array( //tag标签信息
                     array(//三日留存
                         'tagName'=>'用户留存数据',//标签名称
-                        'name' => array('三日留存','七日留存'),
+                        'name' => array('次日留存','三日留存','七日留存','十五日留存','月留存'),
                         'dataName' => array('每日登录人数'),
                     ),
 //                    array(//三日留存
@@ -176,7 +176,7 @@ return [
                 ),
                 'tab_all' => array(
                     array(
-                        'thred' => array($dateName, '每日登录人数','三日留存'),
+                        'thred' => array($dateName, '次日留存','三日留存','七日留存','十五日留存','月留存'),
                         'dataname' => $mouthName,
                     ),
 //                    array(//三日留存

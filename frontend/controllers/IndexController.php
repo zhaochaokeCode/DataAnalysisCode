@@ -228,15 +228,12 @@ class IndexController extends CommController
                 $date = date('Y-m-d',$v['f_time']) ;
                 $categories[] =$date ; //视图日期
                 $serArr[] = doubleval($v['num']) ; //视图数据
-                $serArr1[] = doubleval($v['num']+10 ); //视图数据
                 $tabArr[] = array($date,$v['num']); //表格数据
             }
-
-
             return  array(array(
                 'count' => $count,
                 'categories' => json_encode($categories),
-                'series' =>array($serArr,$serArr1), //这个还需要重新分配数组,如果是多维度
+                'series' =>array($serArr), //这个还需要重新分配数组,如果是多维度
                 'tab' => $tabArr
             ));
 

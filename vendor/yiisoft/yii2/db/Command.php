@@ -428,7 +428,7 @@ class Command extends Component
     {
         $params = [];
         $sql = $this->db->getQueryBuilder()->insert($table, $columns, $params);
-        echo $sql ;
+
         return $this->setSql($sql)->bindValues($params);
     }
 

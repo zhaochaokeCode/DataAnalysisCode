@@ -15,6 +15,7 @@ use yii\web\Controller;
  */
 class CommController extends Controller
 {
+    public $where ;
     public function init()
     {
         $session = Yii::$app->session;
@@ -23,8 +24,21 @@ class CommController extends Controller
         }else{
 //            echo $session['user_name'] ;
         }
-    }
+        $where = 'where 1';
 
+        if ($_GET['starttime']) {
+            $where .= ' and f_time>=' . strtotime($_GET['starttime']);
+        }
+
+        if ($_GET['endtime']) {
+            $where .= ' and f_time<=' . strtotime($_GET['endtime']);
+        }
+        $this->where = $where ;
+
+    }
+    public function getWhere(){
+        return $this->where ;
+    }
 }
 
 

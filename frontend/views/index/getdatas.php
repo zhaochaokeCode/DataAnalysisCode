@@ -33,7 +33,6 @@
                                     class=\"fa fa-bar-chart-o\"></i> <span class=\"hidden-inline-mobile\">$tagName</span></a>
                                        </li>" ;
                                     $view_id .=" <div id=\"container$key\" style=\"min-width: 200px;margin: 0 auto\"></div>";
-
                                 }
                             }else{
                                 echo '<h1 align="center">对不起,没有数据</h1>';
