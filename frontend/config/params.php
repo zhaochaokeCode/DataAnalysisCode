@@ -13,7 +13,8 @@ return [
             'character' => array(
                 'tag' => array( //tag标签信息
                     array(//新增注册用户
-                        'name' => '新增注册用户',
+                        'tagName'=>'新增注册用户',
+                        'name' => array('新增注册用户'),
                         'dataName' => array('新增注册用户'),
                     ),
                 ),
@@ -28,7 +29,8 @@ return [
             'recharge' => array(
                 'tag' => array( //tag标签信息
                     array(//新增注册用户
-                        'name' => '每日充值金额',
+                        'tagName'=>'每日付费用户',//标签名称
+                        'name' => array('每日充值金额'),
                         'dataName' => array('每日充值金额'),
                     )
                 ),
@@ -44,7 +46,8 @@ return [
             'jinbi' => array(
                 'tag' => array( //tag标签信息
                     array(//每日金币消耗
-                        'name' => '每日金币消耗',
+                        'tagName'=>'每日金币消耗',//标签名称
+                        'name' => array('每日金币消耗'),
                         'dataName' => array('每日金币消耗'),
                     )
                 ),
@@ -60,7 +63,8 @@ return [
             'card_train' => array(
                 'tag' => array( //tag标签信息
                     array(//每日灵偶培养消耗经验
-                        'name' => '灵偶培养消耗经验',
+                        'tagName'=>'每日灵偶培养消耗',//标签名称
+                        'name' => array('name' => '灵偶培养消耗经验'),
                         'dataName' => array('灵偶培养消耗经验'),
                     )
                 ),
@@ -76,7 +80,8 @@ return [
             'skill_up' => array(
                 'tag' => array( //tag标签信息
                     array(//每日技能功法消耗日志
-                        'name' => '技能功法消耗数量',
+                        'tagName'=>'每日技能功法消耗日志',//标签名称
+                        'name' => array('技能功法消耗数量'),
                         'dataName' => array('技能功法消数量'),
                     )
                 ),
@@ -92,7 +97,8 @@ return [
             'jingjie_up' => array(
                 'tag' => array( //tag标签信息
                     array(//每日技能功法消耗日志
-                        'name' => '境界消耗真气数量',
+                        'tagName'=>'每日技能功法消耗日志',//标签名称
+                        'name' => array('境界消耗真气数量'),
                         'dataName' => array('境界消耗真气数量'),
                     )
                 ),
@@ -108,7 +114,8 @@ return [
             'killboss' => array(
                 'tag' => array( //tag标签信息
                     array(//每日击杀boss日志
-                        'name' => '击杀boss数量',
+                        'tagName'=>'每日击杀boss日志',//标签名称
+                        'name' => array('击杀boss数量'),
                         'dataName' => array('击杀boss数量'),
                     )
                 ),
@@ -123,8 +130,9 @@ return [
             //----每日获得元宝日志----
             'yuanbao' => array(
                 'tag' => array( //tag标签信息
-                    array(//每日击杀boss日志
-                        'name' => '获得元宝数量',
+                    array(//每日获得元宝数量
+                        'tagName'=>'每日获得元宝数量',//标签名称
+                        'name' => array('获得元宝数量'),
                         'dataName' => array('获得元宝数量'),
                     )
                 ),
@@ -136,11 +144,12 @@ return [
                 )
 
             ),
-            //----每日获得元宝日志----
+            //----每日登录人数----
             'login' => array(
                 'tag' => array( //tag标签信息
                     array(//每日登录人数
-                        'name' => '每日登录人数',
+                        'tagName'=>'每日登录人数',//标签名称
+                        'name' => array('每日登录人数'),
                         'dataName' => array('每日登录人数'),
                     )
                 ),
@@ -156,23 +165,24 @@ return [
             'retention' => array(
                 'tag' => array( //tag标签信息
                     array(//三日留存
-                        'name' => '每日登录人数',
+                        'tagName'=>'用户留存数据',//标签名称
+                        'name' => array('三日留存','七日留存'),
                         'dataName' => array('每日登录人数'),
                     ),
-                    array(//三日留存
-                        'name' => '每日登录人数',
-                        'dataName' => array('每日登录人数'),
-                    )
+//                    array(//三日留存
+//                        'name' => array('每日登录人数'),
+//                        'dataName' => array('每日登录人数'),
+//                    )
                 ),
                 'tab_all' => array(
                     array(
-                        'thred' => array($dateName, '每日登录人数',),
+                        'thred' => array($dateName, '每日登录人数','三日留存'),
                         'dataname' => $mouthName,
                     ),
-                    array(//三日留存
-                        'name' => '每日登录人数',
-                        'dataName' => array('每日登录人数'),
-                    )
+//                    array(//三日留存
+//                        'name' => '每日登录人数',
+//                        'dataName' => array('每日登录人数'),
+//                    )
                 )
 
             ),

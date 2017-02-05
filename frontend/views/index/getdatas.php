@@ -26,7 +26,7 @@
                         global $view_id ;
                             if($all_data[0]){
                                 for($i=0;$i<count($all_data);$i++){
-                                    $tagName = $all_data[$i]['tag']['name'] ;
+                                    $tagName = $all_data[$i]['tag']['tagName'] ;
                                     $key = $i+1 ;
                                     $default = $i>0?'':"class=\"active\"" ;
                                     echo "<li id=\"tab_$key\" $default ><a href=\"#box_tab$key\" data-toggle=\"tab\"><i

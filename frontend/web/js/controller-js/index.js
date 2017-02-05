@@ -1,11 +1,17 @@
 $(function(){
 
     $("[id^=tab_]").click( function () {
-        var id=$(this).attr("id").split("tab_")[1];
-        var url = "/index/getdatas?action="+id ;
-        $('#ifrm').attr("src",url);
-        $("#hide_action").attr('name',id) ;
 
+        var urlArr = $(this).attr("id").split("_") ;
+
+        //其它的比较复杂的控制器视图
+        if(urlArr[1]=='sec'){
+            var url = "/" + urlArr[2];
+        }else {//通用控制器视图
+            var url = "/index/getdatas?action=" + urlArr[1];
+        }
+        $('#ifrm').attr("src", url);
+        $("#hide_action").attr('name', id);
         //document.getElementById('ifrm').contentWindow.location.reload(true);
     });
 
