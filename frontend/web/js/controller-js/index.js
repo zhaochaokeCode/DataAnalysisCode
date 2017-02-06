@@ -2,11 +2,11 @@ $(function(){
 
     $("[id^=tab_]").click( function () {
 
-        var urlArr = $(this).attr("id").split("_") ;
+        var urlArr = $(this).attr("id").split("tab_") ;
 
         //其它的比较复杂的控制器视图
-        if(urlArr[1]=='sec'){
-            var url = "/" + urlArr[2];
+        if( $(this).attr("id")=='tab_retention'){
+            var url = "/" + urlArr[1];
         }else {//通用控制器视图
             var url = "/index/getdatas?action=" + urlArr[1];
         }

@@ -86,6 +86,7 @@ class IndexController extends CommController
                     'data'=>$allGame[$k]['series'][$key1]
                 );
             }
+
             $allGame[$k]['series'] = json_encode($tmArr) ;
 
 

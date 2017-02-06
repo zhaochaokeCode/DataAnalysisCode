@@ -119,7 +119,7 @@
                     </a>
                     <ul class="sub">
                         <li><a id="tab_login" href="#"><span class="sub-menu-text">每日登录用户</span></a>
-                        <li><a id="tab_sec_retention" href="#"><span class="sub-menu-text">用户留存</span></a>
+                        <li><a id="tab_retention" href="#"><span class="sub-menu-text">用户留存</span></a>
                         </li>
                     </ul>
                 </li>

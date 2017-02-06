@@ -64,7 +64,7 @@ return [
                 'tag' => array( //tag标签信息
                     array(//每日灵偶培养消耗经验
                         'tagName'=>'每日灵偶培养消耗',//标签名称
-                        'name' => array('name' => '灵偶培养消耗经验'),
+                        'name' => array('灵偶培养消耗经验'),
                         'dataName' => array('灵偶培养消耗经验'),
                     )
                 ),
