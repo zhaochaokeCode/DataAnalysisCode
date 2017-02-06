@@ -7,7 +7,8 @@ function submitBut(id_var){
         data: cont,
         success: function(data2) {
             if(data2==1){
-            location.href = "http://localhost" ;
+
+            location.href =  window.location.host ;
             }else{
                 alert('验证失败') ;
                 return false ;
