@@ -59,7 +59,7 @@ class CommController extends Controller
         if(in_array($_GET['action'],$actionArr)){
             return  'comm'.$suffix ;
         }else{
-
+            if($_GET['action']=='customer_churn') return 'customerChurn'.$suffix ;
             //特殊方法名数组
             return  $_GET['action'].$suffix ;
         }

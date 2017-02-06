@@ -48,20 +48,19 @@ class IndexController extends CommController
     private function getData()
     {
         $tabName = "bi_log_" . $_GET['action'];
-        $connection = Yii::$app->db;
 
         $where = $this->where;
         $funName = $this->getFuntionName();
-        return $this->$funName($connection, $where, $tabName);
-
+        return $this->$funName($where, $tabName);
     }
-
     /**
+     *
      * 生成每日登陆的二级数据
      * 第一步生成数据,没有配上数据之外的标题 时间步长等数据
      */
-    public function loginCreateData($connection, $where)
+    public function loginCreateData($where)
     {
+        $connection = Yii::$app->db ;
         $sql = "SELECT f_time from bi_count_login order by id desc limit 1";
         $command = $connection->createCommand($sql);
         $allDatas = $command->queryOne();
@@ -88,46 +87,11 @@ class IndexController extends CommController
             //今天的数据实时生成
             $this->insertDb($connection);
         }
-
-
     }
 
-    /**
-     * 生成统计数据,写入数据库
-     */
-    public function insertDb($connection)
+    private function commCreateData( $where, $tabName)
     {
-        for ($i = 0; $i < 30; $i++) {
-            $start = strtotime(date("Y-m-d", strtotime("-$i day")));
-            $end = strtotime(date("Y-m-d", time() - 86400 * ($i - 1)));
-
-            $sql = "SELECT count(DISTINCT(f_character_id)) num from bi_log_login
-                            WHERE f_time>=$start AND f_time<$end
-                        ";
-            $command = $connection->createCommand($sql);
-            $allDatas = $command->queryAll();
-            if ($allDatas) {
-                echo date("Y-m-d", $start) . $sql . "<br><br>";
-                foreach ($allDatas as $v) {
-                    $tabName = "bi_count_login";
-                    if ($v['num']) {
-                        $data = array(
-                            'f_time' => $start,
-                            'num' => $v['num'],
-                        );
-                        $connection->createCommand()->insert($tabName, $data)->execute();
-                    }
-                }
-
-            }
-
-        }
-
-
-    }
-
-    private function commCreateData($connection, $where, $tabName)
-    {
+        $connection = Yii::$app->db;
         $sql = "SELECT * FROM  $tabName $where order BY f_time asc";
         $command = $connection->createCommand($sql);
         $allDatas = $command->queryAll();
@@ -215,6 +179,24 @@ class IndexController extends CommController
             'series' => array($serArr), //这个还需要重新分配数组,如果是多维度
             'tab' => $tabArr
         ));
-        die;
     }
+    /**
+     * @param $where
+     * @param $tabName
+     */
+    public function customerChurnCreateData($where, $tabName){
+        $connection = Yii::$app->db;
+        for($i=0;$i<30;$i++){
+            $startTime =date("Y-m-d",strtotime('-1 dyas')) ;
+            $endTime   = $startTime+86400 ;
+            $where =
+
+            $sql = "SELECT count(DISTINCT(f_character_id))FROM  $tabName $where GROUP by order BY f_character_id f_time asc";
+            $command = $connection->createCommand($sql);
+        }
+
+
+        $allDatas = $command->queryAll();
+    }
+
 }
