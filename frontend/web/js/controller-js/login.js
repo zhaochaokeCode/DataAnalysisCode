@@ -8,7 +8,7 @@ function submitBut(id_var){
         success: function(data2) {
             if(data2==1){
 
-            location.href =  window.location.host ;
+            location.href = '' ;
             }else{
                 alert('验证失败') ;
                 return false ;
