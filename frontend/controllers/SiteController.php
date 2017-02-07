@@ -61,8 +61,9 @@ class SiteController extends CommController
 
     public function actionIndex()
     {
-        $key=1 ;
-        $this->createCustomerChurn(30)  ;
+        //流失
+        $key=30 ;
+        $this->createCustomerChurn($key)  ;return ;
 
 
         if(!isset($_GET['create_data'])) return ;
@@ -440,7 +441,7 @@ class SiteController extends CommController
                     if ($v['num']) {
                         $data = array(
                             'f_time' => $start,
-                            'num' => $v['num'],
+                            'num' => $v['num'  ],
                         );
                         $connection->createCommand()->insert($tabName, $data)->execute();
                     }
@@ -453,10 +454,33 @@ class SiteController extends CommController
     }
     public  function createCustomerChurn($key=30){
         for($i=0;$i<$key;$i++){
-            $sql = date() ;
+            $valArr ='' ;
+            $startTime  = $this->getStrart()-86400*$i ;
+            $endTime    = $startTime+86400 ;
 
+            $sql = "SELECT distinct(f_character_id) id from bi_log_character where  f_time>=$startTime AND f_time<$endTime" ;
+            $command =  Yii::$app->db->createCommand($sql);
+            $allRegist = $command->queryAll();
+            if(!$allRegist) continue ;
+            foreach($allRegist as $v){
+                $strArr[] = $v['id'];
+            }
+            $inStr = implode(',',$strArr) ;
+            $lastSql = "select id,f_dept,f_nstage_id,f_sstage_id,f_sid,f_game_id,f_character_id,max(f_time) from bi_log_logout WHERE
+                  f_time>=$startTime AND f_time<$endTime and f_character_id in($inStr) group by f_character_id,
+                  f_sid, f_game_id,f_dept order by f_time asc ";
+            $sqlnst =  "SELECT f_nstage_id,count(a.f_nstage_id) f_nstage_num, f_sstage_id,count(a.f_sstage_id) f_sstage_num ,a.f_sid,a.f_game_id,a.f_dept from ($lastSql) as a
+                        group by f_sid, f_game_id,f_nstage_id,f_sstage_id,f_dept  " ;
+            $command =  Yii::$app->db->createCommand($sqlnst);
+            $allDatas = $command->queryAll();
 
-
+            $keyArr = array_keys($allDatas[0]) ;
+            $keyArr[] = 'f_time';
+            foreach($allDatas as $v){
+                $v[] = $startTime;
+                $valArr[] = array_values($v) ;
+            }
+            Yii::$app->db->createCommand()->batchInsert('bi_count_customer_churn',$keyArr,$valArr)->execute();
         }
 
 

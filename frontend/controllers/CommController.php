@@ -46,6 +46,9 @@ class CommController extends Controller
     public function getWhere(){
         return $this->where ;
     }
+    public function getStrart(){
+        return strtotime(date("Y-m-d",strtotime('-1 days')));
+    }
 
     /**
      * @return string 获取需要调用的方法名的字符串
@@ -122,6 +125,28 @@ class CommController extends Controller
 
         }
         return $allGame;
+
+    }
+    public function commLogClo($data)
+    {
+        $array=array('f_dept',//平台标识
+                    'f_server_address_id',//物理服务器编号
+                    'f_sid',            //服务器ID
+                    'f_game_id',        //游戏ID
+                    'f_character_id') ; //角色ID
+
+        foreach($data as $v){
+            $keyArr = array_keys($v) ;
+            foreach($keyArr as $key){
+                if(in_array($key,$array)){
+                    $retArr[] = $v[$key] ;
+                }
+
+            }
+
+
+
+        }
 
     }
 }
