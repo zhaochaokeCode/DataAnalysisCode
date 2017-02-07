@@ -12,6 +12,10 @@ class SiteController extends CommController
 {
     public $layout = false;
 
+    public $cusKey=false ;
+    public $valArr ;
+
+
     /**
      * @inheritdoc
      */
@@ -454,7 +458,6 @@ class SiteController extends CommController
     }
     public  function createCustomerChurn($key=30){
         for($i=0;$i<$key;$i++){
-            $valArr ='' ;
             $startTime  = $this->getStrart()-86400*$i ;
             $endTime    = $startTime+86400 ;
 
@@ -466,24 +469,40 @@ class SiteController extends CommController
                 $strArr[] = $v['id'];
             }
             $inStr = implode(',',$strArr) ;
-            $lastSql = "select id,f_dept,f_nstage_id,f_sstage_id,f_sid,f_game_id,f_character_id,max(f_time) from bi_log_logout WHERE
-                  f_time>=$startTime AND f_time<$endTime and f_character_id in($inStr) group by f_character_id,
-                  f_sid, f_game_id,f_dept order by f_time asc ";
-            $sqlnst =  "SELECT f_nstage_id,count(a.f_nstage_id) f_nstage_num, f_sstage_id,count(a.f_sstage_id) f_sstage_num ,a.f_sid,a.f_game_id,a.f_dept from ($lastSql) as a
-                        group by f_sid, f_game_id,f_nstage_id,f_sstage_id,f_dept  " ;
-            $command =  Yii::$app->db->createCommand($sqlnst);
-            $allDatas = $command->queryAll();
 
-            $keyArr = array_keys($allDatas[0]) ;
-            $keyArr[] = 'f_time';
-            foreach($allDatas as $v){
-                $v[] = $startTime;
-                $valArr[] = array_values($v) ;
-            }
-            Yii::$app->db->createCommand()->batchInsert('bi_count_customer_churn',$keyArr,$valArr)->execute();
+            $nsArr= $this->getCustomData('f_nstage_id',1,$startTime,$endTime,$inStr) ;
+            $ssArr=$this->getCustomData('f_sstage_id',2,$startTime,$endTime,$inStr) ;
+            $valArr = $nsArr+$ssArr ;
+
+            Yii::$app->db->createCommand()->batchInsert('bi_count_customer_churn',$this->cusKey,$valArr)->execute();
         }
 
 
+
+    }
+    private function getCustomData($nsId,$type,$startTime,$endTime,$inStr){
+        $lastSql = "select id,f_dept,$nsId,f_sid,f_game_id,f_character_id,max(f_time) from bi_log_logout WHERE
+                  f_time>=$startTime AND f_time<$endTime and f_character_id in($inStr) group by
+                  f_sid, f_game_id,f_dept,$nsId order by f_time asc ";
+
+        //---退出剧情id和数量
+        $sql =  "SELECT $nsId f_out_id,count(a.$nsId) f_out_num,a.f_sid,a.f_game_id,a.f_dept from ($lastSql) as a
+                        group by f_sid, f_game_id,$nsId,f_dept  " ;
+        $command =  Yii::$app->db->createCommand($sql);
+        $allDatas = $command->queryAll();
+        if($type==2)echo $sql."<br><br>" ;
+        if(!$this->cusKey) {
+            $this->cusKey = array_keys($allDatas[0]);
+            $this->cusKey[] = 'f_time';
+            $this->cusKey[] = 'f_type';
+        }
+        $ret =array() ;
+        foreach($allDatas as $v){
+            $v[] = $startTime;
+            $v[] = $type;
+            $ret[] = array_values($v) ;
+        }
+        return $ret ;
 
     }
 
