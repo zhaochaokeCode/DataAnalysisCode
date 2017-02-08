@@ -9,6 +9,7 @@ namespace frontend\controllers;
 
 
 use Yii;
+use app\models\BiCountCustomerChurn ;
 
 /**
  * Index     controller
@@ -181,22 +182,64 @@ class IndexController extends CommController
         ));
     }
     /**
-     * @param $where
+     * @param $where1
      * @param $tabName
      */
-    public function customerChurnCreateData($where, $tabName){
-        $connection = Yii::$app->db;
-        for($i=0;$i<30;$i++){
-            $startTime =date("Y-m-d",strtotime('-1 dyas')) ;
-            $endTime   = $startTime+86400 ;
-            $where =
+    public function customerChurnCreateData(){
+        echo '流失' ;
 
-            $sql = "SELECT count(DISTINCT(f_character_id))FROM  $tabName $where GROUP by order BY f_character_id f_time asc";
-            $command = $connection->createCommand($sql);
+        
+        
+        
+        
+    }
+    public function logoutCreateData(){
+        $tabName = 'bi_count_logout' ;
+        $start  = strtotime($_GET['starttime'] );
+
+        $end = strtotime($_GET['endtime']) ;
+        if($end-$start<86400){
+            $len = 1;
+        }else{
+            $len = floor(($end-$start)/86400) ;
         }
 
+        $groupBy = ' f_dept,f_game_id,f_sid ' ;
 
-        $allDatas = $command->queryAll();
+
+
+        for($i=0;$i<$len;$i++){
+            $stime = $start+86400*$i ;
+            $etime = $stime+86400*($i+1) ;
+
+
+
+            //当日退出的关卡
+            $where = " where f_time>=$stime and f_time<$etime and f_type=1 " ;
+            $sql = "SELECT * FROM $tabName $where  group by $groupBy order BY f_time  asc";
+            $command = Yii::$app->db->createCommand($sql);
+            $nsDatas = $command->queryAll();
+
+
+
+
+            foreach($nsDatas as $k=>$v){
+                $tabArr[] = array($k, $v);
+
+            }
+
+
+
+
+
+
+
+            //当日退出的场景
+            $where = " f_time>=$stime and f_time<$etime and type=1 " ;
+            $sql = "SELECT * FROM $tabName  $where group by $groupBy order BY f_time  asc";
+            $command = Yii::$app->db->createCommand($sql);
+            $ssDatas = $command->queryAll();
+        }
+
     }
-
 }

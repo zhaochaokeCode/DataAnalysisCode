@@ -186,6 +186,31 @@ return [
                 )
 
             ),
+            //----留失----
+            'retention_lost' => array(
+                'tag' => array( //tag标签信息
+                    array(//三日留存
+                        'tagName'=>'用户留失数据',//标签名称
+                        'name' => array('次日留失','三日留失','七日留失','十五日留失','月留失'),
+                        'dataName' => array('每日登录人数'),
+                    ),
+//                    array(//三日留失
+//                        'name' => array('每日登录人数'),
+//                        'dataName' => array('每日登录人数'),
+//                    )
+                ),
+                'tab_all' => array(
+                    array(
+                        'thred' => array($dateName, '次日留失','三日留失','七日留失','十五日留失','月留失'),
+                        'dataname' => $mouthName,
+                    ),
+//                    array(//三日留存
+//                        'name' => '每日登录人数',
+//                        'dataName' => array('每日登录人数'),
+//                    )
+                )
+
+            ),
 
         )
     )

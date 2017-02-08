@@ -66,8 +66,11 @@ class SiteController extends CommController
     public function actionIndex()
     {
         //流失
+        $this->initDb() ; return;
+
         $key=30 ;
-        $this->createCustomerChurn($key)  ;return ;
+//        $this->createCustomerChurn($key)  ;return ;
+        $this->createLogOut($key)  ;return ;
 
 
         if(!isset($_GET['create_data'])) return ;
@@ -324,10 +327,11 @@ class SiteController extends CommController
     }
 
     /**
-     * 留存分析数据统计
+     * 留失分析数据统计
      */
     public function initDb()
     {
+        $tabName = "bi_count_retention" ;
         $connection = Yii::$app->db;
         $time = time() - 86400 * 30;
         for ($i = 0; $i < 30; $i++) {
@@ -349,14 +353,14 @@ class SiteController extends CommController
                         ";
 
             $command = $connection->createCommand($sql);
-            $result = $command->queryAll();
+            $resultAll = $command->queryAll();
 
 
             $tag = "<br><br>";
             $two = $three = $seven = $f_fifteen_day = $thirty = 0;
-            if ($result) {
+            if ($resultAll) {
                 echo date("Y-m-d", $start) . $tag;
-                foreach ($result as $v) {
+                foreach ($resultAll as $v) {
                     $idArr[] = $v['id'];
                 }
                 $allNum = count($idArr);
@@ -380,7 +384,7 @@ class SiteController extends CommController
                 }
                 //30日留存
                 if ($i < 1) {
-                    $thirty = $this->runSql($fivthtime, $thirtytime, $regStr, $connection, $allNum);
+                    $thirty = $this->runSql($thirtytime-86400, $thirtytime, $regStr, $connection, $allNum);
                 }
 
             }
@@ -391,19 +395,66 @@ class SiteController extends CommController
                 'f_fifteen_day' => $f_fifteen_day,
                 'f_thirty_day' => $thirty,
                 'f_time' => $start,
-
+                'f_type' =>1
                 //预留一下 平台
             );
-            $tabName = $this->tabName;
-            $sql = "select id from $tabName where f_time ='$start'";
+
+            $sql = "select id from $tabName where f_time ='$start' and f_type=1";
             $command = $connection->createCommand($sql);
             $result = $command->queryOne();
             if ($result['id']) {
                 $connection->createCommand()->update($tabName, $data, array('id' => $result['id']))->execute();
-//                echo 'update' ;
             } else {
                 $connection->createCommand()->insert($tabName, $data)->execute();
-//                echo 'insert' ;
+            }
+
+            if ($resultAll) {
+                echo date("Y-m-d", $start) . $tag;
+                foreach ($resultAll as $v) {
+                    $idArr[] = $v['id'];
+                }
+                $allNum = count($idArr);
+                $regStr = implode(',', $idArr);
+
+                //次日留存
+                if ($i < 29) {
+                    $two = $this->runSql($secStr, $secStr+86400, $regStr, $connection, $allNum);
+                }
+                //三日留存
+                if ($i < 27) {
+                    $three = $this->runSql($threeSta, $threeSta+86400, $regStr, $connection, $allNum);
+                }
+                //七日留存
+                if ($i < 23) {
+                    $seven = $this->runSql($seventime, $seventime+86400, $regStr, $connection, $allNum);
+                }
+                //十五日留存
+                if ($i < 15) {
+                    $f_fifteen_day = $this->runSql($fivthtime, $fivthtime+86400, $regStr, $connection, $allNum);
+                }
+                //30日留存
+                if ($i < 1) {
+                    $thirty = $this->runSql($thirtytime, $thirtytime+86400, $regStr, $connection, $allNum);
+                }
+
+            }
+            $data = array(
+                'f_tow_day' => $two,
+                'f_three_day' => $three,
+                'f_seven_day' => $seven,
+                'f_fifteen_day' => $f_fifteen_day,
+                'f_thirty_day' => $thirty,
+                'f_time' => $start,
+                'f_type' =>2
+                //预留一下 平台
+            );
+            $sql = "select id from $tabName where f_time ='$start' and f_type=2";
+            $command = $connection->createCommand($sql);
+            $result = $command->queryOne();
+            if ($result['id']) {
+                $connection->createCommand()->update($tabName, $data, array('id' => $result['id']))->execute();
+            } else {
+                $connection->createCommand()->insert($tabName, $data)->execute();
             }
         }
 
@@ -456,7 +507,10 @@ class SiteController extends CommController
         }
 
     }
-    public  function createCustomerChurn($key=30){
+    /**
+     *用户的退出
+     */
+    public  function createLogOut($key=30){
         for($i=0;$i<$key;$i++){
             $startTime  = $this->getStrart()-86400*$i ;
             $endTime    = $startTime+86400 ;
@@ -470,17 +524,16 @@ class SiteController extends CommController
             }
             $inStr = implode(',',$strArr) ;
 
-            $nsArr= $this->getCustomData('f_nstage_id',1,$startTime,$endTime,$inStr) ;
-            $ssArr=$this->getCustomData('f_sstage_id',2,$startTime,$endTime,$inStr) ;
+            $nsArr= $this->getLogoutData('f_nstage_id',1,$startTime,$endTime,$inStr) ;
+            $ssArr=$this->getLogoutData('f_sstage_id',2,$startTime,$endTime,$inStr) ;
             $valArr = $nsArr+$ssArr ;
-
-            Yii::$app->db->createCommand()->batchInsert('bi_count_customer_churn',$this->cusKey,$valArr)->execute();
+            Yii::$app->db->createCommand()->batchInsert('bi_count_logout',$this->cusKey,$valArr)->execute();
         }
 
 
 
     }
-    private function getCustomData($nsId,$type,$startTime,$endTime,$inStr){
+    private function getLogoutData($nsId,$type,$startTime,$endTime,$inStr){
         $lastSql = "select id,f_dept,$nsId,f_sid,f_game_id,f_character_id,max(f_time) from bi_log_logout WHERE
                   f_time>=$startTime AND f_time<$endTime and f_character_id in($inStr) group by
                   f_sid, f_game_id,f_dept,$nsId order by f_time asc ";

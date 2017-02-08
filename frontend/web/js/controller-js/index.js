@@ -5,7 +5,7 @@ $(function(){
         var urlArr = $(this).attr("id").split("tab_") ;
         var action =urlArr[1]  ;
 
-        var action_arry = ["retention", "html", "css", "JavaScript" ];
+        var action_arry = ["retention", "retention?type=1", "css", "JavaScript" ];
 
         //其它的比较复杂的控制器视图
         if( $.inArray(action, action_arry)!=-1){

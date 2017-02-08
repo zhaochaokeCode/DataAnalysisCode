@@ -24,7 +24,9 @@ class RetentionController extends CommController
         $connection = Yii::$app->db;
 //        $this->initDb($connection);
 
-        $where = $this->getWhere() ;
+        $type= $_GET['type']?2:1 ;
+        $where = $this->getWhere()." and f_type=$type " ;
+
         $where .= " and f_tow_day>0 " ;
         $sql = "SELECT f_time,f_tow_day,f_three_day,f_seven_day,
                 f_fifteen_day,f_thirty_day
@@ -53,9 +55,8 @@ class RetentionController extends CommController
                 'series' => array($towDay, $threeDay, $sevenDay, $fifteenDay, $thirtyDay), //这个还需要重新分配数组,如果是多维度
                 'tab' => $tabArr
             ));
-
-           return $this->createData($allGame, 'retention');
-
+            $type= $_GET['type']?'retention':'retention_lost' ;
+            return $this->createData($allGame,$type);
         }
 
     }

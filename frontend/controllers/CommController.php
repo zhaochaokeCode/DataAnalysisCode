@@ -25,7 +25,11 @@ class CommController extends Controller
 //            echo $session['user_name'] ;
         }
         $where = 'where 1';
-
+        if(!$_GET['starttime']){
+            $now = time() ;
+            $_GET['starttime'] = date("Y-m-d 00:00:00",$now - 86400*30) ;
+            $_GET['endtime']   = date("Y-m-d 00:00:00",$now );
+        }
         if ($_GET['starttime']) {
             $where .= ' and f_time>=' . strtotime($_GET['starttime']);
         }
