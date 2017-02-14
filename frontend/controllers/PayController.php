@@ -259,7 +259,12 @@ class PayController extends Controller
     }
 
     public function actionWxre(){
-        if(file_put_contents('/tmp/data.txt',json_encode($_POST)."-----".date("Y-m-d H:i:s",time()."\n"),FILE_APPEND)) {
+        if($_POST){
+            $data =  $_POST ;
+        }else{
+            $data =  $_GET ;
+        }
+        if(file_put_contents('/tmp/data.txt',json_encode($data)."-----".date("Y-m-d H:i:s",time()."\n"),FILE_APPEND)) {
             echo 'success';
         }else{
             echo 'fail' ;
