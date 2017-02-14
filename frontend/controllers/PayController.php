@@ -18,6 +18,17 @@ class PayController extends Controller
      */
     public function actionIndex()
     {
+
+
+
+
+     //   http://wx.bookor.com/pay/request_pay.page?appid=9696020&apporder=2017021415969602010645965&pid=10&pname=60钻石&price=600&userid=1066783&redirect=http%3A%2F%2Fmy.59600.com%2Fgames%2F9696020%2F%3Fcid%3D59600&ext=42336448585246614645684D6446704847773D3D&r=vewdf7apy2lwux1jytfzrq6q7e1n0txy&sign=94DB0F46F9A5639927B1396F8E15DB9A
+
+
+
+
+
+
         $parameter = array(
             "app_id" => "2017011205020547",
             "biz_content" => json_encode(array(
@@ -136,6 +147,119 @@ class PayController extends Controller
         return $data ;
     }
 
+
+    /**
+     * 微信支付
+     */
+    public function actionWxpay(){
+        $wxpay_config = array(
+            'app_id' => 'wxd9d911dea9726475',
+            'app_secret' => 'd8ff100ddbfa59b1530df883890b411a',
+            'mch_id' => '1434267502',
+            'partner_id' => 'mGUPhEEyKHafb2CRMQ4jkg9Pz6GWBqqK',
+            'notify_url' => 'http://www.yourdomain.com/order/wxpay_notify'
+        );
+         //var_dump($wxpay_config);
+
+        $APP_ID = $wxpay_config['app_id'];            //APPID
+        $APP_SECRET = $wxpay_config['app_secret'];    //appsecret
+        $MCH_ID=$wxpay_config['mch_id'];
+        $PARTNER_ID = $wxpay_config['partner_id'];
+        $NOTIFY_URL = $wxpay_config['notify_url'];
+
+
+
+        //STEP 1. 构造一个订单。
+        $order=array(
+            "body" => 'test data',
+            "appid" => $APP_ID,
+            "device_info" => "APP-001",
+            "mch_id" => $MCH_ID,
+            "nonce_str" => mt_rand(),
+            "notify_url" => $NOTIFY_URL,
+            "out_trade_no" =>'20170101'.time() ,
+            "spbill_create_ip" => "210.12.129.178",//$this->input->ip_address(),
+            "total_fee" => intval(1000),//注意：前方有坑！！！最小单位是分，跟支付宝不一样。1表示1分钱。只能是整形。
+            "trade_type" => "APP"
+        );
+        ksort($order);
+
+        //STEP 2. 签名
+        $sign="";
+        foreach ($order as $key => $value) {
+            if($value&&$key!="sign"&&$key!="key"){
+                $sign.=$key."=".$value."&";
+            }
+        }
+        $sign.="key=".$PARTNER_ID;
+        $sign=strtoupper(md5($sign));//echo $sign.'<br/>';exit;
+
+        //STEP 3. 请求服务器
+        $xml="<xml>\n";
+        foreach ($order as $key => $value) {
+            $xml.="<".$key.">".$value."</".$key.">\n";
+        }
+        $xml.="<sign>".$sign."</sign>\n";
+        $xml.="</xml>";
+        //echo $sign.'<br/>';
+        $opts = array(
+            'http' =>
+                array(
+                    'method'  => 'POST',
+                    'header'  => 'Content-type: text/xml',
+                    'content' => $xml
+                ),
+            "ssl"=>array(
+                "verify_peer"=>false,
+                "verify_peer_name"=>false,
+            )
+        );
+        $context  = stream_context_create($opts);
+        $result = file_get_contents('https://api.mch.weixin.qq.com/pay/unifiedorder', false, $context);
+
+        $result = simplexml_load_string($result,null, LIBXML_NOCDATA);
+
+        //
+        if ($result->return_code == 'SUCCESS' && $result->result_code == 'SUCCESS') {
+            $prepay=array(
+                "noncestr"=>"".$result->nonce_str,
+                "prepayid"=>"".$result->prepay_id,//上一步请求微信服务器得到nonce_str和prepay_id参数。
+                "appid"=>$APP_ID,
+                "package"=>"Sign=WXPay",
+                "partnerid"=>$MCH_ID,
+                "timestamp"=>"".time(),
+                "sign"=>""
+            );
+            ksort($prepay);
+            $sign="";
+            foreach ($prepay as $key => $value) {
+                if($value&&$key!="sign"&&$key!="key"){
+                    $sign.=$key."=".$value."&";
+                }
+            }
+            $sign.="key=".$PARTNER_ID;
+            $sign=strtoupper(md5($sign));
+            $prepay['sign'] = $sign;
+            $prepay['success'] = true;
+        } else {
+            $prepay=array(
+                "success" => false,
+                "noncestr"=>"",
+                "prepayid"=>"",
+                "appid"=>$APP_ID,
+                "package"=>"Sign=WXPay",
+                "partnerid"=>$MCH_ID,
+                "timestamp"=>"".time(),
+                "sign"=>"",
+                "return_msg"=>$result->return_msg
+            );
+        }
+        echo json_encode(array('data'=>$prepay,'code'=>'200')) ;
+
+
+
+
+    }
 
 
 
