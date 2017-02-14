@@ -157,7 +157,7 @@ class PayController extends Controller
             'app_secret' => 'd8ff100ddbfa59b1530df883890b411a',
             'mch_id' => '1434267502',
             'partner_id' => 'mGUPhEEyKHafb2CRMQ4jkg9Pz6GWBqqK',
-            'notify_url' => 'http://www.yourdomain.com/order/wxpay_notify'
+            'notify_url' => 'http://116.62.100.98/pay/wxre'
         );
          //var_dump($wxpay_config);
 
@@ -254,14 +254,18 @@ class PayController extends Controller
                 "return_msg"=>$result->return_msg
             );
         }
-        echo json_encode(array('data'=>$prepay,'code'=>'200')) ;
-
-
-
+        echo json_encode(array('data'=>$prepay,'code'=>'200','message'=>'true')) ;
 
     }
 
+    public function actionWxre(){
+        if(file_put_contents('/tmp/data.txt',json_encode($_POST)."-----".date("Y-m-d H:i:s",time()."\n"),FILE_APPEND)) {
+            echo 'success';
+        }else{
+            echo 'fail' ;
+        }
 
+    }
 
 }
 
