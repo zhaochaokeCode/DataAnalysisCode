@@ -177,7 +177,7 @@ class PayController extends Controller
             "mch_id" => $MCH_ID,
             "nonce_str" => mt_rand(),
             "notify_url" => $NOTIFY_URL,
-            "out_trade_no" =>'20170101'.time() ,
+            "out_trade_no" =>'2017031'.time() ,
             "spbill_create_ip" => "210.12.129.178",//$this->input->ip_address(),
             "total_fee" => intval(1),//注意：前方有坑！！！最小单位是分，跟支付宝不一样。1表示1分钱。只能是整形。
             "trade_type" => "APP"
@@ -259,17 +259,14 @@ class PayController extends Controller
     }
 
     public function actionWxre(){
-        if($_POST){
-            $data =  $_POST ;
-        }else{
-            $data =  $_GET ;
-        }
-        if(file_put_contents('/tmp/data.txt',json_encode($data)."-----".date("Y-m-d H:i:s",time()."\n"),FILE_APPEND)) {
+
+        $fileContent = file_get_contents("php://input");
+
+        if(file_put_contents('/tmp/data.txt',$fileContent."-----".date("Y-m-d H:i:s",time()."\n"),FILE_APPEND)) {
             echo 'success';
         }else{
             echo 'fail' ;
         }
-
     }
 
 }
