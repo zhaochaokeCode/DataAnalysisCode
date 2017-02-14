@@ -11,6 +11,11 @@ class PayController extends Controller
 {
     private $fileCharset = "UTF-8";
     public $postCharset = "UTF-8";
+
+    /**
+     *  默认的是 阿里支付 不要为问什么
+     * 因为我喜欢阿里 哈哈
+     */
     public function actionIndex()
     {
         $parameter = array(
@@ -21,7 +26,7 @@ class PayController extends Controller
                 "total_amount" => "0.01",
                 "subject" => 1,
                 "body" => "我是测试数据",
-                "out_trade_no" => "20170114000001"
+                "out_trade_no" => "201701".time()
             )),
             "charset" => "utf-8",
             "format" => "json",
@@ -35,12 +40,17 @@ class PayController extends Controller
         echo json_encode(array('code'=>200,'data'=> $this->createUrlStr($parameter),'message'=>'success')) ;
     }
 
+    /**
+     * 阿里的回调接口
+     */
     public function actionRecall(){
-       echo file_put_contents('/tmp/data.txt',json_encode($_POST)."-----".date("Y-m-d H:i:s",time()."\n"),FILE_APPEND) ;
+        if(file_put_contents('/tmp/data.txt',json_encode($_POST)."-----".date("Y-m-d H:i:s",time()."\n"),FILE_APPEND)) {
+            echo 'success';
+        }else{
+            echo 'fail' ;
+        }
+
     }
-
-
-
 
 
 
