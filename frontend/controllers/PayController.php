@@ -37,7 +37,7 @@ class PayController extends Controller
     }
 
     public function actionRecall(){
-        file_put_contents('/tmp/data.txt ',json_encode($_POST),FILE_APPEND) ;
+       echo file_put_contents('/tmp/data.txt',json_encode($_POST)."\n",FILE_APPEND) ;
     }
 
 
