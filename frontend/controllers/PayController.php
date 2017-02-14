@@ -17,7 +17,6 @@ class PayController extends Controller
             "app_id" => "2017011205020547",
             "biz_content" => json_encode(array(
                 "timeout_express" => "30m",
-                "seller_id" => "",
                 "product_code" => "QUICK_MSECURITY_PAY",
                 "total_amount" => "0.01",
                 "subject" => 1,
@@ -33,7 +32,7 @@ class PayController extends Controller
             "version" => 1.0,
 
         );
-        echo $this->createUrlStr($parameter) ;
+        echo json_encode(array('code'=>200,'data'=> $this->createUrlStr($parameter),'message'=>'success')) ;
     }
 
     public function actionRecall(){
@@ -49,7 +48,6 @@ class PayController extends Controller
     function createUrlStr($parameter){
         $parameter['sign'] = $this->sign($this->getSignContent($parameter));
         $parameter = $this->encodeStr($parameter) ;
-
         return $this->getSignContent($parameter) ;
     }
 
@@ -66,10 +64,11 @@ class PayController extends Controller
                 $v = $this->characet($v, $this->postCharset);
 
                 if ($i == 0) {
-                    $stringToBeSigned .= "$k" . "=" . "$v";
+                    $stringToBeSigned .= $k. "=" .$v;
                 } else {
-                    $stringToBeSigned .= "&" . "$k" . "=" . "$v";
+                    $stringToBeSigned .= "&" .$k. "=" .$v;
                 }
+
                 $i++;
             }
         }
