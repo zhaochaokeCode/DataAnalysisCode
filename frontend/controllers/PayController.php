@@ -179,7 +179,7 @@ class PayController extends Controller
             "notify_url" => $NOTIFY_URL,
             "out_trade_no" =>'20170101'.time() ,
             "spbill_create_ip" => "210.12.129.178",//$this->input->ip_address(),
-            "total_fee" => intval(1000),//注意：前方有坑！！！最小单位是分，跟支付宝不一样。1表示1分钱。只能是整形。
+            "total_fee" => intval(1),//注意：前方有坑！！！最小单位是分，跟支付宝不一样。1表示1分钱。只能是整形。
             "trade_type" => "APP"
         );
         ksort($order);
