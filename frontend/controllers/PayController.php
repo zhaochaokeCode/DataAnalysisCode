@@ -14,20 +14,20 @@ class PayController extends Controller
     public function actionIndex()
     {
         $parameter = array(
-            "app_id" => "app_id",
+            "app_id" => "2017011205020547",
             "biz_content" => json_encode(array(
                 "timeout_express" => "30m",
-                "seller_id" => "30m",
+                "seller_id" => "",
                 "product_code" => "QUICK_MSECURITY_PAY",
                 "total_amount" => "0.01",
                 "subject" => 1,
-                "body" => "0.我是测试数据",
-                "out_trade_no" => "IQJZSRC1YMQB5HU"
+                "body" => "我是测试数据",
+                "out_trade_no" => "20170114000001"
             )),
             "charset" => "utf-8",
             "format" => "json",
             "method" => "alipay.trade.app.pay",
-            "notify_url" => "http://116.62.100.98",
+            "notify_url" => "http://116.62.100.98/pay/recall",
             "sign_type" => "RSA2",
             "timestamp" => date("Y-m-d H:i:s", time()),
             "version" => 1.0,
@@ -37,8 +37,7 @@ class PayController extends Controller
     }
 
     public function actionRecall(){
-
-
+        file_put_contents('/tmp/data.txt ',json_encode($_POST),FILE_APPEND) ;
     }
 
 
