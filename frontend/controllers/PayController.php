@@ -281,7 +281,7 @@ class PayController extends Controller
             }
 
         }
-        $tmp = $str.'ASD23%*!KK4@8MwdWddOc' ;
+        $tmp = iconv("UTF-8", "GB2312//IGNORE", $str) .'ASD23%*!KK4@8MwdWddOc' ;
 
         $md5Str = md5($tmp) ;
         echo $tmp."-----".$md5Str.'-------'.$_POST['sign'] ;
