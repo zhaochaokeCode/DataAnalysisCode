@@ -15,19 +15,17 @@ class PayController extends Controller
     /**
      *  默认的是 阿里支付 不要为问什么
      * 因为我喜欢阿里 哈哈
+     *
+     *
+     * order_id 游戏生成
+     * pr
+     *
+     *
+     *
+     *
      */
     public function actionIndex()
     {
-
-
-
-
-     //   http://wx.bookor.com/pay/request_pay.page?appid=9696020&apporder=2017021415969602010645965&pid=10&pname=60钻石&price=600&userid=1066783&redirect=http%3A%2F%2Fmy.59600.com%2Fgames%2F9696020%2F%3Fcid%3D59600&ext=42336448585246614645684D6446704847773D3D&r=vewdf7apy2lwux1jytfzrq6q7e1n0txy&sign=94DB0F46F9A5639927B1396F8E15DB9A
-
-
-
-
-
 
         $parameter = array(
             "app_id" => "2017011205020547",
