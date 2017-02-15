@@ -19,10 +19,11 @@ class CommController extends Controller
     public function init()
     {
         $session = Yii::$app->session;
-//        if(!isset($session['user_name'])){
-//            $this->render("/login/index") ;
-//        }else{
-////            echo $session['user_name'] ;
+        if(!isset($session['user_name'])){
+            $this->render("/login/index") ;
+        }
+//        else{
+//            echo $session['user_name'] ;
 //        }
         $where = 'where 1';
         if(!$_GET['starttime']){
@@ -156,26 +157,7 @@ class CommController extends Controller
         }
 
     }
-    public function checkSign(){
 
-        foreach($_POST as $k=>$v){
-            if($k!='sign'){
-                $str .= $k.$v ;
-            }
-
-        }
-        $md5Str = md5($str.'ASD23%*!KK4@8MwdWddOc') ;
-        if($md5Str != $_POST['sign']){
-            $data = array('code'=>400,
-                            'message'=>'sign error',
-                            'data'=>array()
-                            ) ;
-            echo json_encode($data) ;die;
-
-        }
-
-
-    }
 
 
 }

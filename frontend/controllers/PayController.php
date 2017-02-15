@@ -24,6 +24,13 @@ class PayController extends Controller
      *
      *
      */
+    public function init()
+    {
+        $this->checkSign() ;
+    }
+
+
+
     public function actionIndex()
     {
 
@@ -265,6 +272,26 @@ class PayController extends Controller
         }else{
             echo 'fail' ;
         }
+    }
+    public function checkSign(){
+
+        foreach($_POST as $k=>$v){
+            if($k!='sign'){
+                $str .= $k.$v ;
+            }
+
+        }
+        $md5Str = md5($str.'ASD23%*!KK4@8MwdWddOc') ;
+        if($md5Str != $_POST['sign']){
+            $data = array('code'=>400,
+                'message'=>'sign error',
+                'data'=>array()
+            ) ;
+            echo json_encode($data) ;die;
+
+        }
+
+
     }
 
 }
