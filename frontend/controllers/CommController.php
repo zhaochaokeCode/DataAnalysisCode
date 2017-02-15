@@ -20,7 +20,7 @@ class CommController extends Controller
     {
         $session = Yii::$app->session;
         if(!isset($session['user_name'])){
-            $this->render("/login/index") ;
+            $this->render("//login/index") ;
         }
 //        else{
 //            echo $session['user_name'] ;
