@@ -289,6 +289,12 @@ class PayController extends Controller
             ) ;
             echo json_encode($data) ;die;
 
+        }else{
+            $data = array('code'=>200,
+                'message'=>'success',
+                'data'=>array()
+            ) ;
+            echo json_encode($data) ;die;
         }
 
 
