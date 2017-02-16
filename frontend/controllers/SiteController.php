@@ -91,6 +91,7 @@ class SiteController extends CommController
 
         //读取每个文件并保存到数据库
         foreach ($fileArr as $v) {
+            $allData =array() ;
             $fileName = $logPath . $v;
             $cont = file_get_contents($fileName);
 
