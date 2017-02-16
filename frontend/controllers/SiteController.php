@@ -129,6 +129,8 @@ class SiteController extends CommController
                 foreach($v as $v3){
 
                     foreach($v3 as $k4=>$v4){
+                        var_dump($v4) ;
+                        die;
                         if($v4!='null'||$v4!='default'){
                             $v3[$k4] ="'$v4'";
                         }
