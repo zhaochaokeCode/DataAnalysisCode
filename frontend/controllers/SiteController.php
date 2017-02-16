@@ -135,7 +135,7 @@ class SiteController extends CommController
                 $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr " ;
                 $connection = Yii::$app->db;
                 $command = $connection->createCommand($sql);
-                $res = $command->execunte();
+                $res = $command->execute();
             }
             sleep(1.0);
         }
