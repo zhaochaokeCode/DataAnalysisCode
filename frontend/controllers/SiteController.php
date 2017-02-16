@@ -112,9 +112,11 @@ class SiteController extends CommController
                 if ($v) {
                     if ($json = json_decode($v)) {
                         $tmpData = $this->objeToArr($json);
-                        $allData[$tmpData['f_log_name']][] = array_values($tmpData) ;
-                        if(!$keyData[$tmpData['f_log_name']]){
-                            $keyData[$tmpData['f_log_name']] = array_keys($tmpData) ;
+                        $name = $tmpData['f_log_name'];
+                        unset($tmpData['f_log_name']) ;
+                        $allData[$name][] = array_values($tmpData) ;
+                        if(!$keyData[$name]){
+                            $keyData[$name] = array_keys($tmpData) ;
                         }
 
                     }
@@ -123,7 +125,6 @@ class SiteController extends CommController
             foreach($allData as $k=>$v){
                 $valStr = '' ;
                 $tabName = 'bi_'.$k ;
-
                 $keyStr = implode(',',$keyData[$k]) ;
                 foreach($v as $v3){
                     foreach($v3 as $k4=>$v4){
