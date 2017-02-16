@@ -26,8 +26,7 @@ class CheckdataController extends Controller
                 }
             }
         }
-        var_dump($tmp) ;
-
+        var_dump($tmp) ; var_dump($datas[0]['log_character_grade']) ;
     }
     function objeToArr($object)
     {
