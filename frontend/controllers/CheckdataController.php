@@ -15,6 +15,7 @@ class CheckdataController extends Controller
         $cont = file_get_contents($data) ;
 
         $datas = explode("\n", $cont);
+        $tmp =array( );
         foreach($datas as $v){
             if ($json = json_decode($v)) {
                 $tmpData = $this->objeToArr($json);
