@@ -21,12 +21,13 @@ class CheckdataController extends Controller
                 $tmpData = $this->objeToArr($json);
                 if (!in_array($tmpData['f_log_name'],$tmp)){
                     $tmp[ $tmpData['f_log_name'] ] = 0;
+                    $add[] = $tmpData ;
                 }else{
                     $tmp[ $tmpData['f_log_name'] ] ++ ;
                 }
             }
         }
-        var_dump($tmp) ; var_dump($datas[0]['log_character_grade']) ;
+        var_dump($tmp) ;var_dump($add) ;
     }
     function objeToArr($object)
     {
