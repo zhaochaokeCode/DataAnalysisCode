@@ -141,7 +141,6 @@ class SiteController extends CommController
                         $valStr .= "($tmpStr)" ;
                     }
                 }
-                
                 $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr " ;
 
                 $connection = Yii::$app->db;
