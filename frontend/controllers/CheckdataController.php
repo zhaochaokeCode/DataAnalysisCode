@@ -21,6 +21,7 @@ class CheckdataController extends Controller
                 $tmpData = $this->objeToArr($json);
                 if (!in_array($tmpData['f_log_name'],$tmp)){
                     $tmp[ $tmpData['f_log_name'] ] = 0;
+                    $add = $v ;
                 }else{
                     $tmp[ $tmpData['f_log_name'] ] ++ ;
                 }
