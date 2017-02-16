@@ -23,7 +23,7 @@ class CheckdataController extends Controller
                 if (!in_array($tmpData['f_log_name'],$tmp)){
                     $tmp[] = $tmpData['f_log_name'];
                     $add[$tmpData['f_log_name']] = 0 ;
-                    $res = $v ;
+                    $res[] = $v ;
                 }else{
                     $add[$tmpData['f_log_name']]++ ;
                 }
