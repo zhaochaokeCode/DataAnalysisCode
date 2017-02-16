@@ -284,7 +284,7 @@ class PayController extends Controller
         $tmp = $str.'ASD23%*!KK4@8MwdWddOc' ;
 
         $md5Str = md5($tmp) ;
-        echo $tmp."-----".$md5Str.'-------'.$_POST['sign'] ;
+//        echo $tmp."-----".$md5Str.'-------'.$_POST['sign'] ;
 
         if($md5Str != $_POST['sign']){
             $data = array('code'=>400,
