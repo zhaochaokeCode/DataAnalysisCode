@@ -12,10 +12,11 @@ class SiteController extends CommController
 {
     public $layout = false;
 
-    public $cusKey=false ;
-    public $valArr ;
+    public $cusKey = false;
+    public $valArr;
 
-    public $days = 7 ;
+    public $days = 7;
+
     /**
      * @inheritdoc
      */
@@ -67,7 +68,7 @@ class SiteController extends CommController
     {
 
         ini_set('memory_limit', '1024M');
-        if(!isset($_GET['create_data'])) return ;
+        if (!isset($_GET['create_data'])) return;
         $sinkFile = Yii::$app->params['runFile'];//中间通道数据文件路径
         $logPath = Yii::$app->params['tmpFilePath']; //文件保存目录
         $logType = array();
@@ -94,33 +95,58 @@ class SiteController extends CommController
             $cont = file_get_contents($fileName);
 
             $datas = explode("\n", $cont);
+            unset($cont);
             $lessArr = array();
-            foreach ($datas as $v) {
-                if ($json = json_decode($v)) {
-                    $tmpData = $this->objeToArr($json);
-                    $tag = true;
-                    if (isset($json->f_params)) {
-                        $tmp2 = array();
-                        foreach ($json->f_params as $k => $v) {
-                            $tmp2[$k] = $v;
-                        }
-                        if (!$tmp2) $tag = false;
-                        $tmp1 = $this->objeToArr($json->f_params);
-                        if (count($tmp1) > 5) {
+//            foreach ($datas as $v) {
+//                if ($json = json_decode($v)) {
+//                    $tmpData = $this->objeToArr($json);
+//                    $moreArr = array();
+//                    $data[$tmpData['f_log_name']][] = $tmpData ;
+//                    $sqlData = $this->createSqlData($tmpData, $lessArr, true, $moreArr);
+////                    sleep(0.1) ;s
+//                }
+//            }
+//        }
+            foreach ($datas as $k => $v) {
+                if ($v) {
+                    if ($json = json_decode($v)) {
+                        $tmpData = $this->objeToArr($json);
+                        $allData[$tmpData['f_log_name']][] = array_values($tmpData) ;
+                        if(!$keyData[$tmpData['f_log_name']]){
+                            $keyData[$tmpData['f_log_name']] = array_keys($tmpData) ;
                         }
 
                     }
-                    $moreArr = array();
-                    $sqlData = $this->createSqlData($tmpData, $lessArr, $tag, $moreArr);
-                    sleep(0.1) ;
                 }
             }
-        }
-        sleep(1.0) ;
-        //流失加留存
-        $this->initDb() ;
+            foreach($allData as $k=>$v){
+                $valStr = '' ;
+                $tabName = $k ;
+                $keyStr = implode(',',$keyData[$tabName]) ;
+                foreach($v as $v3){
+                    $tmpStr = implode(',',$v3) ;
+                    if($valStr){
+                        $valStr .= ",($tmpStr)" ;
+                    }else{
+                        $valStr .= "($tmpStr)" ;
+                    }
+                }
 
-        $this->createLogOut($this->days)  ;return ;
+                $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr " ;
+                $connection = Yii::$app->db;
+                $command = $connection->createCommand($sql);
+                $res = $command->execunte();
+            }
+            sleep(1.0);
+        }
+
+        unset($datas);
+
+        //流失加留存
+        $this->initDb();
+
+        $this->createLogOut($this->days);
+        return;
     }
 
 
@@ -219,7 +245,7 @@ class SiteController extends CommController
             foreach ($object as $key => $value) {
                 if ($key == 'f_params') {
                     if ($value) {
-                        $array = array_merge($array, $this->objeToArr($value));
+                        $array = $array + $this->objeToArr($value);
                     }
                 } else {
                     $array[$key] = $value;
@@ -249,8 +275,6 @@ class SiteController extends CommController
             return;
         }
         $tabName = "bi_" . $tmpData['f_log_name'];
-
-
         $sql = "DESC $tabName ";
         $command = Yii::$app->db->createCommand($sql);
         $columns = $command->queryAll();
@@ -258,18 +282,6 @@ class SiteController extends CommController
         foreach ($columns as $v) {
             $colName = $v['Field'];
             if (isset($tmpData[$colName])) {
-                if ($colName == "f_time") {
-                    $time = $tmpData[$colName];
-                    if (stristr($time, '.')) {
-                        $tmpArr = explode('.', $time);
-                        $tmpData[$colName] = strtotime($tmpArr[0]);
-                    }
-                    if (strlen($tmpData[$colName]) > 11) {
-                        echo $tmpData[$colName] . "<br/><br/>";
-                        continue;
-                    }
-                }
-
                 $data[$colName] = $tmpData[$colName];
             }
         }
@@ -331,7 +343,7 @@ class SiteController extends CommController
      */
     public function initDb()
     {
-        $tabName = "bi_count_retention" ;
+        $tabName = "bi_count_retention";
         $connection = Yii::$app->db;
         $time = time() - 86400 * 30;
         for ($i = 0; $i < 30; $i++) {
@@ -384,7 +396,7 @@ class SiteController extends CommController
                 }
                 //30日留存
                 if ($i < 1) {
-                    $thirty = $this->runSql($thirtytime-86400, $thirtytime, $regStr, $connection, $allNum);
+                    $thirty = $this->runSql($thirtytime - 86400, $thirtytime, $regStr, $connection, $allNum);
                 }
 
             }
@@ -395,7 +407,7 @@ class SiteController extends CommController
                 'f_fifteen_day' => $f_fifteen_day,
                 'f_thirty_day' => $thirty,
                 'f_time' => $start,
-                'f_type' =>1
+                'f_type' => 1
                 //预留一下 平台
             );
 
@@ -418,23 +430,23 @@ class SiteController extends CommController
 
                 //次日留存
                 if ($i < 29) {
-                    $two = $this->runSql($secStr, $secStr+86400, $regStr, $connection, $allNum);
+                    $two = $this->runSql($secStr, $secStr + 86400, $regStr, $connection, $allNum);
                 }
                 //三日留存
                 if ($i < 27) {
-                    $three = $this->runSql($threeSta, $threeSta+86400, $regStr, $connection, $allNum);
+                    $three = $this->runSql($threeSta, $threeSta + 86400, $regStr, $connection, $allNum);
                 }
                 //七日留存
                 if ($i < 23) {
-                    $seven = $this->runSql($seventime, $seventime+86400, $regStr, $connection, $allNum);
+                    $seven = $this->runSql($seventime, $seventime + 86400, $regStr, $connection, $allNum);
                 }
                 //十五日留存
                 if ($i < 15) {
-                    $f_fifteen_day = $this->runSql($fivthtime, $fivthtime+86400, $regStr, $connection, $allNum);
+                    $f_fifteen_day = $this->runSql($fivthtime, $fivthtime + 86400, $regStr, $connection, $allNum);
                 }
                 //30日留存
                 if ($i < 1) {
-                    $thirty = $this->runSql($thirtytime, $thirtytime+86400, $regStr, $connection, $allNum);
+                    $thirty = $this->runSql($thirtytime, $thirtytime + 86400, $regStr, $connection, $allNum);
                 }
 
             }
@@ -445,7 +457,7 @@ class SiteController extends CommController
                 'f_fifteen_day' => $f_fifteen_day,
                 'f_thirty_day' => $thirty,
                 'f_time' => $start,
-                'f_type' =>2
+                'f_type' => 2
                 //预留一下 平台
             );
             $sql = "select id from $tabName where f_time ='$start' and f_type=2";
@@ -496,7 +508,7 @@ class SiteController extends CommController
                     if ($v['num']) {
                         $data = array(
                             'f_time' => $start,
-                            'num' => $v['num'  ],
+                            'num' => $v['num'],
                         );
                         $connection->createCommand()->insert($tabName, $data)->execute();
                     }
@@ -507,55 +519,58 @@ class SiteController extends CommController
         }
 
     }
+
     /**
      *用户的退出
      */
-    public  function createLogOut($key=30){
-        for($i=0;$i<$key;$i++){
-            $startTime  = $this->getStrart()-86400*$i ;
-            $endTime    = $startTime+86400 ;
+    public function createLogOut($key = 30)
+    {
+        for ($i = 0; $i < $key; $i++) {
+            $startTime = $this->getStrart() - 86400 * $i;
+            $endTime = $startTime + 86400;
 
-            $sql = "SELECT distinct(f_character_id) id from bi_log_character where  f_time>=$startTime AND f_time<$endTime" ;
-            $command =  Yii::$app->db->createCommand($sql);
+            $sql = "SELECT distinct(f_character_id) id from bi_log_character where  f_time>=$startTime AND f_time<$endTime";
+            $command = Yii::$app->db->createCommand($sql);
             $allRegist = $command->queryAll();
-            if(!$allRegist) continue ;
-            foreach($allRegist as $v){
+            if (!$allRegist) continue;
+            foreach ($allRegist as $v) {
                 $strArr[] = $v['id'];
             }
-            $inStr = implode(',',$strArr) ;
+            $inStr = implode(',', $strArr);
 
-            $nsArr= $this->getLogoutData('f_nstage_id',1,$startTime,$endTime,$inStr) ;
-            $ssArr=$this->getLogoutData('f_sstage_id',2,$startTime,$endTime,$inStr) ;
-            $valArr = $nsArr+$ssArr ;
-            Yii::$app->db->createCommand()->batchInsert('bi_count_logout',$this->cusKey,$valArr)->execute();
+            $nsArr = $this->getLogoutData('f_nstage_id', 1, $startTime, $endTime, $inStr);
+            $ssArr = $this->getLogoutData('f_sstage_id', 2, $startTime, $endTime, $inStr);
+            $valArr = $nsArr + $ssArr;
+            Yii::$app->db->createCommand()->batchInsert('bi_count_logout', $this->cusKey, $valArr)->execute();
         }
 
 
-
     }
-    private function getLogoutData($nsId,$type,$startTime,$endTime,$inStr){
+
+    private function getLogoutData($nsId, $type, $startTime, $endTime, $inStr)
+    {
         $lastSql = "select id,f_dept,$nsId,f_sid,f_game_id,f_character_id,max(f_time) from bi_log_logout WHERE
                   f_time>=$startTime AND f_time<$endTime and f_character_id in($inStr) group by
                   f_sid, f_game_id,f_dept,$nsId order by f_time asc ";
 
         //---退出剧情id和数量
-        $sql =  "SELECT $nsId f_out_id,count(a.$nsId) f_out_num,a.f_sid,a.f_game_id,a.f_dept from ($lastSql) as a
-                        group by f_sid, f_game_id,$nsId,f_dept  " ;
-        $command =  Yii::$app->db->createCommand($sql);
+        $sql = "SELECT $nsId f_out_id,count(a.$nsId) f_out_num,a.f_sid,a.f_game_id,a.f_dept from ($lastSql) as a
+                        group by f_sid, f_game_id,$nsId,f_dept  ";
+        $command = Yii::$app->db->createCommand($sql);
         $allDatas = $command->queryAll();
-        if($type==2)echo $sql."<br><br>" ;
-        if(!$this->cusKey) {
+        if ($type == 2) echo $sql . "<br><br>";
+        if (!$this->cusKey) {
             $this->cusKey = array_keys($allDatas[0]);
             $this->cusKey[] = 'f_time';
             $this->cusKey[] = 'f_type';
         }
-        $ret =array() ;
-        foreach($allDatas as $v){
+        $ret = array();
+        foreach ($allDatas as $v) {
             $v[] = $startTime;
             $v[] = $type;
-            $ret[] = array_values($v) ;
+            $ret[] = array_values($v);
         }
-        return $ret ;
+        return $ret;
 
     }
 
