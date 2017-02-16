@@ -127,13 +127,13 @@ class SiteController extends CommController
                 $tabName = 'bi_'.$k ;
                 $keyStr = implode(',',$keyData[$k]) ;
                 foreach($v as $v3){
-                    if($tabName=='bi_log_online_character_cnt'){
-                        var_dump($v3) ;die;
-                    }
+
                     foreach($v3 as $k4=>$v4){
-                        if($v4!='null'||$v4!='default')
-                        $v3[$k4] ="'$v4'";
+                        if($v4!='null'||$v4!='default'){
+                            $v3[$k4] ="'$v4'";
+                        }
                     }
+
                     $tmpStr = implode(',',$v3) ;
                     if($valStr){
                         $valStr .= ",($tmpStr)" ;
@@ -141,8 +141,9 @@ class SiteController extends CommController
                         $valStr .= "($tmpStr)" ;
                     }
                 }
-
+                
                 $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr " ;
+
                 $connection = Yii::$app->db;
                 $command = $connection->createCommand($sql);
                 $res = $command->execute();
