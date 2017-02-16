@@ -291,7 +291,7 @@ class PayController extends Controller
                 'message'=>'sign error',
                 'data'=>array()
             ) ;
-//            echo json_encode($data) ;die;
+            echo json_encode($data) ;die;
 
         }else{
             $data = array('code'=>200,
