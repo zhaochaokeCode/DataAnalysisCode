@@ -29,7 +29,6 @@ class CheckdataController extends Controller
                 }
             }
         }
-        var_dump($add) ;echo "<br><br>" ;var_dump($res);
     }
     function objeToArr($object)
     {

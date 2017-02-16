@@ -19,7 +19,7 @@ class CommController extends Controller
     public function init()
     {
         $session = Yii::$app->session;
-        if(!isset($session['user_name'])&&!isset($_GET[''])){
+        if(!isset($session['user_name'])&&!isset($_GET['create_data'])){
             $this->render("//login/index") ;
         }
 //        else{
