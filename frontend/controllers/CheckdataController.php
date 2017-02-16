@@ -16,18 +16,20 @@ class CheckdataController extends Controller
 
         $datas = explode("\n", $cont);
         $tmp =array( );
+
         foreach($datas as $v){
             if ($json = json_decode($v)) {
                 $tmpData = $this->objeToArr($json);
                 if (!in_array($tmpData['f_log_name'],$tmp)){
-                    $tmp[ $tmpData['f_log_name'] ] = 0;
-                    $add[] = $v ;
+                    $tmp[] = $tmpData['f_log_name'];
+                    $add[$tmpData['f_log_name']] = 0 ;
+                    $res = $v ;
                 }else{
-                    $tmp[ $tmpData['f_log_name'] ] ++ ;
+                    $add[$tmpData['f_log_name']]++ ;
                 }
             }
         }
-        var_dump($tmp) ;echo "<br><br>" ;var_dump($add);
+        var_dump($add) ;echo "<br><br>" ;var_dump($res);
     }
     function objeToArr($object)
     {
