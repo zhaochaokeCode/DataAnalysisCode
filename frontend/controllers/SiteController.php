@@ -15,7 +15,7 @@ class SiteController extends CommController
     public $cusKey=false ;
     public $valArr ;
 
-
+    public $days = 7 ;
     /**
      * @inheritdoc
      */
@@ -65,12 +65,6 @@ class SiteController extends CommController
 
     public function actionIndex()
     {
-        //流失
-        $this->initDb() ; return;
-
-        $key=30 ;
-//        $this->createCustomerChurn($key)  ;return ;
-        $this->createLogOut($key)  ;return ;
 
 
         if(!isset($_GET['create_data'])) return ;
@@ -78,7 +72,6 @@ class SiteController extends CommController
         $logPath = Yii::$app->params['tmpFilePath']; //文件保存目录
         $logType = array();
         $ret = array();
-
 
         //获取mysql的表名
         $sql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'data_analysis'";
@@ -119,10 +112,17 @@ class SiteController extends CommController
                     }
                     $moreArr = array();
                     $sqlData = $this->createSqlData($tmpData, $lessArr, $tag, $moreArr);
+                    sleep(0.1) ;
                 }
             }
         }
+        sleep(1.0) ;
+        //流失加留存
+        $this->initDb() ;
+
+        $this->createLogOut($this->days)  ;return ;
     }
+
 
 //            while (($file = readdir($current_dir)) !== false) {
 //                if ($file == '.' || $file == '..') {
