@@ -281,26 +281,24 @@ class PayController extends Controller
             }
 
         }
-        $tmp = iconv("UTF-8", "GB2312//IGNORE",$str) .'ASD23%*!KK4@8MwdWddOc' ;
+        $tmp = $str.'ASD23%*!KK4@8MwdWddOc' ;
 
         $md5Str = md5($tmp) ;
         echo $tmp."-----".$md5Str.'-------'.$_POST['sign'] ;
-
-
 
         if($md5Str != $_POST['sign']){
             $data = array('code'=>400,
                 'message'=>'sign error',
                 'data'=>array()
             ) ;
-            echo json_encode($data) ;die;
+//            echo json_encode($data) ;die;
 
         }else{
             $data = array('code'=>200,
                 'message'=>'success',
                 'data'=>array()
             ) ;
-            echo json_encode($data) ;die;
+//            echo json_encode($data) ;die;
         }
 
 
