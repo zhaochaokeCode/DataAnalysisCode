@@ -127,7 +127,7 @@ class SiteController extends CommController
                 $tabName = 'bi_'.$k ;
                 $keyStr = implode(',',$keyData[$k]) ;
                 foreach($v as $v3){
-                    if($tabName=='bi_log_online_character_cnt '){
+                    if($tabName=='bi_log_online_character_cnt'){
                         var_dump($v3) ;die;
                     }
                     foreach($v3 as $k4=>$v4){
