@@ -66,7 +66,7 @@ class SiteController extends CommController
     public function actionIndex()
     {
 
-
+        ini_set('memory_limit', '1024M');
         if(!isset($_GET['create_data'])) return ;
         $sinkFile = Yii::$app->params['runFile'];//中间通道数据文件路径
         $logPath = Yii::$app->params['tmpFilePath']; //文件保存目录
