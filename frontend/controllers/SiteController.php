@@ -121,7 +121,7 @@ class SiteController extends CommController
             }
             foreach($allData as $k=>$v){
                 $valStr = '' ;
-                $tabName = $k ;
+                $tabName = 'bi_'.$k ;
                 $keyStr = implode(',',$keyData[$tabName]) ;
                 foreach($v as $v3){
                     $tmpStr = implode(',',$v3) ;
