@@ -118,20 +118,20 @@
                         <span class="arrow"></span>
                     </a>
                     <ul class="sub">
-                        <li><a id="tab_login" href="#"><span class="sub-menu-text">每日登录用户</span></a>
-                        <li><a id="tab_retention?type=1" href="#"><span class="sub-menu-text">用户留存</span></a>
-                        <li><a id="tab_retention" href="#"><span class="sub-menu-text">用户留失</span></a>
+                        <li><a id="tab_/login" href="#"><span class="sub-menu-text">每日登录用户</span></a>
+                        <li><a id="tab_/retention?type=1" href="#"><span class="sub-menu-text">用户留存</span></a>
+                        <li><a id="tab_/retention" href="#"><span class="sub-menu-text">用户留失</span></a>
                         </li>
                     </ul>
                 </li>
                 <li class="has-sub">
                     <a href="javascript:;" class="">
-                        <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">数据报表4<span
+                        <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">用户充值<span
                                 class="badge pull-right">1</span></span>
                         <span class="arrow"></span>
                     </a>
                     <ul class="sub">
-                        <li><a class="" href="search_results.html"><span class="sub-menu-text">Search Results</span></a>
+                        <li><a id="tab_/count/recharge" href="#"><span class="sub-menu-text">用户充值</span></a>
                         </li>
                     </ul>
                 </li>

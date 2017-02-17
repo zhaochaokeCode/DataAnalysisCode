@@ -18,51 +18,55 @@ class SiteController extends CommController
     public $days = 7;
 
     /**
-     * @inheritdoc
+     *流失加留存
      */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
-                'rules' => [
-                    [
-                        'actions' => ['signup'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
+    public function actionCount(){
+        //
+        $this->initDb();
+        $this->createLogOut($this->days);
+
+        return;
     }
 
     /**
-     * @inheritdoc
+     * 初始化recharge
      */
-    public function actions()
+    public function actionRecharge()
     {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
-        ];
+        $key =10;
+        $tabName = "bi_count_retention";
+        $connection = Yii::$app->db;
+        $strtime = $this->getStrart() ;
+        for ($i = 0; $i <$key; $i++) {
+            $stime = $strtime-86400*$i ;
+            $etime = $strtime+86400 ;
+            //  充值人数,充值元宝,登录人数,新增(注册人数),
+            $sql = " select count(DISTINCT(a.f_character_id)) recharge_hum_num,
+                    COUNT(f_recharge_yuanbao) recharge_num,
+                    (SELECT count(DISTINCT(a.f_character_id))id from bi_log_login where f_time>$stime and f_time<$etime)login_hum_num ,
+                    (SELECT count(DISTINCT(a.f_character_id))id from bi_log_character where f_time>$stime and f_time<$etime)regist_hum_num
+                    from bi_log_recharge a where f_time>$stime and f_time<$etime" ;
+            $command = Yii::$app->db->createCommand($sql);
+            $datas = $command->queryOne();
+            if($datas['recharge_hum_num']) {
+                //新增充值人数
+                $sql1 = "select count(DISTINCT(a.f_character_id)) new_recharge_num,
+                    count(f_recharge_yuanbao) yunbao  from bi_log_recharge a where
+                      f_time>$stime and f_time<$etime and  f_character_id in(SELECT id from bi_log_character
+                      where  f_time>$stime and f_time<$etime)
+                    ";
+                $command = Yii::$app->db->createCommand($sql);
+                $datas = $datas + $command->queryOne();
+                var_dump($datas);
+                echo "<br><br>";
+            }
+
+        }
     }
+
+    /**
+     * @throws 初始化所有数据
+     */
 
     public function actionIndex()
     {
@@ -97,17 +101,7 @@ class SiteController extends CommController
 
             $datas = explode("\n", $cont);
             unset($cont);
-            $lessArr = array();
-//            foreach ($datas as $v) {
-//                if ($json = json_decode($v)) {
-//                    $tmpData = $this->objeToArr($json);
-//                    $moreArr = array();
-//                    $data[$tmpData['f_log_name']][] = $tmpData ;
-//                    $sqlData = $this->createSqlData($tmpData, $lessArr, true, $moreArr);
-////                    sleep(0.1) ;s
-//                }
-//            }
-//        }
+
             foreach ($datas as $k => $v) {
                 if ($v) {
                     if ($json = json_decode($v)) {
@@ -177,103 +171,8 @@ class SiteController extends CommController
 
     }
 
-    /**
-     *
-     */
-    public function actionCount(){
-        //流失加留存
-        $this->initDb();
-        $this->createLogOut($this->days);
-        return;
-    }
 
 
-//            while (($file = readdir($current_dir)) !== false) {
-//                if ($file == '.' || $file == '..') {
-//                    continue;
-//                } else if (is_dir($file)) {    //如果是目录,进行递归
-//                } else {
-//                    $fileName = $path . '/' . $file;
-//                    $cont = file_get_contents($fileName);
-//                    $datas = explode("\n", $cont);
-//
-//
-//                    $lessArr = array();
-//                    foreach ($datas as $v) {
-//                        if ($json = json_decode($v)) {
-//                            $tmpData = $this->objeToArr($json);
-//                            $tag = true;
-//                            if (isset($json->f_params)) {
-//                                $tmp2 = array();
-//                                foreach ($json->f_params as $k => $v) {
-//                                    $tmp2[$k] = $v;
-//                                }
-//                                if (!$tmp2) $tag = false;
-//                                $tmp1 = $this->objeToArr($json->f_params);
-//                                if (count($tmp1) > 5) {
-//                                }
-//
-//                            }
-//                        if($tmpData['f_log_name']=='log_online_character_cnt'){
-//                            print_r($tmpData) ;die;
-//                        }
-//                        continue ;
-//                            $moreArr = array();
-//                            $sqlData = $this->createSqlData($tmpData, $lessArr, $tag, $moreArr);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//                            continue;
-//                            $tmp = array_keys($logType);
-
-//                            if (($name = $useData['f_log_name'])) {
-//                                if ($name == 'log_online_character_cnt') $name = 'log_onlineinfo';
-//                                $tabName = 'bi_' . $name;
-
-
-//                            if (!in_array($tabName, $tmp)) {
-//                                $logType[$json->f_log_name] = 1;
-//                                $ret[] = array($json->f_log_name, $fileName);
-//                                $type[] = $v ;
-//
-//                                if($json->f_log_name=='log_online_character_cnt'){
-//                                    $json->f_log_name= 'log_onlineinfo' ;
-//                                }
-//                                if(in_array($tabName = 'bi_'.$json->f_log_name,$tabArr)){
-//                                    echo 'in '.$json->f_log_name."<br/>"."<br/>"  ;
-//
-//                                }else{
-//                                    echo '------ not in'.$json->f_log_name."<br/>"."<br/>"  ;
-//                                }
-//
-//                            } else {
-//                                $logType[$json->f_log_name]++;
-//                            }
-//                            } else {
-////                            echo $v;
-//                                echo "<br/>";
-//                                echo "<br/>";
-//                            }
-//                        }
-//                    }
-//
-//                }
-//            }
-//        foreach($ret as $v){
-////            echo $v[1]."   :  " .$v[0]."<br/>";
-//            echo $v[0] ;
-//            echo "<br/>"; echo "<br/>";
-//        }
-////        foreach($type as $v){
-//////            echo $v[1]."   :  " .$v[0]."<br/>";
-////            echo $v ;
-////            echo "<br/>"; echo "<br/>";
-////        }
-//        print_r($logType) ;
-//            closedir($current_dir);
-//        }
 
 
     function objeToArr($object)
@@ -293,88 +192,9 @@ class SiteController extends CommController
             $array = $object;
         }
 
-//        print_r($array) ;die;
         return $array;
 
     }
-
-//    /**
-//     * @param $tmpData 原始数据 是个二维数据
-//     *
-//     *
-//     * @param $ret      一维数据 数据表要插入的数据字段值
-//     *
-//     */
-//    public function createSqlData($tmpData, &$lessArr, $tag, &$moreArr)
-//    {
-//
-//        if (!isset($tmpData['f_log_name'])) {
-//            var_dump($tmpData);
-//            return;
-//        }
-//        $tabName = "bi_" . $tmpData['f_log_name'];
-//        $sql = "DESC $tabName ";
-//        $command = Yii::$app->db->createCommand($sql);
-//        $columns = $command->queryAll();
-//        $tpadArr = array('id', 'f_type', 'f_other');
-//        foreach ($columns as $v) {
-//            $colName = $v['Field'];
-//            if (isset($tmpData[$colName])) {
-//                $data[$colName] = $tmpData[$colName];
-//            }
-//        }
-//
-//        Yii::$app->db->createCommand()->insert($tabName, $data)->execute();
-//        return;
-//
-//
-////        Yii::$app->db->createCommand()->batchInsert(UserModel::$tabName(), ['user_id','username'], [
-////            ['1','test1'],
-////            ['2','test2'],
-////            ['3','test3'],
-////        ])->execute();
-////
-////
-//
-//
-//        foreach ($columns as $v) {
-//            $useColu[] = $v['Field'];
-//            if (!in_array($v['Field'], $tmpData)) {
-//
-//                if (!in_array($v['Field'], $tpadArr) && !$tag) {
-//                    if (!in_array($v['Field'], $lessArr)) {
-//                        $lessArr[] = $v['Field'];
-//                        echo "缺少的字段:" . $tabName . ":" . $v['Field'] . "<br/><br/>";
-//                    }
-//                }
-//            }
-//        }
-//
-//
-//        foreach ($tmpData as $key => $val) {
-//            if ($key == 'f_log_name' || $key == 'f_params') continue;
-//            if (is_array($val)) {
-//                foreach ($val as $k1 => $v1) {
-//                    if ($key == 'f_log_name' || $key == 'f_params') continue;
-//                    if (!in_array($k1, $useColu)) {
-//                        if (!in_array($k1, $moreArr)) {
-//                            $moreArr[] = $k1;
-//                            echo $tabName . ":" . $k1 . "<br/><br/>";
-//                        }
-//                    }
-//                }
-//            } else {
-//                if (!in_array($key, $useColu)) {
-//                    if (!in_array($key, $moreArr)) {
-//                        $moreArr[] = $key;
-//                        echo '多出的字段:' . $tabName . ":" . $key . "<br/><br/>";
-//                    }
-//
-//                }
-//            }
-//        }
-//
-//    }
 
     /**
      * 留失分析数据统计
@@ -611,5 +431,8 @@ class SiteController extends CommController
         return $ret;
 
     }
+
+
+
 
 }
