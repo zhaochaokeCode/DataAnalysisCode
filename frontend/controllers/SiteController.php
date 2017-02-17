@@ -129,40 +129,41 @@ class SiteController extends CommController
                     }
                 }
             }
-            foreach($allData as $k=>$v){
-                $valStr = '' ;
-                $tabName = 'bi_'.$k ;
-                $keyStr = implode(',',$keyData[$k]) ;
-                $coluNum =  count($keyData[$k]) ; //一共多少列
+            foreach($allData as $k=>$v) {
+                if ($v) {
+                    $valStr = '';
+                    $tabName = 'bi_' . $k;
+                    $keyStr = implode(',', $keyData[$k]);
+                    $coluNum = count($keyData[$k]); //一共多少列
 
-                foreach($v as $v3){
-                    if($coluNum!=count($v3)){
-                        var_dump($keyData[$k]) ;
-                        echo"<br>" ;
-                        echo"<br><br>" ;
-                        continue ;
-                    }
+                    foreach ($v as $v3) {
+                        if ($coluNum != count($v3)) {
+                            var_dump($keyData[$k]);
+                            echo "<br>";
+                            echo "<br><br>";
+                            continue;
+                        }
 
 
+                        foreach ($v3 as $k4 => $v4) {
+                            if ($v4 != 'null' && $v4 != 'default') {
+                                $v3[$k4] = "'$v4'";
+                            }
+                        }
 
-                    foreach($v3 as $k4=>$v4){
-                        if($v4!='null'&&$v4!='default'){
-                            $v3[$k4] ="'$v4'";
+                        $tmpStr = implode(',', $v3);
+                        if ($valStr) {
+                            $valStr .= ",($tmpStr)";
+                        } else {
+                            $valStr .= "($tmpStr)";
                         }
                     }
+                    $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
 
-                    $tmpStr = implode(',',$v3) ;
-                    if($valStr){
-                        $valStr .= ",($tmpStr)" ;
-                    }else{
-                        $valStr .= "($tmpStr)" ;
-                    }
+                    $connection = Yii::$app->db;
+                    $command = $connection->createCommand($sql);
+                    $res = $command->execute();
                 }
-                $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr " ;
-
-                $connection = Yii::$app->db;
-                $command = $connection->createCommand($sql);
-                $res = $command->execute();
             }
             sleep(1.0);
         }
