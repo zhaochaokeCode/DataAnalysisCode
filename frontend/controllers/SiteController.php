@@ -138,9 +138,9 @@ class SiteController extends CommController
 
                     foreach ($v as $v3) {
                         if ($coluNum != count($v3)) {
-                            var_dump($keyData[$k]);
-                            echo "<br>";
-                            echo "<br><br>";
+//                            var_dump($keyData[$k]);
+//                            echo "<br>";
+//                            echo "<br><br>";
                             continue;
                         }
 
@@ -157,6 +157,10 @@ class SiteController extends CommController
                         } else {
                             $valStr .= "($tmpStr)";
                         }
+                    }
+                    if($valStr==null){
+                        var_dump($v) ;
+                        die;
                     }
                     $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
 
