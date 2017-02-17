@@ -180,7 +180,7 @@ class SiteController extends CommController
     /**
      *
      */
-    public function actionCountData(){
+    public function actionCount(){
         //流失加留存
         $this->initDb();
         $this->createLogOut($this->days);
