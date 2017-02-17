@@ -158,16 +158,15 @@ class SiteController extends CommController
                             $valStr .= "($tmpStr)";
                         }
 
-                        if($valStr==null){
-                            var_dump($tmpStr ) ;
-                            die;
-                        }
-                    }
-                    $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
 
-                    $connection = Yii::$app->db;
-                    $command = $connection->createCommand($sql);
-                    $res = $command->execute();
+                    }
+                    if($valStr) {
+                        $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
+
+                        $connection = Yii::$app->db;
+                        $command = $connection->createCommand($sql);
+                        $res = $command->execute();
+                    }
                 }
             }
             sleep(1.0);
