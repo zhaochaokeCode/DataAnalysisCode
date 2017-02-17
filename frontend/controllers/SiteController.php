@@ -174,6 +174,13 @@ class SiteController extends CommController
 
         unset($datas);
 
+
+    }
+
+    /**
+     *
+     */
+    public function actionCountData(){
         //流失加留存
         $this->initDb();
 
@@ -292,83 +299,83 @@ class SiteController extends CommController
 
     }
 
-    /**
-     * @param $tmpData 原始数据 是个二维数据
-     *
-     *
-     * @param $ret      一维数据 数据表要插入的数据字段值
-     *
-     */
-    public function createSqlData($tmpData, &$lessArr, $tag, &$moreArr)
-    {
-
-        if (!isset($tmpData['f_log_name'])) {
-            var_dump($tmpData);
-            return;
-        }
-        $tabName = "bi_" . $tmpData['f_log_name'];
-        $sql = "DESC $tabName ";
-        $command = Yii::$app->db->createCommand($sql);
-        $columns = $command->queryAll();
-        $tpadArr = array('id', 'f_type', 'f_other');
-        foreach ($columns as $v) {
-            $colName = $v['Field'];
-            if (isset($tmpData[$colName])) {
-                $data[$colName] = $tmpData[$colName];
-            }
-        }
-
-        Yii::$app->db->createCommand()->insert($tabName, $data)->execute();
-        return;
-
-
-//        Yii::$app->db->createCommand()->batchInsert(UserModel::$tabName(), ['user_id','username'], [
-//            ['1','test1'],
-//            ['2','test2'],
-//            ['3','test3'],
-//        ])->execute();
+//    /**
+//     * @param $tmpData 原始数据 是个二维数据
+//     *
+//     *
+//     * @param $ret      一维数据 数据表要插入的数据字段值
+//     *
+//     */
+//    public function createSqlData($tmpData, &$lessArr, $tag, &$moreArr)
+//    {
+//
+//        if (!isset($tmpData['f_log_name'])) {
+//            var_dump($tmpData);
+//            return;
+//        }
+//        $tabName = "bi_" . $tmpData['f_log_name'];
+//        $sql = "DESC $tabName ";
+//        $command = Yii::$app->db->createCommand($sql);
+//        $columns = $command->queryAll();
+//        $tpadArr = array('id', 'f_type', 'f_other');
+//        foreach ($columns as $v) {
+//            $colName = $v['Field'];
+//            if (isset($tmpData[$colName])) {
+//                $data[$colName] = $tmpData[$colName];
+//            }
+//        }
+//
+//        Yii::$app->db->createCommand()->insert($tabName, $data)->execute();
+//        return;
 //
 //
-
-
-        foreach ($columns as $v) {
-            $useColu[] = $v['Field'];
-            if (!in_array($v['Field'], $tmpData)) {
-
-                if (!in_array($v['Field'], $tpadArr) && !$tag) {
-                    if (!in_array($v['Field'], $lessArr)) {
-                        $lessArr[] = $v['Field'];
-                        echo "缺少的字段:" . $tabName . ":" . $v['Field'] . "<br/><br/>";
-                    }
-                }
-            }
-        }
-
-
-        foreach ($tmpData as $key => $val) {
-            if ($key == 'f_log_name' || $key == 'f_params') continue;
-            if (is_array($val)) {
-                foreach ($val as $k1 => $v1) {
-                    if ($key == 'f_log_name' || $key == 'f_params') continue;
-                    if (!in_array($k1, $useColu)) {
-                        if (!in_array($k1, $moreArr)) {
-                            $moreArr[] = $k1;
-                            echo $tabName . ":" . $k1 . "<br/><br/>";
-                        }
-                    }
-                }
-            } else {
-                if (!in_array($key, $useColu)) {
-                    if (!in_array($key, $moreArr)) {
-                        $moreArr[] = $key;
-                        echo '多出的字段:' . $tabName . ":" . $key . "<br/><br/>";
-                    }
-
-                }
-            }
-        }
-
-    }
+////        Yii::$app->db->createCommand()->batchInsert(UserModel::$tabName(), ['user_id','username'], [
+////            ['1','test1'],
+////            ['2','test2'],
+////            ['3','test3'],
+////        ])->execute();
+////
+////
+//
+//
+//        foreach ($columns as $v) {
+//            $useColu[] = $v['Field'];
+//            if (!in_array($v['Field'], $tmpData)) {
+//
+//                if (!in_array($v['Field'], $tpadArr) && !$tag) {
+//                    if (!in_array($v['Field'], $lessArr)) {
+//                        $lessArr[] = $v['Field'];
+//                        echo "缺少的字段:" . $tabName . ":" . $v['Field'] . "<br/><br/>";
+//                    }
+//                }
+//            }
+//        }
+//
+//
+//        foreach ($tmpData as $key => $val) {
+//            if ($key == 'f_log_name' || $key == 'f_params') continue;
+//            if (is_array($val)) {
+//                foreach ($val as $k1 => $v1) {
+//                    if ($key == 'f_log_name' || $key == 'f_params') continue;
+//                    if (!in_array($k1, $useColu)) {
+//                        if (!in_array($k1, $moreArr)) {
+//                            $moreArr[] = $k1;
+//                            echo $tabName . ":" . $k1 . "<br/><br/>";
+//                        }
+//                    }
+//                }
+//            } else {
+//                if (!in_array($key, $useColu)) {
+//                    if (!in_array($key, $moreArr)) {
+//                        $moreArr[] = $key;
+//                        echo '多出的字段:' . $tabName . ":" . $key . "<br/><br/>";
+//                    }
+//
+//                }
+//            }
+//        }
+//
+//    }
 
     /**
      * 留失分析数据统计
