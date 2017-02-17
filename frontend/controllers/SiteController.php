@@ -130,7 +130,7 @@ class SiteController extends CommController
                 }
             }
             foreach($allData as $k=>$v) {
-                if ($v) {
+                if (count($v[0])>1) {
                     $valStr = '';
                     $tabName = 'bi_' . $k;
                     $keyStr = implode(',', $keyData[$k]);
@@ -157,10 +157,11 @@ class SiteController extends CommController
                         } else {
                             $valStr .= "($tmpStr)";
                         }
-                    }
-                    if($valStr==null){
-                        var_dump($tmpStr ) ;
-                        die;
+
+                        if($valStr==null){
+                            var_dump($tmpStr ) ;
+                            die;
+                        }
                     }
                     $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
 
