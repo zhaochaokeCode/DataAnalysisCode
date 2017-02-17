@@ -152,7 +152,7 @@ class SiteController extends CommController
                         }
 
                         $tmpStr = implode(',', $v3);
-                        if ($valStr) {
+                        if ($valStr!=null) {
                             $valStr .= ",($tmpStr)";
                         } else {
                             $valStr .= "($tmpStr)";
