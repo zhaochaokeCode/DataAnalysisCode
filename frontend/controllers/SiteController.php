@@ -159,7 +159,7 @@ class SiteController extends CommController
                         }
                     }
                     if($valStr==null){
-                        var_dump($v) ;
+                        var_dump($tmpStr ) ;
                         die;
                     }
                     $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
