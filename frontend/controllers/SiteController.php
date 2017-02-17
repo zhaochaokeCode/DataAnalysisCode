@@ -126,8 +126,16 @@ class SiteController extends CommController
                 $valStr = '' ;
                 $tabName = 'bi_'.$k ;
                 $keyStr = implode(',',$keyData[$k]) ;
-                foreach($v as $v3){
+                $coluNum =  count($keyData[$k]) ; //一共多少列
 
+                foreach($v as $v3){
+                    if($coluNum!=count($v3)){
+                        var_dump($keyData[$k]) ;
+                        echo"<br>" ;
+                        var_dump($keyData[$v3]) ;
+                        echo"<br><br>" ;
+                        continue ;
+                    }
                     foreach($v3 as $k4=>$v4){
                         if($v4!='null'&&$v4!='default'){
                             $v3[$k4] ="'$v4'";
