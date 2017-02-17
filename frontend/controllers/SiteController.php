@@ -112,13 +112,20 @@ class SiteController extends CommController
                 if ($v) {
                     if ($json = json_decode($v)) {
                         $tmpData = $this->objeToArr($json);
+
+                        //去掉不需要保存的表名,保留唯一一次的表名
                         $name = $tmpData['f_log_name'];
                         unset($tmpData['f_log_name']) ;
-                        $allData[$name][] = array_values($tmpData) ;
+
                         if(!$keyData[$name]){
                             $keyData[$name] = array_keys($tmpData) ;
                         }
 
+                        //对所有数据进行相同的排序
+                        foreach($keyData[$name]  as $v){
+                            $newArr[$v] = $tmpData[$v];
+                        }
+                        $allData[$name][] = array_values($newArr) ;
                     }
                 }
             }
@@ -132,10 +139,12 @@ class SiteController extends CommController
                     if($coluNum!=count($v3)){
                         var_dump($keyData[$k]) ;
                         echo"<br>" ;
-                        var_dump($v3) ;
                         echo"<br><br>" ;
                         continue ;
                     }
+
+
+
                     foreach($v3 as $k4=>$v4){
                         if($v4!='null'&&$v4!='default'){
                             $v3[$k4] ="'$v4'";
