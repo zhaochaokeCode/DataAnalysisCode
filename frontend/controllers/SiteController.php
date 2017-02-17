@@ -132,7 +132,7 @@ class SiteController extends CommController
                     if($coluNum!=count($v3)){
                         var_dump($keyData[$k]) ;
                         echo"<br>" ;
-                        var_dump($keyData[$v3]) ;
+                        var_dump($v3) ;
                         echo"<br><br>" ;
                         continue ;
                     }
