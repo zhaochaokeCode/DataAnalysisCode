@@ -11,21 +11,43 @@ class CountController extends CommController
     {
         $etime = $this->getStrart() ;
         $stime =   $etime-86400*31  ;
-        $clo = array('id','日期','登录人数','充值人数','充值金额','ARPU','ARPPU','付费率','新增人数','新增充值人数','新增充值金额','新增ARPU','新增ARPU','新增付费率') ;
+        $clo = array('日期','登录人数','充值人数','充值金额','ARPU','ARPPU','付费率','新增人数','新增充值人数','新增充值金额','新增ARPU','新增ARPU','新增付费率') ;
         $sql = "SELECT * FROM bi_count_recharge  where f_time>=$stime and  f_time<=$etime
                 and recharge_num>0 limit 7" ;
 
         $command = Yii::$app->db->createCommand($sql);
 
         $dataAll  = $command->queryAll() ;
+
+
+
+
         foreach($dataAll as $k=>$v){
+            unset($dataAll[$k]['id']) ;
             $dataAll[$k]['f_time'] = date("Y-m-d",$v['f_time'] ) ;
             foreach($v as $key1=>$val1){
-                if($k=='arpu'||$k=='arppu'||$k=='new_arpu'||$k=='new_arppu'){
-//                    if(stristr('.',$v)){
-//                        $tmp = explode('.',$v) ;
-//                        $dataAll[$k][$key1]= $tmp[0]
+                if($key1=='arpu'||$key1=='arppu'||$key1=='new_arpu'||$key1=='new_arppu')
+                {
+                    $val1 =$val1*100 ;
+                    if($val1<99){
+                        if($val1<10){
+                            $newVal = "0.0".$val1 ;
+                        }else{
+                            $newVal = "0.".$val1 ;
+                        }
+                    }else{
+                        $newVal=1000;
+                        $start= substr($val1,-2,2) ;
+                        $end  = substr($val1,-strlen($val1),strlen($val1)-2) ;
+                        $newVal =$end .".".$start ;
+                    }
+                    $dataAll[$k][$key1]= $newVal ;
                 }
+                if($key1=='fufei'||$key1=='new_fufei'){
+                    $newVal ="$newVal%" ;
+                    $dataAll[$k][$key1]= $newVal ;
+                }
+
             }
 
         }
