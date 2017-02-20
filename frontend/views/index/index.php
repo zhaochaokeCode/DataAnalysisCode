@@ -118,9 +118,9 @@
                         <span class="arrow"></span>
                     </a>
                     <ul class="sub">
-                        <li><a id="tab_/login" href="#"><span class="sub-menu-text">每日登录用户</span></a>
-                        <li><a id="tab_/retention?type=1" href="#"><span class="sub-menu-text">用户留存</span></a>
-                        <li><a id="tab_/retention" href="#"><span class="sub-menu-text">用户留失</span></a>
+                        <li><a id="tab_login" href="#"><span class="sub-menu-text">每日登录用户</span></a>
+                        <li><a id="tab_urlretention?type=1" href="#"><span class="sub-menu-text">用户留存</span></a>
+                        <li><a id="tab_urlretention" href="#"><span class="sub-menu-text">用户留失</span></a>
                         </li>
                     </ul>
                 </li>
@@ -131,7 +131,7 @@
                         <span class="arrow"></span>
                     </a>
                     <ul class="sub">
-                        <li><a id="tab_/count/recharge" href="#"><span class="sub-menu-text">用户充值</span></a>
+                        <li><a id="tab_urlcount/recharge" href="#"><span class="sub-menu-text">用户充值</span></a>
                         </li>
                     </ul>
                 </li>

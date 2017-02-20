@@ -157,7 +157,17 @@ class CommController extends Controller
         }
 
     }
+    /**
+     * 保留两位小数的算法
+     */
+    public function getZeroNum($num){
+        if($num!=0){
+            return substr($num*100,-2,10).".".substr($num*100,-1,2) ;
+        }else{
+            return "0.00" ;
+        }
 
+    }
 
 
 }

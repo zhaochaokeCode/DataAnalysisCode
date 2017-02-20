@@ -33,7 +33,7 @@ class SiteController extends CommController
      */
     public function actionRecharge()
     {
-        $key =10;
+        $key =100;
         $tabName = "bi_count_retention";
         $connection = Yii::$app->db;
         $strtime = $this->getStrart() ;
@@ -43,23 +43,63 @@ class SiteController extends CommController
             //  充值人数,充值元宝,登录人数,新增(注册人数),
             $sql = " select count(DISTINCT(a.f_character_id)) recharge_hum_num,
                     COUNT(f_recharge_yuanbao) recharge_num,
-                    (SELECT count(DISTINCT(a.f_character_id))id from bi_log_login where f_time>$stime and f_time<$etime)login_hum_num ,
-                    (SELECT count(DISTINCT(a.f_character_id))id from bi_log_character where f_time>$stime and f_time<$etime)regist_hum_num
+                    (SELECT count(DISTINCT(f_character_id))id from bi_log_login where f_time>$stime and f_time<$etime)login_hum_num ,
+                    (SELECT count(DISTINCT(f_character_id))id from bi_log_character where f_time>$stime and f_time<$etime)regist_hum_num
                     from bi_log_recharge a where f_time>$stime and f_time<$etime" ;
+
             $command = Yii::$app->db->createCommand($sql);
             $datas = $command->queryOne();
-            if($datas['recharge_hum_num']) {
+//            if($datas['recharge_hum_num']) {
                 //新增充值人数
-                $sql1 = "select count(DISTINCT(a.f_character_id)) new_recharge_num,
-                    count(f_recharge_yuanbao) yunbao  from bi_log_recharge a where
-                      f_time>$stime and f_time<$etime and  f_character_id in(SELECT id from bi_log_character
+                $sql1 = "select count(DISTINCT(a.f_character_id)) new_recharge_hum_num,
+                    count(f_recharge_yuanbao) new_recharge_num  from bi_log_recharge a where
+                      f_time>$stime and f_time<$etime and  f_character_id in(SELECT f_character_id from bi_log_character
                       where  f_time>$stime and f_time<$etime)
                     ";
-                $command = Yii::$app->db->createCommand($sql);
-                $datas = $datas + $command->queryOne();
-                var_dump($datas);
-                echo "<br><br>";
+                $command = Yii::$app->db->createCommand($sql1);
+                $datas2 =  $command->queryOne();
+
+                $datas = $datas+ $datas2 ;
+
+
+
+                $a = $datas['recharge_num']==0?0:  sprintf("%.2f",$datas['recharge_num']/$datas['login_hum_num']);
+                $b = $datas['recharge_num']==0?0:  sprintf("%.2f",$datas['recharge_num']/$datas['recharge_hum_num']) ;
+                $c = $datas['recharge_num']==0?0:sprintf("%.2f",$datas['recharge_hum_num']/$datas['login_hum_num']);
+
+                $d = $datas['recharge_num']==0?0:  sprintf("%.2f",$datas['new_recharge_num']/$datas['regist_hum_num']) ;
+                $e = $datas['recharge_num']==0?0:  sprintf("%.2f",$datas['new_recharge_num']/$datas['new_recharge_hum_num']) ;
+                $f = $datas['recharge_num']==0?0:sprintf("%.2f",$datas['new_recharge_hum_num']/$datas['regist_hum_num']);
+
+
+
+
+            $sql4 ="DESC bi_count_recharge" ;
+            $command = Yii::$app->db->createCommand($sql4);
+            $datas3 =  $command->queryAll();
+            foreach($datas3 as $v){
+                if($v['Field']!='id'){
+                    $tmp[] = $v['Field'];
+                }
             }
+                $insertData= array(
+                    $tmp[0]=> $stime,
+                    $tmp[1]=>$datas['login_hum_num'],
+                    $tmp[2]=> $datas['recharge_hum_num'],
+                    $tmp[3]=>$datas['recharge_num'],
+                    $tmp[4]=>$a,
+                    $tmp[5]=>$b,
+                    $tmp[6]=>$c,
+                    $tmp[7]=>$datas['regist_hum_num'],
+
+                    $tmp[8]=>$datas['new_recharge_hum_num'],
+                    $tmp[9]=>$datas['new_recharge_num'],
+                    $tmp[10]=>$d,
+                    $tmp[11]=>$e,
+                    $tmp[12]=>$f
+                );
+            Yii::$app->db->createCommand()->insert("bi_count_recharge", $insertData)->execute();
+//            }
 
         }
     }
@@ -431,6 +471,8 @@ class SiteController extends CommController
         return $ret;
 
     }
+
+
 
 
 

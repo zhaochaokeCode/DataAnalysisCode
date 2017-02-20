@@ -46,6 +46,7 @@ function initTabData(tab_data,allpage,key) {
     pagesAjax(allpage);
     //生成tab
     createTable(tab_data,key);
+
     //分页
 
 }

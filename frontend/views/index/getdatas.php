@@ -15,6 +15,9 @@
 <div class="row">
     <div class="col-md-12">
         <!-- BOX -->
+        <?php
+        if($all_data[0]['series']){
+        ?>
         <div class="box border green">
             <div class="box-title" style="height:10px;">
                 <h5><i class="fa fa-bars"></i> <span class="hidden-inline-mobile">基本信息报表</span></h5>
@@ -47,6 +50,8 @@
                 </div>
             </div>
         </div>
+        <?php
+        }?>
     </div>
 </div>
 <?php
@@ -95,18 +100,21 @@ if($all_data[0]){
     $(function () {
         <?php
        foreach($all_data as $k=>$v){
+
        ?>
         var tab_data =      <?php echo $v['tab']?> ;
         var allpage =       <?php echo ceil($v['count']/10)?> ; //总共多少页
         var tab_key =       <?php echo $k?> ;
         initTabData(tab_data,allpage,tab_key);
+            <?php
+             if($v['series']){
+            ?>
+            var series =        <?php echo $v['series']?> ;
+            var categories =    <?php echo $v['categories']?> ;
 
-        var series =        <?php echo $v['series']?> ;
-        var categories =    <?php echo $v['categories']?> ;
+            initViewDatas(series,categories,tab_key);
 
-        initViewDatas(series,categories,tab_key);
-
-        <?php }?>
+        <?php }}?>
     })
 </script>
 
