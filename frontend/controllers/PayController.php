@@ -332,7 +332,7 @@ class PayController extends Controller
             "f_os"=>$data['os'],
             "f_status"=>0
         ) ;
-       $result=  Yii::$app->db->createCommand()->insert("create_order_info",$data) ;
+       $result=  Yii::$app->db2->createCommand()->insert("create_order_info",$data) ;
     }
 
 }
