@@ -26,7 +26,7 @@ class PayController extends Controller
      */
     public function init()
     {
-//        $this->checkSign() ;
+        $this->checkSign() ;
     }
 
 
@@ -278,7 +278,7 @@ class PayController extends Controller
         }
     }
     public function checkSign(){
-
+        $str = '' ;
         foreach($_POST as $k=>$v){
             if($k!='sign'){
                 $str .= $k.$v ;
@@ -330,6 +330,7 @@ class PayController extends Controller
             "f_status"=>0
         ) ;
        $result=  Yii::$app->db2->createCommand()->insert("create_order_info",$data2)->execute() ;
+        var_dump($result) ;
     }
 
 }
