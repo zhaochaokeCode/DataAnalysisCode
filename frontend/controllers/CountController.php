@@ -13,7 +13,7 @@ class CountController extends CommController
         $stime =   $etime-86400*31  ;
         $clo = array('日期','登录人数','充值人数','充值金额','ARPU','ARPPU','付费率','新增人数','新增充值人数','新增充值金额','新增ARPU','新增ARPU','新增付费率') ;
         $sql = "SELECT * FROM bi_count_recharge  where f_time>=$stime and  f_time<=$etime
-                and recharge_num>0 limit 7" ;
+                and f_recharge_num>0 limit 7" ;
 
         $command = Yii::$app->db->createCommand($sql);
 

@@ -61,6 +61,11 @@ class CommController extends Controller
         return strtotime(date("Y-m-d",strtotime('-1 days')));
     }
 
+    public function getCommCon(){
+
+        return " f_dept,f_server_address_id,f_game_id,f_sid " ;
+    }
+
     /**
      * @return string 获取需要调用的方法名的字符串
      */
