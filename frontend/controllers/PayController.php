@@ -26,17 +26,14 @@ class PayController extends Controller
      */
     public function init()
     {
-        $this->checkSign() ;
+//        $this->checkSign() ;
     }
 
 
 
     public function actionIndex()
     {
-//        var_dump($_POST) ;die;
         $app_id = "2017011205020547" ;
-//        if($_POST) $this->saveOrder($_POST,1) ;
-//        echo $app_id ;diel
         $this->saveOrder($_POST,1) ;
 
         $parameter = array(
@@ -332,8 +329,7 @@ class PayController extends Controller
             "f_os"=>$data['os'],
             "f_status"=>0
         ) ;
-        var_dump($data2) ;
-       $result=  Yii::$app->db2->createCommand()->insert("create_order_info",$data2) ;
+       $result=  Yii::$app->db2->createCommand()->insert("create_order_info",$data2)->execute() ;
     }
 
 }
