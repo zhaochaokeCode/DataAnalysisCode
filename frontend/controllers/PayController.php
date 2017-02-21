@@ -24,15 +24,16 @@ class PayController extends Controller
      *
      *
      */
-    public function init()
-    {
-        $this->checkSign() ;
-    }
+//    public function init()
+//    {
+//        $this->checkSign() ;
+//    }
 
 
 
     public function actionIndex()
     {
+        $this->checkSign() ;
         $app_id = "2017011205020547" ;
         $time =time() ;
         if($this->saveOrder($_POST,1,$time)) {
@@ -42,7 +43,7 @@ class PayController extends Controller
                     "timeout_express" => "30m",
                     "product_code" => "QUICK_MSECURITY_PAY",
                     "total_amount" => $_POST['total_amount'],
-                    "subject" =>urldecode($_POST['product_name']),
+                    "subject" =>urldecode($_POST['game_name'].' '.$_POST['product_name']),
                     "out_trade_no" =>$_POST['order_id']
                 )),
                 "charset" => "utf-8",
@@ -159,6 +160,8 @@ class PayController extends Controller
      * 微信支付
      */
     public function actionWxpay(){
+        $this->checkSign() ;
+
         $wxpay_config = array(
             'app_id' => 'wxd9d911dea9726475',
             'app_secret' => 'd8ff100ddbfa59b1530df883890b411a',
