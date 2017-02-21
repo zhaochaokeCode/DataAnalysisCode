@@ -34,27 +34,27 @@ class PayController extends Controller
     public function actionIndex()
     {
         $app_id = "2017011205020547" ;
-        $this->saveOrder($_POST,1) ;
+        if($this->saveOrder($_POST,1)) {
+            $parameter = array(
+                "app_id" => $app_id,
+                "biz_content" => json_encode(array(
+                    "timeout_express" => "30m",
+                    "product_code" => "QUICK_MSECURITY_PAY",
+                    "total_amount" => $_POST['total_amount'],
+                    "subject" => $_POST['product_name'],
+                    "out_trade_no" => $_POST['order_id']
+                )),
+                "charset" => "utf-8",
+                "format" => "json",
+                "method" => "alipay.trade.app.pay",
+                "notify_url" => "http://116.62.100.98/pay/recall",
+                "sign_type" => "RSA2",
+                "timestamp" => $_POST['time'],
+                "version" => 1.0,
 
-        $parameter = array(
-            "app_id" => $app_id,
-            "biz_content" => json_encode(array(
-                "timeout_express" => "30m",
-                "product_code" => "QUICK_MSECURITY_PAY",
-                "total_amount" =>$_POST['total_amount'],
-                "subject" => $_POST['product_name'],
-                "out_trade_no" =>$_POST['order_id']
-            )),
-            "charset" => "utf-8",
-            "format" => "json",
-            "method" => "alipay.trade.app.pay",
-            "notify_url" => "http://116.62.100.98/pay/recall",
-            "sign_type" => "RSA2",
-            "timestamp" => $_POST['time'],
-            "version" => 1.0,
-
-        );
-        echo json_encode(array('code'=>200,'data'=> $this->createUrlStr($parameter),'message'=>'success')) ;
+            );
+            echo json_encode(array('code' => 200, 'data' => $this->createUrlStr($parameter), 'message' => 'success'));
+        }
     }
 
     /**
@@ -330,7 +330,7 @@ class PayController extends Controller
             "f_status"=>0
         ) ;
 //
-       $result=  Yii::$app->db2->createCommand()->insert("create_order_info",$data2)->execute() ;
+       return   Yii::$app->db2->createCommand()->insert("create_order_info",$data2)->execute() ;
     }
 
 }
