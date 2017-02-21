@@ -42,7 +42,7 @@ class PayController extends Controller
                     "timeout_express" => "30m",
                     "product_code" => "QUICK_MSECURITY_PAY",
                     "total_amount" => $_POST['total_amount'],
-                    "subject" =>1 ,
+                    "subject" =>urldecode($_POST['product_name']),
                     "out_trade_no" =>$_POST['order_id']
                 )),
                 "charset" => "utf-8",
