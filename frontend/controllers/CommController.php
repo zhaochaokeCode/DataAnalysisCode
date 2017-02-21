@@ -173,6 +173,26 @@ class CommController extends Controller
         }
 
     }
+    public function objeToArr($object)
+    {
+        $array = array();
+        if (is_object($object)) {
+            foreach ($object as $key => $value) {
+                if ($key == 'f_params') {
+                    if ($value) {
+                        $array = $array + $this->objeToArr($value);
+                    }
+                } else {
+                    $array[$key] = $value;
+                }
+            }
+        } else {
+            $array = $object;
+        }
+
+        return $array;
+    }
+
 
 
 }

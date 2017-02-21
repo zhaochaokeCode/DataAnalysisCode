@@ -63,7 +63,11 @@ class PayController extends Controller
      * 阿里的回调接口
      */
     public function actionRecall(){
-        if(file_put_contents('/tmp/data.txt',json_encode($_POST)."-----".date("Y-m-d H:i:s",time()."\n"),FILE_APPEND)) {
+
+//生成签名结果
+        $isSign = $this->getSignVeryfy($_POST, $_POST["sign"]);
+        $isSign=$isSign?1: 0;
+        if(file_put_contents('/tmp/data.txt',$isSign."-----".date("Y-m-d H:i:s",time()."\n"),FILE_APPEND)) {
             echo 'success';
         }else{
             echo 'fail' ;
@@ -160,7 +164,6 @@ class PayController extends Controller
      * 微信支付
      */
     public function actionWxpay(){
-        $this->checkSign() ;
 
         $wxpay_config = array(
             'app_id' => 'wxd9d911dea9726475',
@@ -281,9 +284,10 @@ class PayController extends Controller
             echo 'fail' ;
         }
     }
-    public function checkSign(){
+    public function checkSign($data=false){
+        $checkData = $data?$data:$_POST ;
         $str = '' ;
-        foreach($_POST as $k=>$v){
+        foreach($checkData as $k=>$v){
             if($k!='sign'){
                 $str .= $k.$v ;
             }
@@ -294,7 +298,7 @@ class PayController extends Controller
         $md5Str = md5($tmp) ;
 //        echo $tmp."-----".$md5Str.'-------'.$_POST['sign'] ;
 
-        if($md5Str != $_POST['sign']){
+        if($md5Str != $checkData['sign']){
             $data = array('code'=>400,
                 'message'=>'sign error',
                 'data'=>array()
@@ -324,7 +328,7 @@ class PayController extends Controller
             "f_role_name"=>urldecode($data['role_name']),
             "f_server_id"=>urldecode($data['server_id']),
             "f_server_name"=>urldecode($data['server_name']),
-            "f_time"=>time(),
+            "f_time"=>$time,
             "f_yunying_id"=>$data['yunying_id'],
             "f_sn_id"=>$data['channel'],
             "f_total_amount"=>$data['total_amount'],
@@ -336,6 +340,100 @@ class PayController extends Controller
 //
        return   Yii::$app->db2->createCommand()->insert("create_order_info",$data2)->execute() ;
     }
+    public function objeToArr($object)
+    {
+        $array = array();
+        if (is_object($object)) {
+            foreach ($object as $key => $value) {
+                if ($key == 'f_params') {
+                    if ($value) {
+                        $array = $array + $this->objeToArr($value);
+                    }
+                } else {
+                    $array[$key] = $value;
+                }
+            }
+        } else {
+            $array = $object;
+        }
+
+        return $array;
+
+    }
+    /**
+     * 获取返回时的签名验证结果
+     * @param $para_temp 通知返回来的参数数组
+     * @param $sign 返回的签名结果
+     * @return 签名验证结果
+     */
+    function getSignVeryfy($para_temp, $sign) {
+        //除去待签名参数数组中的空值和签名参数
+        $para_filter = $this->paraFilter($para_temp);
+
+        //对待签名参数数组排序
+        $para_sort = $this->argSort($para_filter);
+
+        //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+        $prestr = $this->createLinkstring($para_sort);
+
+        $alipay_public_key = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvCaRb3/ANrpy8kUGxQjOIIYXDqPzROKe9wjIDd/40P9NM58M348NrY8JPvyKS13Pbx/8+VSBBXuyRxSdppZ5czubYLHKpUBq8SuqRx0VIKJcA7ghtMg66h/F+o05L62tqGvQ6xpsO24kTb12LOtaFZzzZgnCjy6Jwl/QlA2sK/Ky5ofkV2QUJX9g42xq2wN0aO2ECYKbVpoLYiRfZJfL5bLSrlWnZxUgC14vwbnMp4PJ/PjgR5x9e4QOHId7VP6qrX0+tXi2WHrNo8dGU4j9Znm2r7Qwa48wXipXQSPlxt97ISRoIYGQuUJlYjfhrspyHJINk438zVNglCudiI93mwIDAQAB' ;
+        $alipay_public_key=str_replace("-----BEGIN PUBLIC KEY-----","",$alipay_public_key);
+        $alipay_public_key=str_replace("-----END PUBLIC KEY-----","",$alipay_public_key);
+        $alipay_public_key=str_replace("\n","",$alipay_public_key);
+
+        $alipay_public_key='-----BEGIN PUBLIC KEY-----'.PHP_EOL.wordwrap($alipay_public_key, 64, "\n", true) .PHP_EOL.'-----END PUBLIC KEY-----';
+        $res=openssl_get_publickey($alipay_public_key);
+        if($res)
+        {
+            $result =(bool)openssl_verify($prestr, base64_decode($sign), $res,OPENSSL_ALGO_SHA256);
+        }
+        else {
+            echo "您的支付宝公钥格式不正确!"."<br/>"."The format of your alipay_public_key is incorrect!";
+            exit();
+        }
+        openssl_free_key($res);
+        return $result ;
+    }
+
+
+    function paraFilter($para) {
+        $para_filter = array();
+        while (list ($key, $val) = each ($para)) {
+            if($key == "sign" || $key == "sign_type" || $val == "")continue;
+            else	$para_filter[$key] = $para[$key];
+        }
+        return $para_filter;
+    }
+    /**
+     * 对数组排序
+     * @param $para 排序前的数组
+     * return 排序后的数组
+     */
+    function argSort($para) {
+        ksort($para);
+        reset($para);
+        return $para;
+    }
+
+    /**
+     * 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+     * @param $para 需要拼接的数组
+     * return 拼接完成以后的字符串
+     */
+    function createLinkstring($para) {
+        $arg  = "";
+        while (list ($key, $val) = each ($para)) {
+            $arg.=$key."=".$val."&";
+        }
+        //去掉最后一个&字符
+        $arg = substr($arg,0,count($arg)-2);
+
+        //如果存在转义字符，那么去掉转义
+        if(get_magic_quotes_gpc()){$arg = stripslashes($arg);}
+
+        return $arg;
+    }
+
 
 }
 
