@@ -40,8 +40,8 @@ class PayController extends Controller
                 "biz_content" => json_encode(array(
                     "timeout_express" => "30m",
                     "product_code" => "QUICK_MSECURITY_PAY",
-                    "total_amount" => $_POST['total_amount'],
-                    "subject" => urldecode($_POST['product_name']),
+                    "total_amount" => 0.01,
+                    "subject" => "1",
                     "out_trade_no" => $_POST['order_id']
                 )),
                 "charset" => "utf-8",
