@@ -33,23 +33,27 @@ class PayController extends Controller
 
     public function actionIndex()
     {
+//        var_dump($_POST) ;die;
+        $app_id = "2017011205020547" ;
+//        if($_POST) $this->saveOrder($_POST,1) ;
+//        echo $app_id ;diel
+        $this->saveOrder($_POST,1) ;
 
         $parameter = array(
-            "app_id" => "2017011205020547",
+            "app_id" => $app_id,
             "biz_content" => json_encode(array(
                 "timeout_express" => "30m",
                 "product_code" => "QUICK_MSECURITY_PAY",
-                "total_amount" => "0.01",
-                "subject" => 1,
-                "body" => "我是测试数据",
-                "out_trade_no" => "201701".time()
+                "total_amount" =>$_POST['total_amount'],
+                "subject" => $_POST['product_name'],
+                "out_trade_no" =>$_POST['order_id']
             )),
             "charset" => "utf-8",
             "format" => "json",
             "method" => "alipay.trade.app.pay",
             "notify_url" => "http://116.62.100.98/pay/recall",
             "sign_type" => "RSA2",
-            "timestamp" => date("Y-m-d H:i:s", time()),
+            "timestamp" => $_POST['time'],
             "version" => 1.0,
 
         );
@@ -263,6 +267,9 @@ class PayController extends Controller
 
     }
 
+    /**
+     * 微信回调
+     */
     public function actionWxre(){
 
         $fileContent = file_get_contents("php://input");
@@ -302,6 +309,30 @@ class PayController extends Controller
         }
 
 
+    }
+    private function saveOrder($data,$type){
+
+        $data = array(
+            "f_game_id"=>$data['game_id'],
+            "f_game_name"=>$data['game_name'],
+            "f_order_id"=>$data['order_id'],
+            "f_pay_type"=>$type,
+            "f_product_id"=>$data['product_id'],
+            "f_product_name"=>$data['product_name'],
+            "f_role_id"=>$data['role_id'],
+            "f_role_name"=>$data['role_name'],
+            "f_server_id"=>$data['server_id'],
+            "f_server_name"=>$data['server_name'],
+            "f_time"=>$data['time'],
+            "f_yunying_id"=>$data['yunying_id'],
+            "f_sn_id"=>$data['sn_id'],
+            "f_total_amount"=>$data['total_amount'],
+            "f_extension"=>$data['extension'],
+            "f_device"=>$data['device'],
+            "f_os"=>$data['os'],
+            "f_status"=>0
+        ) ;
+       $result=  Yii::$app->db->createCommand()->insert("create_order_info",$data) ;
     }
 
 }
