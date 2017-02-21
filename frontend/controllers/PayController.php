@@ -34,22 +34,23 @@ class PayController extends Controller
     public function actionIndex()
     {
         $app_id = "2017011205020547" ;
-        if($this->saveOrder($_POST,1)) {
+        $time =time() ;
+        if($this->saveOrder($_POST,1,$time)) {
             $parameter = array(
                 "app_id" => $app_id,
                 "biz_content" => json_encode(array(
                     "timeout_express" => "30m",
                     "product_code" => "QUICK_MSECURITY_PAY",
-                    "total_amount" => 0.01,
-                    "subject" => "1",
-                    "out_trade_no" => $_POST['order_id']
+                    "total_amount" => $_POST['total_amount'],
+                    "subject" =>1 ,
+                    "out_trade_no" =>$_POST['order_id']
                 )),
                 "charset" => "utf-8",
                 "format" => "json",
                 "method" => "alipay.trade.app.pay",
                 "notify_url" => "http://116.62.100.98/pay/recall",
                 "sign_type" => "RSA2",
-                "timestamp" => $_POST['time'],
+                "timestamp" => date("Y-m-d H:i:s",$time),
                 "version" => 1.0,
 
             );
@@ -307,7 +308,7 @@ class PayController extends Controller
 
 
     }
-    private function saveOrder($data,$type){
+    private function saveOrder($data,$type,$time){
 
         $data2 = array(
             "f_game_id"=>$data['game_id'],
@@ -320,7 +321,7 @@ class PayController extends Controller
             "f_role_name"=>urldecode($data['role_name']),
             "f_server_id"=>urldecode($data['server_id']),
             "f_server_name"=>urldecode($data['server_name']),
-            "f_time"=>$data['time'],
+            "f_time"=>time(),
             "f_yunying_id"=>$data['yunying_id'],
             "f_sn_id"=>$data['channel'],
             "f_total_amount"=>$data['total_amount'],
