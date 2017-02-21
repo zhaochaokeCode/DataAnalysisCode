@@ -322,7 +322,7 @@ class PayController extends Controller
             "f_server_name"=>urldecode($data['server_name']),
             "f_time"=>$data['time'],
             "f_yunying_id"=>$data['yunying_id'],
-            "f_sn_id"=>$data['sn_id'],
+            "f_sn_id"=>$data['channel'],
             "f_total_amount"=>$data['total_amount'],
             "f_extension"=>urldecode($data['extension']),
             "f_device"=>$data['device'],
@@ -331,7 +331,6 @@ class PayController extends Controller
         ) ;
 //
        $result=  Yii::$app->db2->createCommand()->insert("create_order_info",$data2)->execute() ;
-        var_dump($result) ;
     }
 
 }
