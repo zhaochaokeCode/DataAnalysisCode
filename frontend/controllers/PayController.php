@@ -312,7 +312,7 @@ class PayController extends Controller
     }
     private function saveOrder($data,$type){
 
-        $data = array(
+        $data2 = array(
             "f_game_id"=>$data['game_id'],
             "f_game_name"=>$data['game_name'],
             "f_order_id"=>$data['order_id'],
@@ -332,7 +332,8 @@ class PayController extends Controller
             "f_os"=>$data['os'],
             "f_status"=>0
         ) ;
-       $result=  Yii::$app->db2->createCommand()->insert("create_order_info",$data) ;
+        var_dump($data2) ;
+       $result=  Yii::$app->db2->createCommand()->insert("create_order_info",$data2) ;
     }
 
 }
