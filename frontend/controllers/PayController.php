@@ -376,7 +376,8 @@ class PayController extends Controller
         //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
         $prestr = $this->createLinkstring($para_sort);
 
-        $alipay_public_key = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvCaRb3/ANrpy8kUGxQjOIIYXDqPzROKe9wjIDd/40P9NM58M348NrY8JPvyKS13Pbx/8+VSBBXuyRxSdppZ5czubYLHKpUBq8SuqRx0VIKJcA7ghtMg66h/F+o05L62tqGvQ6xpsO24kTb12LOtaFZzzZgnCjy6Jwl/QlA2sK/Ky5ofkV2QUJX9g42xq2wN0aO2ECYKbVpoLYiRfZJfL5bLSrlWnZxUgC14vwbnMp4PJ/PjgR5x9e4QOHId7VP6qrX0+tXi2WHrNo8dGU4j9Znm2r7Qwa48wXipXQSPlxt97ISRoIYGQuUJlYjfhrspyHJINk438zVNglCudiI93mwIDAQAB' ;
+
+        $alipay_public_key = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB' ;
         $alipay_public_key=str_replace("-----BEGIN PUBLIC KEY-----","",$alipay_public_key);
         $alipay_public_key=str_replace("-----END PUBLIC KEY-----","",$alipay_public_key);
         $alipay_public_key=str_replace("\n","",$alipay_public_key);
@@ -385,7 +386,7 @@ class PayController extends Controller
         $res=openssl_get_publickey($alipay_public_key);
         if($res)
         {
-            $result =(bool)openssl_verify($prestr, base64_decode($sign), $res,OPENSSL_ALGO_SHA256);
+            $result =(bool)openssl_verify($prestr, base64_decode($sign), $res);
         }
         else {
             echo "您的支付宝公钥格式不正确!"."<br/>"."The format of your alipay_public_key is incorrect!";
