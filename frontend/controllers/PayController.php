@@ -223,7 +223,7 @@ class PayController extends Controller
             $order = array(
                 "body" => 'test data',
                 "appid" => $APP_ID,
-                "device_info" => "APP-001",
+                "device_info" => $_POST['device'],
                 "mch_id" => $MCH_ID,
                 "nonce_str" => mt_rand(1,1000000),
                 "notify_url" => $NOTIFY_URL,
@@ -277,7 +277,7 @@ class PayController extends Controller
                     "appid" => $APP_ID,
                     "package" => "Sign=WXPay",
                     "partnerid" => $MCH_ID,
-                    "timestamp" => "" . time(),
+                    "timestamp" => $time,
                     "sign" => ""
                 );
                 ksort($prepay);
@@ -299,7 +299,7 @@ class PayController extends Controller
                     "appid" => $APP_ID,
                     "package" => "Sign=WXPay",
                     "partnerid" => $MCH_ID,
-                    "timestamp" => "" . time(),
+                    "timestamp" => $time ,
                     "sign" => "",
                     "return_msg" => $result->return_msg
                 );
