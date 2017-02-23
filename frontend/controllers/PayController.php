@@ -376,6 +376,7 @@ class PayController extends Controller
             "f_status"=>0
         ) ;
 //
+        var_dump($data2) ;die;
        return   Yii::$app->db2->createCommand()->insert("create_order_info",$data2)->execute() ;
     }
     public function objeToArr($object)
