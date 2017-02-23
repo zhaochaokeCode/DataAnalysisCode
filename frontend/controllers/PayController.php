@@ -268,6 +268,7 @@ class PayController extends Controller
             $result = file_get_contents('https://api.mch.weixin.qq.com/pay/unifiedorder', false, $context);
 
             $result = simplexml_load_string($result, null, LIBXML_NOCDATA);
+            var_dump($result) ;die;
 
             //
             if ($result->return_code == 'SUCCESS' && $result->result_code == 'SUCCESS') {
@@ -376,7 +377,6 @@ class PayController extends Controller
             "f_status"=>0
         ) ;
 //
-        var_dump($data2) ;die;
        return   Yii::$app->db2->createCommand()->insert("create_order_info",$data2)->execute() ;
     }
     public function objeToArr($object)
