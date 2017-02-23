@@ -221,7 +221,7 @@ class PayController extends Controller
 
             //STEP 1. 构造一个订单。
             $order = array(
-                "body" =>$_POST['game_name'].' '.$_POST['product_name'],
+                "body" =>urlencode($_POST['game_name']).' '.urldecode($_POST['product_name']),
                 "appid" => $APP_ID,
                 "device_info" => $_POST['device'],
                 "mch_id" => $MCH_ID,
