@@ -227,9 +227,9 @@ class PayController extends Controller
                 "mch_id" => $MCH_ID,
                 "nonce_str" => mt_rand(1,1000000),
                 "notify_url" => $NOTIFY_URL,
-                "out_trade_no" => $_GET['order_id'],
+                "out_trade_no" => $_POST['order_id'],
                 "spbill_create_ip" => "101.37.18.43",//$this->input->ip_address(),
-                "total_fee" => $_GET['total_amount'],//注意：前方有坑！！！最小单位是分，跟支付宝不一样。1表示1分钱。只能是整形。
+                "total_fee" => $_POST['total_amount'],//注意：前方有坑！！！最小单位是分，跟支付宝不一样。1表示1分钱。只能是整形。
                 "trade_type" => "APP"
             );
             ksort($order);
@@ -268,7 +268,6 @@ class PayController extends Controller
             $result = file_get_contents('https://api.mch.weixin.qq.com/pay/unifiedorder', false, $context);
 
             $result = simplexml_load_string($result, null, LIBXML_NOCDATA);
-            var_dump($result) ;die;
 
             //
             if ($result->return_code == 'SUCCESS' && $result->result_code == 'SUCCESS') {
