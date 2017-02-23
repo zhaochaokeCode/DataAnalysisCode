@@ -264,13 +264,11 @@ class PayController extends Controller
                     "verify_peer_name" => false,
                 )
             );
-            var_dump($opts) ;
 
             $context = stream_context_create($opts);
             $result = file_get_contents('https://api.mch.weixin.qq.com/pay/unifiedorder', false, $context);
 
             $result = simplexml_load_string($result, null, LIBXML_NOCDATA);
-            var_dump($result) ;
             //
             if ($result->return_code == 'SUCCESS' && $result->result_code == 'SUCCESS') {
                 $prepay = array(
