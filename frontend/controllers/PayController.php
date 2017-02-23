@@ -191,6 +191,7 @@ class PayController extends Controller
      */
     public function actionWxpay(){
         $time = time() ;
+        var_dump($_POST) ;die;
         if($this->saveOrder($_POST,2,$time)) {
 
             /**
