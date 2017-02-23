@@ -63,16 +63,42 @@ class PayController extends Controller
      * 阿里的回调接口
      */
     public function actionRecall(){
-
+//        $_POST =$this->objeToArr(json_decode('{
+//    "total_amount": "0.01",
+//    "buyer_id": "2088102757673262",
+//    "trade_no": "2017022121001004260296548514",
+//    "notify_time": "2017-02-21 16:17:54",
+//    "subject": "三生三世十里桃花 元宝",
+//    "sign_type": "RSA2",
+//    "buyer_logon_id": "mot***@163.com",
+//    "auth_app_id": "2017011205020547",
+//    "charset": "utf-8",
+//    "notify_type": "trade_status_sync",
+//    "invoice_amount": "0.01",
+//    "out_trade_no": "BWD1487665053",
+//    "trade_status": "TRADE_SUCCESS",
+//    "gmt_payment": "2017-02-21 16:17:53",
+//    "version": "1.0",
+//    "point_amount": "0.00",
+//    "gmt_create": "2017-02-21 16:17:53",
+//    "buyer_pay_amount": "0.01",
+//    "receipt_amount": "0.01",
+//    "app_id": "2017011205020547",
+//    "seller_id": "2088521621890572",
+//    "notify_id": "d425186f9ff795eb01bad490a4bf0bfi0a",
+//    "seller_email": "chuntianhuyu@baiwen100.com"
+//}')) ;
 //生成签名结果
-        $isSign = $this->getSignVeryfy($_POST, $_POST["sign"]);
-        $isSign=$isSign?1: 0;
-        if(file_put_contents('/tmp/data.txt',$isSign."-----".date("Y-m-d H:i:s",time()."\n"),FILE_APPEND)) {
-            echo 'success';
-        }else{
-            echo 'fail' ;
-        }
+        $this->saveAliInfo($_POST) ;
 
+        $isSign = $this->getSignVeryfy($_POST, $_POST["sign"]);
+
+        /**
+         * 如过校验成功
+         */
+        if($isSign){
+            echo 'success' ;
+        }
     }
 
 
@@ -164,110 +190,122 @@ class PayController extends Controller
      * 微信支付
      */
     public function actionWxpay(){
+        $time = time() ;
+        if($this->saveOrder($_POST,2,$time)) {
 
-        $wxpay_config = array(
-            'app_id' => 'wxd9d911dea9726475',
-            'app_secret' => 'd8ff100ddbfa59b1530df883890b411a',
-            'mch_id' => '1434267502',
-            'partner_id' => 'mGUPhEEyKHafb2CRMQ4jkg9Pz6GWBqqK',
-            'notify_url' => 'http://116.62.100.98/pay/wxre'
-        );
-         //var_dump($wxpay_config);
+            /**
+             * --------根据gameid获取
+             */
+            $app_id = 'wxd9d911dea9726475' ;
+            $app_secret = 'd8ff100ddbfa59b1530df883890b411a' ; //私钥
+            $mch_id = '1434267502' ;
+            $partner_id = 'mGUPhEEyKHafb2CRMQ4jkg9Pz6GWBqqK' ; //api秘钥
 
-        $APP_ID = $wxpay_config['app_id'];            //APPID
-        $APP_SECRET = $wxpay_config['app_secret'];    //appsecret
-        $MCH_ID=$wxpay_config['mch_id'];
-        $PARTNER_ID = $wxpay_config['partner_id'];
-        $NOTIFY_URL = $wxpay_config['notify_url'];
-
-
-
-        //STEP 1. 构造一个订单。
-        $order=array(
-            "body" => 'test data',
-            "appid" => $APP_ID,
-            "device_info" => "APP-001",
-            "mch_id" => $MCH_ID,
-            "nonce_str" => mt_rand(),
-            "notify_url" => $NOTIFY_URL,
-            "out_trade_no" =>'2017031'.time() ,
-            "spbill_create_ip" => "210.12.129.178",//$this->input->ip_address(),
-            "total_fee" => intval(1),//注意：前方有坑！！！最小单位是分，跟支付宝不一样。1表示1分钱。只能是整形。
-            "trade_type" => "APP"
-        );
-        ksort($order);
-
-        //STEP 2. 签名
-        $sign="";
-        foreach ($order as $key => $value) {
-            if($value&&$key!="sign"&&$key!="key"){
-                $sign.=$key."=".$value."&";
-            }
-        }
-        $sign.="key=".$PARTNER_ID;
-        $sign=strtoupper(md5($sign));//echo $sign.'<br/>';exit;
-
-        //STEP 3. 请求服务器
-        $xml="<xml>\n";
-        foreach ($order as $key => $value) {
-            $xml.="<".$key.">".$value."</".$key.">\n";
-        }
-        $xml.="<sign>".$sign."</sign>\n";
-        $xml.="</xml>";
-        //echo $sign.'<br/>';
-        $opts = array(
-            'http' =>
-                array(
-                    'method'  => 'POST',
-                    'header'  => 'Content-type: text/xml',
-                    'content' => $xml
-                ),
-            "ssl"=>array(
-                "verify_peer"=>false,
-                "verify_peer_name"=>false,
-            )
-        );
-        $context  = stream_context_create($opts);
-        $result = file_get_contents('https://api.mch.weixin.qq.com/pay/unifiedorder', false, $context);
-
-        $result = simplexml_load_string($result,null, LIBXML_NOCDATA);
-
-        //
-        if ($result->return_code == 'SUCCESS' && $result->result_code == 'SUCCESS') {
-            $prepay=array(
-                "noncestr"=>"".$result->nonce_str,
-                "prepayid"=>"".$result->prepay_id,//上一步请求微信服务器得到nonce_str和prepay_id参数。
-                "appid"=>$APP_ID,
-                "package"=>"Sign=WXPay",
-                "partnerid"=>$MCH_ID,
-                "timestamp"=>"".time(),
-                "sign"=>""
+            //-------------------------------------
+            $notify_url = 'http://116.62.100.98/pay/wxre' ;
+            $wxpay_config = array(
+                'app_id' => $app_id ,
+                'app_secret' => $app_secret,
+                'mch_id' => $mch_id, //商户id
+                'partner_id' => $partner_id,
+                'notify_url' => $notify_url
             );
-            ksort($prepay);
-            $sign="";
-            foreach ($prepay as $key => $value) {
-                if($value&&$key!="sign"&&$key!="key"){
-                    $sign.=$key."=".$value."&";
+            //var_dump($wxpay_config);
+
+            $APP_ID = $wxpay_config['app_id'];            //APPID
+            $APP_SECRET = $wxpay_config['app_secret'];    //appsecret
+            $MCH_ID = $wxpay_config['mch_id'];
+            $PARTNER_ID = $wxpay_config['partner_id'];
+            $NOTIFY_URL = $wxpay_config['notify_url'];
+
+
+            //STEP 1. 构造一个订单。
+            $order = array(
+                "body" => 'test data',
+                "appid" => $APP_ID,
+                "device_info" => "APP-001",
+                "mch_id" => $MCH_ID,
+                "nonce_str" => mt_rand(1,1000000),
+                "notify_url" => $NOTIFY_URL,
+                "out_trade_no" => $_GET['order_id'],
+                "spbill_create_ip" => "101.37.18.43",//$this->input->ip_address(),
+                "total_fee" => $_GET['total_amount'],//注意：前方有坑！！！最小单位是分，跟支付宝不一样。1表示1分钱。只能是整形。
+                "trade_type" => "APP"
+            );
+            ksort($order);
+
+            //STEP 2. 签名
+            $sign = "";
+            foreach ($order as $key => $value) {
+                if ($value && $key != "sign" && $key != "key") {
+                    $sign .= $key . "=" . $value . "&";
                 }
             }
-            $sign.="key=".$PARTNER_ID;
-            $sign=strtoupper(md5($sign));
-            $prepay['sign'] = $sign;
-            $prepay['success'] = true;
-        } else {
-            $prepay=array(
-                "success" => false,
-                "noncestr"=>"",
-                "prepayid"=>"",
-                "appid"=>$APP_ID,
-                "package"=>"Sign=WXPay",
-                "partnerid"=>$MCH_ID,
-                "timestamp"=>"".time(),
-                "sign"=>"",
-                "return_msg"=>$result->return_msg
+            $sign .= "key=" . $PARTNER_ID;
+            $sign = strtoupper(md5($sign));//echo $sign.'<br/>';exit;
+
+            //STEP 3. 请求服务器
+            $xml = "<xml>\n";
+            foreach ($order as $key => $value) {
+                $xml .= "<" . $key . ">" . $value . "</" . $key . ">\n";
+            }
+            $xml .= "<sign>" . $sign . "</sign>\n";
+            $xml .= "</xml>";
+            //echo $sign.'<br/>';
+            $opts = array(
+                'http' =>
+                    array(
+                        'method' => 'POST',
+                        'header' => 'Content-type: text/xml',
+                        'content' => $xml
+                    ),
+                "ssl" => array(
+                    "verify_peer" => false,
+                    "verify_peer_name" => false,
+                )
             );
+            $context = stream_context_create($opts);
+            $result = file_get_contents('https://api.mch.weixin.qq.com/pay/unifiedorder', false, $context);
+
+            $result = simplexml_load_string($result, null, LIBXML_NOCDATA);
+
+            //
+            if ($result->return_code == 'SUCCESS' && $result->result_code == 'SUCCESS') {
+                $prepay = array(
+                    "noncestr" => "" . $result->nonce_str,
+                    "prepayid" => "" . $result->prepay_id,//上一步请求微信服务器得到nonce_str和prepay_id参数。
+                    "appid" => $APP_ID,
+                    "package" => "Sign=WXPay",
+                    "partnerid" => $MCH_ID,
+                    "timestamp" => "" . time(),
+                    "sign" => ""
+                );
+                ksort($prepay);
+                $sign = "";
+                foreach ($prepay as $key => $value) {
+                    if ($value && $key != "sign" && $key != "key") {
+                        $sign .= $key . "=" . $value . "&";
+                    }
+                }
+                $sign .= "key=" . $PARTNER_ID;
+                $sign = strtoupper(md5($sign));
+                $prepay['sign'] = $sign;
+                $prepay['success'] = true;
+            } else {
+                $prepay = array(
+                    "success" => false,
+                    "noncestr" => "",
+                    "prepayid" => "",
+                    "appid" => $APP_ID,
+                    "package" => "Sign=WXPay",
+                    "partnerid" => $MCH_ID,
+                    "timestamp" => "" . time(),
+                    "sign" => "",
+                    "return_msg" => $result->return_msg
+                );
+            }
+            echo json_encode(array('data' => $prepay, 'code' => '200', 'message' => 'true'));
         }
-        echo json_encode(array('data'=>$prepay,'code'=>'200','message'=>'true')) ;
 
     }
 
@@ -373,20 +411,17 @@ class PayController extends Controller
         //对待签名参数数组排序
         $para_sort = $this->argSort($para_filter);
 
+
         //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
         $prestr = $this->createLinkstring($para_sort);
 
-
-        $alipay_public_key = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB' ;
-        $alipay_public_key=str_replace("-----BEGIN PUBLIC KEY-----","",$alipay_public_key);
-        $alipay_public_key=str_replace("-----END PUBLIC KEY-----","",$alipay_public_key);
-        $alipay_public_key=str_replace("\n","",$alipay_public_key);
-
+        $alipay_public_key = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs+Vie7KknXGSk9NmnnAY6SK9EOQWs8CorI7lGE7XBHOCSQnTJ566rEdpU5BsnTs2qzKjZhohQsnYsvfGiR1gHO4OB4hs/Dir9DG3+7uB9ij3mjf4lHq2CxNr4ddG6XDfC3Tjr890go+XMkS00DoeF3SNslY25vj9JTzJ8L8kGBBjS34AvsV+CWhuy5S56YRaEjahgYL49eijycRxXGhaq+bOqsYpAH6ZJLN4CnRycpCNoMBiNNVapFgm9iffRD4YoOD1US5xuj+Ya/u6HKv2WNhyDkL8fRJI6Xr5w7TQsqIDLbGyxt10MvsDQhy9MNaaOYUOeesD+O/UhxsHjGGqIQIDAQAB' ;
         $alipay_public_key='-----BEGIN PUBLIC KEY-----'.PHP_EOL.wordwrap($alipay_public_key, 64, "\n", true) .PHP_EOL.'-----END PUBLIC KEY-----';
+
         $res=openssl_get_publickey($alipay_public_key);
         if($res)
         {
-            $result =(bool)openssl_verify($prestr, base64_decode($sign), $res);
+            $result =(bool)openssl_verify($prestr, base64_decode($sign), $res,OPENSSL_ALGO_SHA256);
         }
         else {
             echo "您的支付宝公钥格式不正确!"."<br/>"."The format of your alipay_public_key is incorrect!";
@@ -400,7 +435,7 @@ class PayController extends Controller
     function paraFilter($para) {
         $para_filter = array();
         while (list ($key, $val) = each ($para)) {
-            if($key == "sign" || $key == "sign_type" || $val == "")continue;
+            if($key == "sign" || $key == "sign_type")continue;
             else	$para_filter[$key] = $para[$key];
         }
         return $para_filter;
@@ -415,13 +450,12 @@ class PayController extends Controller
         reset($para);
         return $para;
     }
-
     /**
      * 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
      * @param $para 需要拼接的数组
      * return 拼接完成以后的字符串
      */
-    function createLinkstring($para) {
+    function createLinkstring($para){
         $arg  = "";
         while (list ($key, $val) = each ($para)) {
             $arg.=$key."=".$val."&";
@@ -435,6 +469,19 @@ class PayController extends Controller
         return $arg;
     }
 
+    public function saveAliInfo($data){
+
+        $sql = "DESC ali_repay_info" ;
+        $command = Yii::$app->db2->createCommand($sql);
+        $resultAll = $command->queryAll();
+        foreach($resultAll as $v){
+            $Field = $v['Field'] ;
+            if($Field!='id'){
+                $newData[$Field]= $_POST[$Field] ;
+            }
+        }
+        $command = Yii::$app->db2->createCommand()->insert('ali_repay_info',$newData)->execute();
+    }
 
 }
 

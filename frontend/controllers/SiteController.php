@@ -208,11 +208,7 @@ class SiteController extends CommController
 
         unset($datas);
 
-
     }
-
-
-
 
 
 
