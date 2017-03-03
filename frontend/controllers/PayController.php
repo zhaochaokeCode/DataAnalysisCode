@@ -513,6 +513,7 @@ class PayController extends Controller
         $condition = $this->getSignContent($data) ;
         $str = '' ;
         foreach($data as $k=>$v){
+            $v = str_replace(' ','',$v) ;
             $str .="$k=$v" ;
         }
         $str.=$key ;
