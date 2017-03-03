@@ -88,8 +88,13 @@ class PayController extends Controller
 //    "notify_id": "d425186f9ff795eb01bad490a4bf0bfi0a",
 //    "seller_email": "chuntianhuyu@baiwen100.com"
 //}')) ;
+
+
 //生成签名结果
+        file_put_contents('/tmp/data.txt',implode(',',$_POST),FILE_APPEND) ;
+
         $this->saveAliInfo($_POST) ;
+
 
         $isSign = $this->getSignVeryfy($_POST, $_POST["sign"]);
 
@@ -184,176 +189,6 @@ class PayController extends Controller
         }
         return $data ;
     }
-
-
-
-
-    public function checkSign($data=false){
-        $checkData = $data?$data:$_POST ;
-        $str = '' ;
-        foreach($checkData as $k=>$v){
-            if($k!='sign'){
-                $str .= $k.$v ;
-            }
-
-        }
-        $tmp = $str.'ASD23%*!KK4@8MwdWddOc' ;
-
-        $md5Str = md5($tmp) ;
-//        echo $tmp."-----".$md5Str.'-------'.$_POST['sign'] ;
-
-        if($md5Str != $checkData['sign']){
-            $data = array('code'=>400,
-                'message'=>'sign error',
-                'data'=>array()
-            ) ;
-            echo json_encode($data) ;die;
-
-        }else{
-            $data = array('code'=>200,
-                'message'=>'success',
-                'data'=>array()
-            ) ;
-//            echo json_encode($data) ;die;
-        }
-
-
-    }
-    private function saveOrder($data,$type,$time){
-
-        $data2 = array(
-            "f_game_id"=>$data['game_id'],
-            "f_game_name"=>urldecode($data['game_name']),
-            "f_order_id"=>$data['order_id'],
-            "f_pay_type"=>$type,
-            "f_product_id"=>$data['product_id'],
-            "f_product_name"=>urldecode($data['product_name']),
-            "f_role_id"=>$data['role_id'],
-            "f _role_name"=>urldecode($data['role_name']),
-            "f_server_id"=>urldecode($data['server_id']),
-            "f_server_name"=>urldecode($data['server_name']),
-            "f_time"=>$time,
-            "f_yunying_id"=>$data['yunying_id'],
-            "f_sn_id"=>$data['channel'],
-            "f_total_amount"=>$data['total_amount'],
-            "f_extension"=>urldecode($data['extension']),
-            "f_device"=>$data['device'],
-            "f_os"=>$data['os'],
-            "f_status"=>0
-        ) ;
-//
-       return   Yii::$app->db2->createCommand()->insert("create_order_info",$data2)->execute() ;
-    }
-    public function objeToArr($object)
-    {
-        $array = array();
-        if (is_object($object)) {
-            foreach ($object as $key => $value) {
-                if ($key == 'f_params') {
-                    if ($value) {
-                        $array = $array + $this->objeToArr($value);
-                    }
-                } else {
-                    $array[$key] = $value;
-                }
-            }
-        } else {
-            $array = $object;
-        }
-        return $array;
-
-    }
-    /**
-     * 获取返回时的签名验证结果
-     * @param $para_temp 通知返回来的参数数组
-     * @param $sign 返回的签名结果
-     * @return 签名验证结果
-     */
-    function getSignVeryfy($para_temp, $sign) {
-        //除去待签名参数数组中的空值和签名参数
-        $para_filter = $this->paraFilter($para_temp);
-
-        //对待签名参数数组排序
-        $para_sort = $this->argSort($para_filter);
-
-
-        //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
-        $prestr = $this->createLinkstring($para_sort);
-
-        $alipay_public_key = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs+Vie7KknXGSk9NmnnAY6SK9EOQWs8CorI7lGE7XBHOCSQnTJ566rEdpU5BsnTs2qzKjZhohQsnYsvfGiR1gHO4OB4hs/Dir9DG3+7uB9ij3mjf4lHq2CxNr4ddG6XDfC3Tjr890go+XMkS00DoeF3SNslY25vj9JTzJ8L8kGBBjS34AvsV+CWhuy5S56YRaEjahgYL49eijycRxXGhaq+bOqsYpAH6ZJLN4CnRycpCNoMBiNNVapFgm9iffRD4YoOD1US5xuj+Ya/u6HKv2WNhyDkL8fRJI6Xr5w7TQsqIDLbGyxt10MvsDQhy9MNaaOYUOeesD+O/UhxsHjGGqIQIDAQAB' ;
-        $alipay_public_key='-----BEGIN PUBLIC KEY-----'.PHP_EOL.wordwrap($alipay_public_key, 64, "\n", true) .PHP_EOL.'-----END PUBLIC KEY-----';
-
-        $res=openssl_get_publickey($alipay_public_key);
-        if($res)
-        {
-            $result =(bool)openssl_verify($prestr, base64_decode($sign), $res,OPENSSL_ALGO_SHA256);
-        }
-        else {
-            echo "您的支付宝公钥格式不正确!"."<br/>"."The format of your alipay_public_key is incorrect!";
-            exit();
-        }
-        openssl_free_key($res);
-        return $result ;
-    }
-
-
-    function paraFilter($para) {
-        $para_filter = array();
-        while (list ($key, $val) = each ($para)) {
-            if($key == "sign" || $key == "sign_type")continue;
-            else	$para_filter[$key] = $para[$key];
-        }
-        return $para_filter;
-    }
-    /**
-     * 对数组排序
-     * @param $para 排序前的数组
-     * return 排序后的数组
-     */
-    function argSort($para) {
-        ksort($para);
-        reset($para);
-        return $para;
-    }
-    /**
-     * 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
-     * @param $para 需要拼接的数组
-     * return 拼接完成以后的字符串
-     */
-    function createLinkstring($para){
-        $arg  = "";
-        while (list ($key, $val) = each ($para)) {
-            $arg.=$key."=".$val."&";
-        }
-        //去掉最后一个&字符
-        $arg = substr($arg,0,count($arg)-2);
-
-        //如果存在转义字符，那么去掉转义
-        if(get_magic_quotes_gpc()){$arg = stripslashes($arg);}
-
-        return $arg;
-    }
-
-    public function saveAliInfo($data){
-
-        $sql = "DESC ali_repay_info" ;
-        $command = Yii::$app->db2->createCommand($sql);
-        $resultAll = $command->queryAll();
-        foreach($resultAll as $v){
-            $Field = $v['Field'] ;
-            if($Field!='id'){
-                $newData[$Field]= $_POST[$Field] ;
-            }
-        }
-        $command = Yii::$app->db2->createCommand()->insert('ali_repay_info',$newData)->execute();
-    }
-
-
-
-
-
-//---------------以下为微信支付需要的方法---------------------
-
 
 
     /**
@@ -479,86 +314,178 @@ class PayController extends Controller
 
     }
 
-
     /**
      * 微信回调
      */
-    public function actionWxre()
-    {
+    public function actionWxre(){
 
         $fileContent = file_get_contents("php://input");
 
-        if ($fileContent) {
-            $array_data = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+        if(file_put_contents('/tmp/data.txt',$fileContent."-----".date("Y-m-d H:i:s",time()."\n"),FILE_APPEND)) {
+            echo 'success';
+        }else{
+            echo 'fail' ;
+        }
+    }
+    public function checkSign($data=false){
+        $checkData = $data?$data:$_POST ;
+        $str = '' ;
+        foreach($checkData as $k=>$v){
+            if($k!='sign'){
+                $str .= $k.$v ;
+            }
+
+        }
+        $tmp = $str.'ASD23%*!KK4@8MwdWddOc' ;
+
+        $md5Str = md5($tmp) ;
+//        echo $tmp."-----".$md5Str.'-------'.$_POST['sign'] ;
+
+        if($md5Str != $checkData['sign']){
+            $data = array('code'=>400,
+                'message'=>'sign error',
+                'data'=>array()
+            ) ;
+            echo json_encode($data) ;die;
+
+        }else{
+            $data = array('code'=>200,
+                'message'=>'success',
+                'data'=>array()
+            ) ;
+//            echo json_encode($data) ;die;
+        }
 
 
-            if (is_array($array_data)) {
-                $sign = $this->WxgetxSign($array_data, 'mGUPhEEyKHafb2CRMQ4jkg9Pz6GWBqqK');
-                if ($sign == $array_data['sign']) {
-                    $sql = "DESC wx_pay_info";
-                    $command = Yii::$app->db2->createCommand($sql);
-                    $resultAll = $command->queryAll();
-                    foreach ($resultAll as $v) {
-                        $Field = $v['Field'];
-                        if ($Field != 'id') {
-                            $newData[$Field] = $array_data[$Field];
-                        }
+    }
+    private function saveOrder($data,$type,$time){
+
+        $data2 = array(
+            "f_game_id"=>$data['game_id'],
+            "f_game_name"=>urldecode($data['game_name']),
+            "f_order_id"=>$data['order_id'],
+            "f_pay_type"=>$type,
+            "f_product_id"=>$data['product_id'],
+            "f_product_name"=>urldecode($data['product_name']),
+            "f_role_id"=>$data['role_id'],
+            "f_role_name"=>urldecode($data['role_name']),
+            "f_server_id"=>urldecode($data['server_id']),
+            "f_server_name"=>urldecode($data['server_name']),
+            "f_time"=>$time,
+            "f_yunying_id"=>$data['yunying_id'],
+            "f_sn_id"=>$data['channel'],
+            "f_total_amount"=>$data['total_amount'],
+            "f_extension"=>urldecode($data['extension']),
+            "f_device"=>$data['device'],
+            "f_os"=>$data['os'],
+            "f_status"=>0
+        ) ;
+//
+        return   Yii::$app->db2->createCommand()->insert("create_order_info",$data2)->execute() ;
+    }
+    public function objeToArr($object)
+    {
+        $array = array();
+        if (is_object($object)) {
+            foreach ($object as $key => $value) {
+                if ($key == 'f_params') {
+                    if ($value) {
+                        $array = $array + $this->objeToArr($value);
                     }
-                    $command = Yii::$app->db2->createCommand()->insert('wx_pay_info', $newData)->execute();
-                    if ($command) {
-                        echo 'success';
-                    }
-                }
-            } else {
-                if (file_put_contents('/tmp/data.txt', $fileContent . "-----" . date("Y-m-d H:i:s", time() . "\n"), FILE_APPEND)) {
-                    echo 'success';
                 } else {
-                    echo 'fail';
+                    $array[$key] = $value;
                 }
             }
+        } else {
+            $array = $object;
         }
+
+        return $array;
+
     }
+    /**
+     * 获取返回时的签名验证结果
+     * @param $para_temp 通知返回来的参数数组
+     * @param $sign 返回的签名结果
+     * @return 签名验证结果
+     */
+    function getSignVeryfy($para_temp, $sign) {
+        //除去待签名参数数组中的空值和签名参数
+        $para_filter = $this->paraFilter($para_temp);
+
+        //对待签名参数数组排序
+        $para_sort = $this->argSort($para_filter);
 
 
+        //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+        $prestr = $this->createLinkstring($para_sort);
 
-    public function WxgetxSign($Parameters,$key)
-    {
-        if($Parameters['sign']) unset($Parameters['sign']);
-        //签名步骤一：按字典序排序参数
-        ksort($Parameters);
-        $String = $this->formatBizQueryParaMap($Parameters, false);
-        //echo '【string1】'.$String.'</br>';
-        //签名步骤二：在string后加入KEY
-        $String = $String."&key=".$key;
-        //echo "【string2】".$String."</br>";
-        //签名步骤三：MD5加密
-        $String = md5($String);
-        //echo "【string3】 ".$String."</br>";
-        //签名步骤四：所有字符转为大写
-        $result_ = strtoupper($String);
-        //echo "【result】 ".$result_."</br>";
-        return $result_;
-    }
+        $alipay_public_key = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs+Vie7KknXGSk9NmnnAY6SK9EOQWs8CorI7lGE7XBHOCSQnTJ566rEdpU5BsnTs2qzKjZhohQsnYsvfGiR1gHO4OB4hs/Dir9DG3+7uB9ij3mjf4lHq2CxNr4ddG6XDfC3Tjr890go+XMkS00DoeF3SNslY25vj9JTzJ8L8kGBBjS34AvsV+CWhuy5S56YRaEjahgYL49eijycRxXGhaq+bOqsYpAH6ZJLN4CnRycpCNoMBiNNVapFgm9iffRD4YoOD1US5xuj+Ya/u6HKv2WNhyDkL8fRJI6Xr5w7TQsqIDLbGyxt10MvsDQhy9MNaaOYUOeesD+O/UhxsHjGGqIQIDAQAB' ;
+        $alipay_public_key='-----BEGIN PUBLIC KEY-----'.PHP_EOL.wordwrap($alipay_public_key, 64, "\n", true) .PHP_EOL.'-----END PUBLIC KEY-----';
 
-    function formatBizQueryParaMap($paraMap, $urlencode)
-    {
-        $buff = "";
-        ksort($paraMap);
-        foreach ($paraMap as $k => $v)
+        $res=openssl_get_publickey($alipay_public_key);
+        if($res)
         {
-            if($urlencode)
-            {
-                $v = urlencode($v);
+            $result =(bool)openssl_verify($prestr, base64_decode($sign), $res,OPENSSL_ALGO_SHA256);
+        }
+        else {
+            echo "您的支付宝公钥格式不正确!"."<br/>"."The format of your alipay_public_key is incorrect!";
+            exit();
+        }
+        openssl_free_key($res);
+        return $result ;
+    }
+
+
+    function paraFilter($para) {
+        $para_filter = array();
+        while (list ($key, $val) = each ($para)) {
+            if($key == "sign" || $key == "sign_type")continue;
+            else	$para_filter[$key] = $para[$key];
+        }
+        return $para_filter;
+    }
+    /**
+     * 对数组排序
+     * @param $para 排序前的数组
+     * return 排序后的数组
+     */
+    function argSort($para) {
+        ksort($para);
+        reset($para);
+        return $para;
+    }
+    /**
+     * 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+     * @param $para 需要拼接的数组
+     * return 拼接完成以后的字符串
+     */
+    function createLinkstring($para){
+        $arg  = "";
+        while (list ($key, $val) = each ($para)) {
+            $arg.=$key."=".$val."&";
+        }
+        //去掉最后一个&字符
+        $arg = substr($arg,0,count($arg)-2);
+
+        //如果存在转义字符，那么去掉转义
+        if(get_magic_quotes_gpc()){$arg = stripslashes($arg);}
+
+        return $arg;
+    }
+
+    public function saveAliInfo($data){
+
+        $sql = "DESC ali_repay_info" ;
+        $command = Yii::$app->db2->createCommand($sql);
+        $resultAll = $command->queryAll();
+        foreach($resultAll as $v){
+            $Field = $v['Field'] ;
+            if($Field!='id'){
+                $newData[$Field]= $_POST[$Field] ;
             }
-            //$buff .= strtolower($k) . "=" . $v . "&";
-            $buff .= $k . "=" . $v . "&";
         }
-        $reqPar;
-        if (strlen($buff) > 0)
-        {
-            $reqPar = substr($buff, 0, strlen($buff)-1);
-        }
-        return $reqPar;
+        $command = Yii::$app->db2->createCommand()->insert('ali_repay_info',$newData)->execute();
     }
 
 }
