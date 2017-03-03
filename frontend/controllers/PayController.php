@@ -323,7 +323,7 @@ class PayController extends Controller
         $this->saveToFile('wxRellData:'.$fileContent) ;
 
         $array_data = json_decode(json_encode(simplexml_load_string($fileContent, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
-        $this->saveRecallData($array_data['out_trade_no'],$array_data['out_trade_no'],$array_data['time_end']) ;
+        $this->saveRecallData($array_data['out_trade_no'],$array_data['total_fee'],$array_data['time_end']) ;
     }
     public function checkSign($data=false){
         $checkData = $data?$data:$_POST ;
