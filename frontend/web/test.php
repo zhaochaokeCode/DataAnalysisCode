@@ -9,5 +9,7 @@
 
 
 
-$str = 'order_id=2017030321001004280223696061&other=1time=2017-03-0315:34:35total_money=0.01' ;
-echo md5($str."EoL32&JSUVt30JHir6v48sk!EoL32&JSUVt30JHir6v48sk!");
+$str = 'order_id=2017030321001004280223720066other=1time=2017-03-0315:40:33total_money=0.01EoL32&JSUVt30JHir6v48sk!' ;
+
+$str = 'order_id=2017030321001004280223724368other=1time=2017-03-0315:56:36total_money=0.01EoL32&JSUVt30JHir6v48sk!' ;
+echo md5($str);
