@@ -148,14 +148,15 @@ class PayController extends Controller
      **/
     function checkEmpty($value)
     {
-        if (!isset($value))
-            return true;
-        if ($value === null)
-            return true;
-        if (trim($value) === "")
-            return true;
-
-        return false;
+        return true ;
+//        if (!isset($value))
+//            return true;
+//        if ($value === null)
+//            return true;
+//        if (trim($value) === "")
+//            return true;
+//
+//        return false;
     }
 
     function characet($data, $targetCharset)
@@ -320,6 +321,7 @@ class PayController extends Controller
     public function actionWxre(){
 
         $fileContent = file_get_contents("php://input");
+        $this->saveToFile('wxRellData:'.$fileContent) ;
 
         $array_data = json_decode(json_encode(simplexml_load_string($fileContent, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
         $this->saveRecallData($array_data['out_trade_no'],$array_data['out_trade_no'],$array_data['time_end']) ;
@@ -500,7 +502,7 @@ class PayController extends Controller
             "time"=>$time,
             "other"=>"1"
         );
-        $recallUrl = "http://114.55.249.122:40200/notify/002050000" ;
+        $recallUrl = "http://114.55.249.122:40200/notify/002050000/" ;
         $condition = $this->getSignContent($data) ;
         $sign = md5($condition.$key);
         $url =$recallUrl.$condition."sign=$sign" ;
