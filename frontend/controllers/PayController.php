@@ -148,15 +148,14 @@ class PayController extends Controller
      **/
     function checkEmpty($value)
     {
-        return true ;
-//        if (!isset($value))
-//            return true;
-//        if ($value === null)
-//            return true;
-//        if (trim($value) === "")
-//            return true;
-//
-//        return false;
+        if (!isset($value))
+            return true;
+        if ($value === null)
+            return true;
+        if (trim($value) === "")
+            return true;
+
+        return false;
     }
 
     function characet($data, $targetCharset)
