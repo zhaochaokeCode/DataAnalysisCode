@@ -483,7 +483,7 @@ class PayController extends Controller
             }
         }
         $str = '' ;
-        foreach($newData as $k=>$v){
+        foreach($_POST as $k=>$v){
             $str .= "$k=$v" ;
         }
 
