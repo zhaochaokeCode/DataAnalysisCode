@@ -104,7 +104,7 @@ class PayController extends Controller
          * 如过校验成功
          */
         if($isSign){
-
+            echo 'success' ;
             $order_id       = $_POST['out_trade_no'] ;
             $total_money    = $_POST['amount'];
             $time           = $_POST['notify_time'];
@@ -505,7 +505,7 @@ class PayController extends Controller
         $recallUrl = "http://114.55.249.122:40200/notify/002050000" ;
         $condition = $this->getSignContent($data) ;
         $sign = md5($condition.$key);
-        $condition.="$recallUrl.sign=$sign" ;
+        $condition.=$recallUrl.$condition."sign=$sign" ;
 
         $this->saveToFile('recallGame:'.$recallUrl) ;
 
@@ -514,7 +514,7 @@ class PayController extends Controller
         if(is_array($data)){
             $data = implode(',',$data) ;
         }
-        echo 'success' ;
+        
         $this->saveToFile($data) ;
 
     }
