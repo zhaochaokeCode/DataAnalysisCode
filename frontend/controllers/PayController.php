@@ -12,6 +12,7 @@ class PayController extends Controller
     private $fileCharset = "UTF-8";
     public $postCharset = "UTF-8";
 
+
     /**
      *  默认的是 阿里支付 不要为问什么
      * 因为我喜欢阿里 哈哈
@@ -91,7 +92,8 @@ class PayController extends Controller
 
 
 //生成签名结果
-        file_put_contents('/tmp/data.txt',implode(',',$_POST),FILE_APPEND) ;
+        $this->saveToFile(implode(',',$_POST)) ;
+//        file_put_contents('/tmp/data.txt',implode(',',$_POST)."\n",FILE_APPEND) ;
 
         $this->saveAliInfo($_POST) ;
 
@@ -102,7 +104,12 @@ class PayController extends Controller
          * 如过校验成功
          */
         if($isSign){
-            echo 'success' ;
+
+            $order_id       = $_POST['out_trade_no'] ;
+            $total_money    = $_POST['amount'];
+            $time           = $_POST['notify_time'];
+            $this->saveRecallData($order_id,$total_money,$time);
+
         }
     }
 
@@ -321,11 +328,8 @@ class PayController extends Controller
 
         $fileContent = file_get_contents("php://input");
 
-        if(file_put_contents('/tmp/data.txt',$fileContent."-----".date("Y-m-d H:i:s",time()."\n"),FILE_APPEND)) {
-            echo 'success';
-        }else{
-            echo 'fail' ;
-        }
+        $array_data = json_decode(json_encode(simplexml_load_string($fileContent, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+        $this->saveRecallData($array_data['out_trade_no'],$array_data['out_trade_no'],$array_data['time_end']) ;
     }
     public function checkSign($data=false){
         $checkData = $data?$data:$_POST ;
@@ -380,8 +384,8 @@ class PayController extends Controller
             "f_os"=>$data['os'],
             "f_status"=>0
         ) ;
-//
-        return   Yii::$app->db2->createCommand()->insert("create_order_info",$data2)->execute() ;
+        $this->saveToFile(implode(',',$data2)) ;
+//        return   Yii::$app->db2->createCommand()->insert("create_order_info",$data2)->execute() ;
     }
     public function objeToArr($object)
     {
@@ -485,7 +489,37 @@ class PayController extends Controller
                 $newData[$Field]= $_POST[$Field] ;
             }
         }
-        $command = Yii::$app->db2->createCommand()->insert('ali_repay_info',$newData)->execute();
+        $this->saveToFile(implode(',',$newData)) ;
+//        $command = Yii::$app->db2->createCommand()->insert('ali_repay_info',$newData)->execute();
+    }
+
+
+
+    public function saveRecallData($order_id,$total_money,$time){
+        $key = "EoL32&JSUVt30JHir6v48sk!" ;
+        $data = array("order_id"=>$order_id,
+            "total_money"=>$total_money,
+            "time"=>$time,
+            "other"=>"1"
+        );
+        $recallUrl = "http://114.55.249.122:40200/notify/002050000" ;
+        $condition = $this->getSignContent($data) ;
+        $sign = md5($condition.$key);
+        $condition.="$recallUrl.sign=$sign" ;
+
+        $data = file_get_contents($condition ) ;
+        if(is_array($data)){
+            $data = implode(',',$data) ;
+        }
+        if($this->saveToFile($data))
+            echo 'success' ;
+    }
+
+    public function saveToFile($str){
+        $time = date("Y-m-d H:i:s") ;
+
+       return file_put_contents('/tmp/data.txt',$str."-------".$time."\n",FILE_APPEND) ;
+
     }
 
 }
