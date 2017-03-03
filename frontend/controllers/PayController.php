@@ -90,14 +90,7 @@ class PayController extends Controller
 //    "seller_email": "chuntianhuyu@baiwen100.com"
 //}')) ;
 
-
-//生成签名结果
-        $this->saveToFile(implode(',',$_POST)) ;
-//        file_put_contents('/tmp/data.txt',implode(',',$_POST)."\n",FILE_APPEND) ;
-
         $this->saveAliInfo($_POST) ;
-
-
         $isSign = $this->getSignVeryfy($_POST, $_POST["sign"]);
 
         /**
@@ -489,7 +482,12 @@ class PayController extends Controller
                 $newData[$Field]= $_POST[$Field] ;
             }
         }
-        $this->saveToFile('aliinfo:'.implode(',',$newData)) ;
+        $str = '' ;
+        foreach($newData as $k=>$v){
+            $str .= "$k=$v" ;
+        }
+
+        $this->saveToFile('aliserviceInfo:'.$str) ;
 //        $command = Yii::$app->db2->createCommand()->insert('ali_repay_info',$newData)->execute();
     }
 
