@@ -473,15 +473,15 @@ class PayController extends Controller
 
     public function saveAliInfo($data){
 
-        $sql = "DESC ali_repay_info" ;
-        $command = Yii::$app->db2->createCommand($sql);
-        $resultAll = $command->queryAll();
-        foreach($resultAll as $v){
-            $Field = $v['Field'] ;
-            if($Field!='id'){
-                $newData[$Field]= $_POST[$Field] ;
-            }
-        }
+//        $sql = "DESC ali_repay_info" ;
+//        $command = Yii::$app->db2->createCommand($sql);
+//        $resultAll = $command->queryAll();
+//        foreach($resultAll as $v){
+//            $Field = $v['Field'] ;
+//            if($Field!='id'){
+//                $newData[$Field]= $_POST[$Field] ;
+//            }
+//        }
         $str = '' ;
         foreach($_POST as $k=>$v){
             $str .= "$k=$v" ;
