@@ -324,6 +324,7 @@ class PayController extends Controller
 
         $array_data = json_decode(json_encode(simplexml_load_string($fileContent, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
         $this->saveRecallData($array_data['out_trade_no'],$array_data['total_fee'],$array_data['time_end']) ;
+        echo 'success' ;
     }
     public function checkSign($data=false){
         $checkData = $data?$data:$_POST ;
