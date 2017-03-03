@@ -517,6 +517,7 @@ class PayController extends Controller
         }
         $str.=$key ;
 
+        $this->saveToFile('md5str:'.$str) ;
         $sign = md5($str);
         $url =$recallUrl.$condition."&sign=$sign" ;
         $url = str_replace(' ','',$url) ;

@@ -1,8 +1,13 @@
 <?php
 /**
+ *
  * Created by PhpStorm.
  * User: zhaochaoke
  * Date: 16/12/30
  * Time: 上午11:46
  */
-echo md5('order_id=2017030315091400000other=1time=20170303150921total_money=1EoL32&JSUVt30JHir6v48sk!EoL32&JSUVt30JHir6v48sk!');
+
+
+
+$str = 'order_id=2017030321001004280223696061&other=1time=2017-03-0315:34:35total_money=0.01' ;
+echo md5($str."EoL32&JSUVt30JHir6v48sk!EoL32&JSUVt30JHir6v48sk!");
