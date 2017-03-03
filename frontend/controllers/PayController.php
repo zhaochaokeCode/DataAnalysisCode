@@ -98,7 +98,7 @@ class PayController extends Controller
          */
         if($isSign){
             echo 'success' ;
-            $order_id       = $_POST['out_trade_no'] ;
+            $order_id       = $_POST['order_id'] ;
             $total_money    = $_POST['total_amount'];
             $time           = $_POST['notify_time'];
             $this->saveRecallData($order_id,$total_money,$time);
