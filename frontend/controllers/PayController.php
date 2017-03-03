@@ -379,6 +379,7 @@ class PayController extends Controller
             "f_os"=>$data['os'],
             "f_status"=>0
         ) ;
+        $str= '' ;
         foreach($data2 as $k=>$v){
             $str .="$k=$v" ;
         }
