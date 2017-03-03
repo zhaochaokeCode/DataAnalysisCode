@@ -510,9 +510,15 @@ class PayController extends Controller
         );
         $recallUrl = "http://114.55.249.122:40200/notify/002070000?" ;
         $condition = $this->getSignContent($data) ;
-        $sign = md5($condition.$key);
+        ksort($data) ;
+        foreach($data as $k=>$v){
+            $str .="$k=$v" ;
+        }
+        $str.=$key ;
+
+        $sign = md5($str);
         $url =$recallUrl.$condition."&sign=$sign" ;
-        $url = str_replace(' ','',$url) ;
+        $url = gstr_replace(' ','',$url) ;
         $this->saveToFile('recallGame:'.$url) ;
 
         $data = file_get_contents($url ) ;
