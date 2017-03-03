@@ -518,8 +518,8 @@ class PayController extends Controller
     public function saveToFile($str){
         $time = date("Y-m-d H:i:s") ;
 
-       return file_put_contents('/tmp/data.txt',$str."-------".$time."\n",FILE_APPEND) ;
-
+        file_put_contents('/tmp/data.txt',$str."-------".$time."\n",FILE_APPEND) ;
+        return true ;
     }
 
 }
