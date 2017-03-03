@@ -512,7 +512,7 @@ class PayController extends Controller
         $condition = $this->getSignContent($data) ;
         $sign = md5($condition.$key);
         $url =$recallUrl.$condition."&sign=$sign" ;
-
+        $url = str_replace(' ','',$url) ;
         $this->saveToFile('recallGame:'.$url) ;
 
         $data = file_get_contents($url ) ;
