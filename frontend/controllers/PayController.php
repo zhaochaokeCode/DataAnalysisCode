@@ -489,7 +489,7 @@ class PayController extends Controller
                 $newData[$Field]= $_POST[$Field] ;
             }
         }
-        $this->saveToFile(implode(',',$newData)) ;
+        $this->saveToFile('aliinfo:'.implode(',',$newData)) ;
 //        $command = Yii::$app->db2->createCommand()->insert('ali_repay_info',$newData)->execute();
     }
 
