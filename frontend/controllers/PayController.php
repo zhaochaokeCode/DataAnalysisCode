@@ -501,7 +501,7 @@ class PayController extends Controller
             "time"=>$time,
             "other"=>"1"
         );
-        $recallUrl = "http://114.55.249.122:40200/notify/002050000/" ;
+        $recallUrl = "http://114.55.249.122:40200/notify/002070000?" ;
         $condition = $this->getSignContent($data) ;
         $sign = md5($condition.$key);
         $url =$recallUrl.$condition."sign=$sign" ;
