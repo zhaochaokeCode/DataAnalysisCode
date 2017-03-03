@@ -384,7 +384,7 @@ class PayController extends Controller
             "f_os"=>$data['os'],
             "f_status"=>0
         ) ;
-        $this->saveToFile(implode(',',$data2)) ;
+        return $this->saveToFile(implode(',',$data2)) ;
 //        return   Yii::$app->db2->createCommand()->insert("create_order_info",$data2)->execute() ;
     }
     public function objeToArr($object)
@@ -517,9 +517,7 @@ class PayController extends Controller
 
     public function saveToFile($str){
         $time = date("Y-m-d H:i:s") ;
-
-        file_put_contents('/tmp/data.txt',$str."-------".$time."\n",FILE_APPEND) ;
-        return true ;
+        return file_put_contents('/tmp/data.txt',$str."-------".$time."\n",FILE_APPEND) ;
     }
 
 }
