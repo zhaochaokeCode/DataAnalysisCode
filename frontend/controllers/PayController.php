@@ -507,6 +507,9 @@ class PayController extends Controller
         $sign = md5($condition.$key);
         $condition.="$recallUrl.sign=$sign" ;
 
+        $this->saveToFile($recallUrl) ;
+
+
         $data = file_get_contents($condition ) ;
         if(is_array($data)){
             $data = implode(',',$data) ;
