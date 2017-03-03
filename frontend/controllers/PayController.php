@@ -509,7 +509,7 @@ class PayController extends Controller
 
         $this->saveToFile('recallGame:'.$url) ;
 
-        $data = file_get_contents($condition ) ;
+        $data = file_get_contents($url ) ;
         if(is_array($data)){
             $data = implode(',',$data) ;
         }
