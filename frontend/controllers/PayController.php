@@ -379,7 +379,12 @@ class PayController extends Controller
             "f_os"=>$data['os'],
             "f_status"=>0
         ) ;
-        return $this->saveToFile(implode(',',$data2)) ;
+        foreach($data2 as $k=>$v){
+            $str .="$k=$v" ;
+        }
+
+
+        return $this->saveToFile($type.":".$str) ;
 //        return   Yii::$app->db2->createCommand()->insert("create_order_info",$data2)->execute() ;
     }
     public function objeToArr($object)
