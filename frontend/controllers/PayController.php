@@ -508,9 +508,10 @@ class PayController extends Controller
             "time"=>$time,
             "other"=>"1"
         );
+        ksort($data) ;
         $recallUrl = "http://114.55.249.122:40200/notify/002070000?" ;
         $condition = $this->getSignContent($data) ;
-        ksort($data) ;
+        $str = '' ;
         foreach($data as $k=>$v){
             $str .="$k=$v" ;
         }
