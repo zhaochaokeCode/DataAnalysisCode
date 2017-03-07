@@ -101,7 +101,7 @@ class PayController extends Controller
             $order_id       = $_POST['out_trade_no'] ;
             $total_money    = $_POST['total_amount'];
             $time           = $_POST['notify_time'];
-            $this->saveRecallData($order_id,$total_money,$time);
+            $this->saveRecallData($order_id,$total_money,$time,1);
 
         }
     }
@@ -320,10 +320,11 @@ class PayController extends Controller
     public function actionWxre(){
 
         $fileContent = file_get_contents("php://input");
-        $this->saveToFile('wxRellData:'.$fileContent) ;
 
         $array_data = json_decode(json_encode(simplexml_load_string($fileContent, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
-        $this->saveRecallData($array_data['out_trade_no'],$array_data['total_fee'],$array_data['time_end']) ;
+        $this->saveToMysql('wx_pay_info' ,$array_data) ;
+
+        $this->saveRecallData($array_data['out_trade_no'],$array_data['total_fee'],$array_data['time_end'],2) ;
         echo 'success' ;
     }
     public function checkSign($data=false){
@@ -385,8 +386,9 @@ class PayController extends Controller
         }
 
 
-        return $this->saveToFile($type.":".$str) ;
-//        return   Yii::$app->db2->createCommand()->insert("create_order_info",$data2)->execute() ;
+
+        return $this->saveToMysql('create_order_info',$data2) ;
+
     }
     public function objeToArr($object)
     {
@@ -481,27 +483,20 @@ class PayController extends Controller
 
     public function saveAliInfo($data){
 
-//        $sql = "DESC ali_repay_info" ;
-//        $command = Yii::$app->db2->createCommand($sql);
-//        $resultAll = $command->queryAll();
-//        foreach($resultAll as $v){
-//            $Field = $v['Field'] ;
-//            if($Field!='id'){
-//                $newData[$Field]= $_POST[$Field] ;
-//            }
-//        }
         $str = '' ;
         foreach($_POST as $k=>$v){
             $str .= "$k=$v" ;
         }
+        return $this->saveToMysql('ali_repay_info',$data) ;
 
-        $this->saveToFile('aliserviceInfo:'.$str) ;
-//        $command = Yii::$app->db2->createCommand()->insert('ali_repay_info',$newData)->execute();
+
+//        $this->saveToFile('aliserviceInfo:'.$str) ;
+//        $command = Yii::$app->db2->createCommand()->insert('ali_repay_info',$data)->execute();
     }
 
 
 
-    public function saveRecallData($order_id,$total_money,$time){
+    public function saveRecallData($order_id,$total_money,$time,$type){
         $key = "EoL32&JSUVt30JHir6v48sk!" ;
         $data = array("order_id"=>$order_id,
             "total_money"=>$total_money,
@@ -518,21 +513,31 @@ class PayController extends Controller
         }
         $str.=$key ;
 
-        $this->saveToFile('md5str:'.$str) ;
         $sign = md5($str);
         $url =$recallUrl.$condition."&sign=$sign" ;
         $url = str_replace(' ','',$url) ;
-        $this->saveToFile('recallGame:'.$url) ;
 
-        $data = file_get_contents($url ) ;
+        $info = file_get_contents($url ) ;
+        $data2 =  array(
+            "order_id"=>$order_id,
+            "pay_type"=>$type,
+            "info"=>$info
+        ) ;
 
-        $this->saveToFile('gameSerData:'.$data) ;
+
+        $this->saveToMysql('recall_data',$data2) ;
+
+//        $this->saveToFile('gameSerData:'.$data) ;
 
     }
 
     public function saveToFile($str){
         $time = date("Y-m-d H:i:s") ;
         return file_put_contents('/tmp/data.txt',$str."-------".$time."\n\n",FILE_APPEND) ;
+    }
+    public function saveToMysql($table,$data){
+        $result= Yii::$app->db2->createCommand()->insert($table,$data)->execute() ;
+        return $result ;
     }
 
 }
