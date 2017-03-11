@@ -34,6 +34,7 @@ class PayController extends Controller
 
     public function actionIndex()
     {
+
         $this->checkSign() ;
         $app_id = "2017011205020547" ;
         $time =time() ;
@@ -50,7 +51,7 @@ class PayController extends Controller
                 "charset" => "utf-8",
                 "format" => "json",
                 "method" => "alipay.trade.app.pay",
-                "notify_url" => "http://116.62.100.98/pay/recall",
+                "notify_url" => $_SERVER['HTTP_HOST']."/pay/recall",
                 "sign_type" => "RSA2",
                 "timestamp" => date("Y-m-d H:i:s",$time),
                 "version" => 1.0,
@@ -352,10 +353,7 @@ class PayController extends Controller
                 'message'=>'success',
                 'data'=>array()
             ) ;
-//            echo json_encode($data) ;die;
         }
-
-
     }
     private function saveOrder($data,$type,$time){
 
@@ -379,12 +377,6 @@ class PayController extends Controller
             "f_os"=>$data['os'],
             "f_status"=>0
         ) ;
-        $str= '' ;
-        foreach($data2 as $k=>$v){
-            $str .="$k=$v" ;
-        }
-
-
 
         return $this->saveToMysql('create_order_info',$data2) ;
 
@@ -482,15 +474,33 @@ class PayController extends Controller
 
     public function saveAliInfo($data){
 
-        $str = '' ;
-        foreach($_POST as $k=>$v){
-            $str .= "$k=$v" ;
-        }
-        return $this->saveToMysql('ali_repay_info',$data) ;
-
-
-//        $this->saveToFile('aliserviceInfo:'.$str) ;
-//        $command = Yii::$app->db2->createCommand()->insert('ali_repay_info',$data)->execute();
+        $tmp = array_keys($data) ;
+        $table = 'ali_repay_info' ;
+        $ali_repay_info = array(
+            'total_amount'=>$data['total_amount'],
+            'buyer_id'=>$data['buyer_id'],
+            'trade_no'=>$data['trade_no'],
+            'notify_time'=>$data['notify_time'],
+            'subject'=>$data['subject'],
+            'sign_type'=>$data['sign_type'],
+            'buyer_logon_id'=>$data['buyer_logon_id'],
+            'auth_app_id'=>$data['auth_app_id'],
+            'charset'=>$data['charset'],
+            'notify_type'=>$data['notify_type'],
+            'invoice_amount'=>$data['invoice_amount'],
+            'out_trade_no'=>$data['out_trade_no'],
+            'trade_status'=>$data['trade_status'],
+            'gmt_payment'=>$data['gmt_payment'],
+            'version'=>$data['version'],
+            'point_amount'=>$data['point_amount'],
+            'gmt_create'=>$data['gmt_create'],
+            'buyer_pay_amount'=>$data['buyer_pay_amount'],
+            'receipt_amount'=>$data['receipt_amount'],
+            'app_id'=>$data['app_id'],
+            'seller_id'=>$data['seller_id'],
+            'notify_id'=>$data['notify_id']
+        );
+        return $this->saveToMysql('ali_repay_info',$ali_repay_info) ;
     }
 
 
@@ -503,7 +513,7 @@ class PayController extends Controller
             "other"=>"1"
         );
         ksort($data) ;
-        $recallUrl = "http://101.37.35.211:40200/notify/002070000?" ;
+        $recallUrl = "pay.slth0.chuntianhuyugame.com:40200/notify/002070000?" ;
         $condition = $this->getSignContent($data) ;
         $str = '' ;
         foreach($data as $k=>$v){
@@ -522,17 +532,11 @@ class PayController extends Controller
             "pay_type"=>$type,
             "info"=>$info
         ) ;
-
-
         $this->saveToMysql('recall_data',$data2) ;
-
-//        $this->saveToFile('gameSerData:'.$data) ;
-
     }
     public function saveToMysql($table,$data){
-        $result= Yii::$app->db2->createCommand()->insert($table,$data)->execute() ;
+        $result= Yii::$app->db3->createCommand()->insert($table,$data)->execute() ;
         return $result ;
     }
-
 }
 
