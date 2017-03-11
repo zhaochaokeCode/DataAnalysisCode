@@ -136,7 +136,6 @@ class PayController extends Controller
                 $i++;
             }
         }
-
         unset ($k, $v);
         return $stringToBeSigned;
     }
@@ -504,7 +503,7 @@ class PayController extends Controller
             "other"=>"1"
         );
         ksort($data) ;
-        $recallUrl = "http://114.55.249.122:40200/notify/002070000?" ;
+        $recallUrl = "http://101.37.35.211:40200/notify/002070000?" ;
         $condition = $this->getSignContent($data) ;
         $str = '' ;
         foreach($data as $k=>$v){
@@ -529,11 +528,6 @@ class PayController extends Controller
 
 //        $this->saveToFile('gameSerData:'.$data) ;
 
-    }
-
-    public function saveToFile($str){
-        $time = date("Y-m-d H:i:s") ;
-        return file_put_contents('/tmp/data.txt',$str."-------".$time."\n\n",FILE_APPEND) ;
     }
     public function saveToMysql($table,$data){
         $result= Yii::$app->db2->createCommand()->insert($table,$data)->execute() ;

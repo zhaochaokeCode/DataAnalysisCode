@@ -27,10 +27,17 @@ return [
         ],
         'db2' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=rm-bp10x743x352g459s.mysql.rds.aliyuncs.com;dbname=data_pay_info',
-//            'dsn' => 'mysql:host=127.0.0.1;dbname=data_analysis',
-            'username' => 'cthy',
-            'password' => 'Cthy@301*&',
+            'dsn' => 'mysql:host=127.0.0.1;dbname=data_pay_info',
+            'username' => 'root',
+            'password' => '123456',
+            'charset' => 'utf8',
+        ],
+        'db3' => [
+            'class' => 'yii\db\Connection',
+//            'dsn' => 'mysql:host=116.62.100.98;dbname=data_analysis',
+            'dsn' => 'mysql:host=114.55.144.153;dbname=data_pay_info',
+            'username' => 'root',
+            'password' => '123456',
             'charset' => 'utf8',
         ],
         'request' => [
