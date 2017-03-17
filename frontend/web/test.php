@@ -2,6 +2,24 @@
 
 ini_set("display_errors", "On");
 error_reporting(E_ALL | E_STRICT);
+
+header("Content-type: text/html; charset=utf-8");
+try {
+    $hostname = "59.110.15.34";
+    $port = 1433;
+    $dbname = "taohua_log";
+    $username = "sa";
+    $pw = "Cthy@301*&";
+    $dbh = new PDO ("dblib:host=$hostname:$port;dbname=$dbname","$username","$pw");
+} catch (PDOException $e) {
+    echo "Failed to get DB handle: " . $e->getMessage() . "\n";
+    exit;
+}
+var_dump($dbh) ;
+die;
+
+
+
 class mongdb{
     public $table ;
 
@@ -76,7 +94,7 @@ class mongdb{
         die;
     }
 }
-$newClass = new mongdb() ;
+//$newClass = new mongdb() ;
 
 
 

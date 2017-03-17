@@ -11,6 +11,20 @@ class CheckdataController extends Controller
 {
     public function actionIndex()
     {
+        $array =array(
+            'buyer_id'=>1
+        ) ;
+        $time = time() ;
+        $sql = "select * from ali_repay_info" ;
+        $command = Yii::$app->db3->createCommand($sql);
+        $nsDatas = $command->queryAll();
+        echo time() -$time ;
+
+
+        die;
+
+
+
         $data = '/data/flume_logs/skill_log/1486277205420-240' ;
         $cont = file_get_contents($data) ;
 

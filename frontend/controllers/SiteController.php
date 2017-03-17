@@ -28,6 +28,10 @@ class SiteController extends CommController
         return;
     }
 
+
+
+
+
     /**
      * 初始化recharge
      */

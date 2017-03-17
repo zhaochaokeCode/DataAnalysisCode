@@ -97,7 +97,6 @@ class IndexController extends CommController
         $command = $connection->createCommand($sql);
         $allDatas = $command->queryAll();
 
-
         if (!$allDatas) return array(array());
 //        var_dump($allDatas[0]) ;die;
 //        if($_GET['action']=='character')
