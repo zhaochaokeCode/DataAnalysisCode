@@ -88,7 +88,7 @@ class SavesqlserController extends Controller
                     $keyStr = $this->getCol($k) ;
                     if($valStr) {
                         $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-//                        echo $sql ;
+                        echo $sql ;
                         $tabArr = $this->mssdb->runSql($sql) ;
 
                     }
