@@ -93,10 +93,8 @@ class SavesqlserController extends Controller
                     }
                 }
             }
-
+            sleep(0.5) ;
         }
-
-
 
     }
 
@@ -246,5 +244,8 @@ class SavesqlserController extends Controller
         }
         return $data ;
     }
+    public function actionCleardata(){
+        $data =  $this->mssdb->clear();
 
+    }
 }
