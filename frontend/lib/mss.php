@@ -53,14 +53,14 @@ class mss
 
     }
     public function clear(){
+        $tmp ='' ;
+        $sql ="select 'truncate table '+name+' ;' from taohua_log.sys.tables where name like 'log%'";
+        foreach($this->db->query($sql) as $row){
+            $tmp .= $row[0] ;
+        }
+        $this->db->query($tmp)  ;
 
-//        $sql ="select 'truncate table '+name+' ;' from taohua_log.sys.tables where name like 'log%'";
-//        foreach($this->db->query($sql) as $row){
-//            $tmp[] = $row[0] ;
-//        }
-//        foreach($tmp as $v){
-//            $this->db->query($v)  ;
-//        }
+
         $sql ="select 'truncate  table '+name+' ;' from taohua_internal_report.sys.tables where name like 'rpt%'";
         $tmp ='' ;
         foreach($this->db->query($sql) as $row){

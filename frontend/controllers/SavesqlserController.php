@@ -50,7 +50,7 @@ class SavesqlserController extends Controller
             $allData =array() ;
             $fileName = $logPath. $v;
             $cont = file_get_contents($fileName);
-            echo $fileName."<br>" ;
+            echo $fileName."<br>" ;die;
             $datas = explode("\n", $cont);
             unset($cont);
 
