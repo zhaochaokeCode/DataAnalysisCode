@@ -1,10 +1,9 @@
 <?php
 namespace frontend\controllers;
-
+require_once '../lib/mss.php' ;
 use Yii;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-
+use mss ;
+header("Content-type: text/html; charset=utf-8");
 /**
  * Site controller
  */
@@ -16,6 +15,14 @@ class SiteController extends CommController
     public $valArr;
 
     public $days = 7;
+
+    public $mssdb ='' ;
+
+    public function init()
+    {
+        $this->mssdb =  new mss() ;
+    }
+
 
     /**
      *流失加留存
@@ -114,7 +121,6 @@ class SiteController extends CommController
 
     public function actionIndex()
     {
-
         ini_set('memory_limit', '1024M');
         if (!isset($_GET['create_data'])) return;
         $sinkFile = Yii::$app->params['runFile'];//中间通道数据文件路径
