@@ -166,7 +166,7 @@ class SavesqlserController extends Controller
                 //f_uid,f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_account_id,f_character_id,f_character_ip,f_character_type,f_insert_time
                 //f_time,f_dept,f_server_address_id,f_account_id,f_character_ip,f_character_type,f_sf_character_id,f_game_id,f_log_name,
                 $data = array(
-                    $data['f_aaccount_id'],
+                    $data['f_account_id'],
                     $data['f_dept'],
                     $data['f_server_address_id'],
                     $data['f_game_id'],
