@@ -61,7 +61,9 @@ class SavesqlserController extends Controller
                         $tmpData = $this->objeToArr($json);
                         $name =   $tmpData['f_log_name'] ;
 
-                        if($name == 'log_account'||$name == 'log_character'||$name == 'log_login'){
+//                        if($name == 'log_account'||$name == 'log_character'||$name == 'log_login'){
+                        if($name == 'log_character'){
+                            echo $fileName ;die;
                             $allData[$name][] = $this->createData($name,$tmpData ) ;
                         }else{
                             continue ;
