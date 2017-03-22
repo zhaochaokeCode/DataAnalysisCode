@@ -9,11 +9,22 @@ class RetentionController extends CommController
     public  $tabName = 'bi_count_retention';
     public function actionIndex()
     {
-        $viAndTa =  $this->createViewAndTabData();
-        return $this->render("//index/getdatas.php",[
-            "all_data"=>$viAndTa
-        ]);
+        $this->sqlserdata() ;
+//        $viAndTa =  $this->createViewAndTabData();
+//        return $this->render("//index/getdatas.php",[
+//            "all_data"=>$viAndTa
+//        ]);
     }
+
+    public function sqlserdata(){
+        $array = array('test') ;
+        var_dump($array) ;
+        die;
+    }
+
+
+
+
     /**
      * 根据原始数据生成视图数据和表格数据
      *

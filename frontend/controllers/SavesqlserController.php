@@ -28,14 +28,15 @@ class SavesqlserController extends Controller
     }
 
     public function actionIndex(){
+//        $this->mssdb->getUserInfo() ; die;
 //        $tabArr = $this->mssdb->getTabColumn('log_character') ;
         $this->getFileCont() ;
-
+//
 
     }
     public function actionGetcol(){
 
-        $tabArr = $this->mssdb->getTabColumn('log_yuanbao') ;
+        $tabArr = $this->mssdb->getTabColumn('log_dungeon') ;
     }
     public function getFileCont(){
         ini_set('memory_limit', '1024M');
@@ -50,7 +51,7 @@ class SavesqlserController extends Controller
             $allData =array() ;
             $fileName = $logPath. $v;
             $cont = file_get_contents($fileName);
-            echo $fileName."<br>" ;
+//            echo $fileName."<br>" ;
             $datas = explode("\n", $cont);
             unset($cont);
 
@@ -61,8 +62,15 @@ class SavesqlserController extends Controller
                         $tmpData = $this->objeToArr($json);
                         $name =   $tmpData['f_log_name'] ;
 
-                        if($name == 'log_account'||$name == 'log_character'||$name == 'log_login'||$name == 'log_logout'){
-//                        if($name == 'log_character'){
+                      if($name == 'log_account'||$name == 'log_character'||$name == 'log_login'||$name == 'log_logout'
+                        ||$name == 'log_stage'||$name=='log_dungeon'){
+                            if($tmpData['f_stage_ns']=='n'){
+                                $tmpData['f_stage_ns']=0;
+                            }
+                            if($tmpData['f_stage_ns']=='s'){
+                                $tmpData['f_stage_ns']=1;
+                            }
+
                             $allData[$name][] = $this->createData($name,$tmpData ) ;
                         }else{
                             continue ;
@@ -138,8 +146,12 @@ class SavesqlserController extends Controller
             case 'log_recharge': //充值
                 $keyStr = "f_uid,f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_rechage_yuanbao,f_orderid,f_discount" ;
                 break ;
-
-
+            case 'log_stage':	//剧情关卡开始及完成日志
+                $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_stage_id,f_stage_ns,f_code";
+                break ;
+            case 'log_dungeon':
+                $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_dungeon_id,f_nandu_id,f_success";
+                break ;
         }
         return $keyStr ;
     }
@@ -243,11 +255,53 @@ class SavesqlserController extends Controller
                     $data['f_discount']
                 );
                 break ;
+               // $keyStr = "f_character_grade,f_character_ip,f_stage_id,f_stage_ns,f_code";
+                case 'log_stage'://12
+                    $data = array(
+                        $data['f_dept'],
+                        $data['f_server_address_id'],
+                        $data['f_game_id'],
+                        "'".date("Y-m-d H:i:s",$data['f_time'])."'",
+                        $data['f_sid'],
+                        "'".$data['f_yunying_id']."'",
+                        $tmp = $data['f_character_id'],//8
+
+
+                        //,f_character_ip,f_rechage_yuanbao,f_orderid,f_discount
+                        $data['f_character_grade'],
+                        $t.$data['f_character_ip'].$t,
+                        $data['f_stage_id'],
+                        $data['f_stage_ns'],
+                        $data['f_code']
+                    );
+                break ;
+            //f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_dungeon_id,f_nandu_id,f_success
+            case 'log_dungeon'://12
+                //  "f_character_grade,f_character_ip,f_dungeon_id,f_nandu_id,f_success";
+                $data = array(
+                    $data['f_dept'],
+                    $data['f_server_address_id'],
+                    $data['f_game_id'],
+                    "'".date("Y-m-d H:i:s",$data['f_time'])."'",
+                    $data['f_sid'],
+                    "'".$data['f_yunying_id']."'",
+                    $tmp = $data['f_character_id'],//8
+
+
+                    //,f_character_ip,f_rechage_yuanbao,f_orderid,f_discount
+                    $data['f_character_grade'],
+                    $t.$data['f_character_ip'].$t,
+                    $data['f_dungeon_id'],
+                    $data['f_nandu_id'],
+                    $data['f_success']
+                );
+                break ;
         }
         return $data ;
     }
     public function actionCleardata(){
-        $data =  $this->mssdb->clear();
+
+//        $data =  $this->mssdb->clear();
 
     }
 }

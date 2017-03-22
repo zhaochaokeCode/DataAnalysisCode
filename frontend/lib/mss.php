@@ -24,8 +24,80 @@ class mss
             exit;
         }
     }
+    public  function getUserInfo(){
 
-    public function getTableName(){
+        $sql = "select DISTINCT(f_yunying_id) from log_character " ;
+        echo $sql ;
+        foreach($this->db->query($sql) as $row){
+            echo $row['f_yunying_id'].",<br>"  ;
+        }
+
+
+
+
+
+
+    }
+
+
+    public function getToruist()
+    {
+        $deviceCode = $_POST['device_code'];
+        $userInfo = array('toruist_name' => $deviceCode);
+        if ($ret = $this->getInfo($userInfo)) {
+            $tmp = '$id';
+            $retId = $ret['_id']->$tmp;
+            $dataArr = array(
+                'user_id' => $retId,
+            );
+        } else {
+            $userInfo['regist_time'] = time();
+            $ret = $this->insertData($userInfo);
+            if ($ret) {
+                $tmp = '$id';
+                $retId = $ret['_id']->$tmp;
+                $dataArr = array(
+                    'user_id' => $retId,
+                );
+
+            }
+            $this->returnResu($dataArr);
+        }
+    }
+    public function transToruist(){
+        $deviceCode = $_POST['device_code'] ;
+        $userInfo = array('toruist_name'=>$deviceCode) ;
+        if($ret=$this->getInfo($userInfo)){
+            $userName = $_POST['phone_num'];
+            $password = $_POST['password'];
+            if($this->table->find(array('name'=>$userName))) $this->returnResu(false, 'phone already exit!');
+
+
+            $code = rand(1000,9999).time() ;
+            $dataArr = array(
+                "name"=>$userName,
+                "password"=>md5(md5($_POST['password'].$code)),
+                "code"=>$code,
+                "regist_time"=>time(),
+                "nick_name"=>''
+            );
+            $change = $this->insertData($dataArr) ;
+
+            if($change){
+                $tmp = '$id' ;
+                $retId = $change['_id']->$tmp ;
+                $dataArr =  array('phone_num' =>$_POST['phone_num'],
+                    'user_id' => $retId,
+                    'name'=>''
+                ) ;
+                $this->returnResu($dataArr);
+            }
+            $this->returnResu(false, 'no user');
+
+        }
+    }
+
+        public function getTableName(){
         $sql = "select name from taohua_log.sys.tables where name like 'log%'" ;
         foreach($this->db->query($sql) as $row){
             $arr[] = $row['name'] ;
@@ -66,6 +138,7 @@ class mss
         foreach($this->db->query($sql) as $row){
             $tmp .= $row[0] ;
         }
+        echo $tmp ;die;
         $this->db->query($tmp)  ;
 
     }

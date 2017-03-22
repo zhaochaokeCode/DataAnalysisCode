@@ -11,6 +11,9 @@ class CheckdataController extends Controller
 {
     public function actionIndex()
     {
+
+
+
         $array =array(
             'buyer_id'=>1
         ) ;
