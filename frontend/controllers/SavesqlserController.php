@@ -28,6 +28,38 @@ class SavesqlserController extends Controller
     }
 
     public function actionIndex(){
+        $str = '58c7e2ed36a5f34247e0fa7b
+58c8f81536a5f33e47e0fa81
+58c8fee936a5f34447e0fa82
+58cbf23636a5f327044480cc
+58c8fb4836a5f33147e0fa82
+58ca411f36a5f322044480c1
+58c95a5c36a5f31b53e0fa88
+58c81fd536a5f34047e0fa7c
+58c9f15836a5f34847e0fa89
+58c8c6b636a5f34d47e0fa7f
+58ca9ea536a5f322044480c4
+58caafde36a5f327044480c3
+58cb910536a5f3c3064480c6
+58ca1fb736a5f335044480bf
+58cbbd9a36a5f32d044480c6
+58cbe5e536a5f326044480cc
+58cb75b236a5f333044480cb
+58c8fb9a36a5f31b53e0fa84
+58cba15636a5f32a044480ca
+58c8f9d436a5f33847e0fa84
+58c901a036a5f34747e0fa85
+58ca953a36a5f334044480c2
+58c9fe2d36a5f33947e0fa86
+58cab04636a5f32a044480c3
+58ca298336a5f32e044480c0
+58c8d6ae36a5f33947e0fa7b' ;
+        $tmp = explode("\n",$str) ;
+        foreach($tmp as $k=>$v){
+            $tmp[$k] = str_replace("\n",'',$v) ;
+            $data = $this->table->findone(["_id" => new MongoId($k1)]);
+        }
+
 //        $this->mssdb->getUserInfo() ; die;
 //        $tabArr = $this->mssdb->getTabColumn('log_character') ;
         $this->getFileCont() ;
@@ -36,7 +68,7 @@ class SavesqlserController extends Controller
     }
     public function actionGetcol(){
 
-        $tabArr = $this->mssdb->getTabColumn('log_dungeon') ;
+        $tabArr = $this->mssdb->getTabColumn('log_consumption') ;
     }
     public function getFileCont(){
         ini_set('memory_limit', '1024M');
@@ -46,7 +78,7 @@ class SavesqlserController extends Controller
 
         $fileArr = explode("\n", $contFile);
 
-
+        $tmp2 = array();
         foreach($fileArr as $v){
             $allData =array() ;
             $fileName = $logPath. $v;
@@ -55,22 +87,21 @@ class SavesqlserController extends Controller
             $datas = explode("\n", $cont);
             unset($cont);
 
-
             foreach ($datas as $k => $v) {
                 if ($v) {
                     if ($json = json_decode($v)) {
                         $tmpData = $this->objeToArr($json);
                         $name =   $tmpData['f_log_name'] ;
 
-                      if($name == 'log_account'||$name == 'log_character'||$name == 'log_login'||$name == 'log_logout'
-                        ||$name == 'log_stage'||$name=='log_dungeon'){
+//                      if($name == 'log_account'||$name == 'log_character'||$name == 'log_login'||$name == 'log_logout'
+//                        ||$name == 'log_stage'||$name=='log_dungeon'){
+                        if($name == 'log_consumption'){
                             if($tmpData['f_stage_ns']=='n'){
                                 $tmpData['f_stage_ns']=0;
                             }
                             if($tmpData['f_stage_ns']=='s'){
                                 $tmpData['f_stage_ns']=1;
                             }
-
                             $allData[$name][] = $this->createData($name,$tmpData ) ;
                         }else{
                             continue ;
@@ -97,15 +128,13 @@ class SavesqlserController extends Controller
                     if($valStr) {
                         $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
                         echo $sql ;
-                        $tabArr = $this->mssdb->runSql($sql) ;
+//                        $tabArr = $this->mssdb->runSql($sql) ;
 
                     }
                 }
             }
             sleep(0.5) ;
-            echo "<br><br>" ;
         }
-
     }
 
 
@@ -149,8 +178,11 @@ class SavesqlserController extends Controller
             case 'log_stage':	//剧情关卡开始及完成日志
                 $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_stage_id,f_stage_ns,f_code";
                 break ;
-            case 'log_dungeon':
+            case 'log_dungeon': //普通副本日志
                 $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_dungeon_id,f_nandu_id,f_success";
+                break ;
+            case 'log_consumption'://商城消费分析日志
+                $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_goods_model_id,f_goods_price,f_goods_num,f_consume_yuanbao_num,f_overplus_yuanbao_num,f_yuanbao_channel";
                 break ;
         }
         return $keyStr ;
@@ -170,7 +202,7 @@ class SavesqlserController extends Controller
                             "'".date("Y-m-d H:i:s",$data['f_time'])."'",
                             $data['f_sid'],
                             "'".$data['f_yunying_id']."'",
-                            $tmp = $data['f_account_id']?$data['f_account_id']:0,
+                            $tmp = $data['f_aaccount_id']?$data['f_account_id']:0,
                             "'".$data['f_phone_id']."'",
                         );
                 break ;
@@ -296,6 +328,31 @@ class SavesqlserController extends Controller
                     $data['f_success']
                 );
                 break ;
+            case 'log_consumption':
+                //"f_goods_model_id,f_goods_price,f_goods_num,f_consume_yuanbao_num,f_overplus_yuanbao_num,f_yuanbao_channel";
+                $data = array(
+                    $data['f_dept'],
+                    $data['f_server_address_id'],
+                    $data['f_game_id'],
+                    "'".date("Y-m-d H:i:s",$data['f_time'])."'",
+                    $data['f_sid'],
+                    "'".$data['f_yunying_id']."'",
+                    $tmp = $data['f_character_id'],//8
+
+
+                    //,f_character_ip,f_rechage_yuanbao,f_orderid,f_discount
+                    $data['f_character_grade'],
+                    $t.$data['f_character_ip'].$t,
+
+                    $data['f_goods_model_id'],
+                    $data['f_goods_price'],
+                    $data['f_goods_num'],
+                    $data['f_consume_yuanbao_num'],
+                    $data['f_overplus_yuanbao_num'],
+                    $data['f_yuanbao_channel']
+                );
+                break ;
+
         }
         return $data ;
     }

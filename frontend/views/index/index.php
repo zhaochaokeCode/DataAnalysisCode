@@ -85,23 +85,23 @@
             <!--            </div>-->
             <!-- SIDEBAR MENU -->
             <ul>
-                <li class="has-subhas-sub">
-                    <a href="javascript:;" class="">
-                        <i class="fa fa-bookmark-o fa-fw"></i> <span class="menu-text">游戏概况</span>
-                        <span class="arrow"></span>
-                    </a>
-                </li>
+<!--                <li class="has-subhas-sub">-->
+<!--                    <a href="javascript:;" class="">-->
+<!--                        <i class="fa fa-bookmark-o fa-fw"></i> <span class="menu-text">游戏概况</span>-->
+<!--                        <span class="arrow"></span>-->
+<!--                    </a>-->
+<!--                </li>-->
                 <li class="has-sub">
                     <a href="javascript:;" class="">
-                        <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">游戏玩家<span
+                        <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">游戏概况<span
                                 class="badge pull-right">9</span></span>
                         <span class="arrow"></span>
                     </a>
                     <ul class="sub" id="player">
-                        <li><a id="tab_character" href="#"><span class="sub-menu-text">新增玩家</span></a></li>
-                        <li><a id="tab_recharge" href="#"><span class="sub-menu-text">充值玩家</span></a></li>
-                        <li><a id="tab_jinbi" href="#"><span class="sub-menu-text">金币消耗</span></a></li>
-                        <li><a id="tab_card_train" href="#"><span class="sub-menu-text">灵偶培养消耗经验</span></a></li>
+                        <li><a id="tab_general_daily" href="#"><span class="sub-menu-text">游戏基本数据</span></a></li>
+                        <li><a id="tab_actuser_daily" href="#"><span class="sub-menu-text">用户活跃</span></a></li>
+                        <li><a id="tab_newuser_remain_daily" href="#"><span class="sub-menu-text">新用户流失</span></a></li>
+                        <li><a id="tab_consumption_daily" href="#"><span class="sub-menu-text">商城统计</span></a></li>
                         <li><a id="tab_skill_up" href="#"><span class="sub-menu-text">技能功法消耗经验</span></a></li>
                         <li><a id="tab_jingjie_up" href="#"><span class="sub-menu-text">境界升级消耗经验</span></a></li>
                         <li><a id="tab_killboss" href="#"><span class="sub-menu-text">每日击杀boss数量</span></a></li>
@@ -111,65 +111,66 @@
 
                     </ul>
                 </li>
-                <li class="has-sub">
-                    <a href="javascript:;" class="">
-                        <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">登录和留存<span
-                                class="badge pull-right">1</span></span>
-                        <span class="arrow"></span>
-                    </a>
-                    <ul class="sub">
-                        <li><a id="tab_login" href="#"><span class="sub-menu-text">每日登录用户</span></a>
-                        <li><a id="tab_urlretention?type=1" href="#"><span class="sub-menu-text">用户留存</span></a>
-                        <li><a id="tab_urlretention" href="#"><span class="sub-menu-text">用户留失</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="has-sub">
-                    <a href="javascript:;" class="">
-                        <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">用户充值<span
-                                class="badge pull-right">1</span></span>
-                        <span class="arrow"></span>
-                    </a>
-                    <ul class="sub">
-                        <li><a id="tab_urlcount/recharge" href="#"><span class="sub-menu-text">用户充值</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="has-sub">
-                    <a href="javascript:;" class="">
-                        <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">数据报表5<span
-                                class="badge pull-right">1</span></span>
-                        <span class="arrow"></span>
-                    </a>
-                    <ul class="sub">
-                        <li><a class="" href="search_results.html"><span class="sub-menu-text">Search Results</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="has-sub">
-                    <a href="javascript:;" class="">
-                        <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">数据报表6<span
-                                class="badge pull-right">1</span></span>
-                        <span class="arrow"></span>
-                    </a>
-                    <ul class="sub">
-                        <li><a class="" href="search_results.html"><span class="sub-menu-text">Search Results</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="has-sub">
-                    <a href="javascript:;" class="">
-                        <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">Other Pages <span
-                                class="badge pull-right">1</span></span>
-                        <span class="arrow"></span>
-                    </a>
-                    <ul class="sub">
-                        <li><a class="" href="search_results.html"><span class="sub-menu-text">Search Results</span></a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            <!-- /SIDEBAR MENU -->
+                <!--        <li class="has-sub">
+                           <a href="javascript:;" class="">
+                               <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">登录和留存<span
+                                       class="badge pull-right">1</span></span>
+                               <span class="arrow"></span>
+                           </a>
+                           <ul class="sub">
+                               <li><a id="tab_login" href="#"><span class="sub-menu-text">每日登录用户</span></a>
+                               <li><a id="tab_urlretention?type=1" href="#"><span class="sub-menu-text">用户留存</span></a>
+                               <li><a id="tab_urlretention" href="#"><span class="sub-menu-text">用户留失</span></a>
+                               </li>
+                           </ul>
+                       </li>
+                       <li class="has-sub">
+                           <a href="javascript:;" class="">
+                               <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">用户充值<span
+                                       class="badge pull-right">1</span></span>
+                               <span class="arrow"></span>
+                           </a>
+                           <ul class="sub">
+                               <li><a id="tab_urlcount/recharge" href="#"><span class="sub-menu-text">用户充值</span></a>
+                               </li>
+                           </ul>
+                       </li>
+                       <li class="has-sub">
+                           <a href="javascript:;" class="">
+                               <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">数据报表5<span
+                                       class="badge pull-right">1</span></span>
+                               <span class="arrow"></span>
+                           </a>
+                           <ul class="sub">
+                               <li><a class="" href="search_results.html"><span class="sub-menu-text">Search Results</span></a>
+                               </li>
+                           </ul>
+                       </li>
+                       <li class="has-sub">
+                           <a href="javascript:;" class="">
+                               <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">数据报表6<span
+                                       class="badge pull-right">1</span></span>
+                               <span class="arrow"></span>
+                           </a>
+                           <ul class="sub">
+                               <li><a class="" href="search_results.html"><span class="sub-menu-text">Search Results</span></a>
+                               </li>
+                           </ul>
+                       </li>
+                       <li class="has-sub">
+                           <a href="javascript:;" class="">
+                               <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">Other Pages <span
+                                       class="badge pull-right">1</span></span>
+                               <span class="arrow"></span>
+                           </a>
+                           <ul class="sub">
+                               <li><a class="" href="search_results.html"><span class="sub-menu-text">Search Results</span></a>
+                               </li>
+                           </ul>
+                       </li>
+                   </ul>
+                   --!>
+                   <!-- /SIDEBAR MENU -->
         </div>
     </div>
     <!-- /SIDEBAR -->

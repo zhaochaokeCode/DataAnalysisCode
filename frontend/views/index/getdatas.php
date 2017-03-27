@@ -17,16 +17,16 @@
         <!-- BOX -->
         <?php
         if($all_data[0]['series']){
-        ?>
-        <div class="box border green">
-            <div class="box-title" style="height:10px;">
-                <h5><i class="fa fa-bars"></i> <span class="hidden-inline-mobile">基本信息报表</span></h5>
-            </div>
-            <div class="box-body">
-                <div class="tab-content">
-                    <ul class="nav nav-tabs" id="all_tab">
-                        <?php
-                        global $view_id ;
+            ?>
+            <div class="box border green">
+                <div class="box-title" style="height:10px;">
+                    <h5><i class="fa fa-bars"></i> <span class="hidden-inline-mobile">基本信息报表</span></h5>
+                </div>
+                <div class="box-body">
+                    <div class="tab-content">
+                        <ul class="nav nav-tabs" id="all_tab">
+                            <?php
+                            global $view_id ;
                             if($all_data[0]){
                                 for($i=0;$i<count($all_data);$i++){
                                     $tagName = $all_data[$i]['tag']['tagName'] ;
@@ -40,40 +40,41 @@
                             }else{
                                 echo '<h1 align="center">对不起,没有数据</h1>';
                             }
-                        ?>
+                            ?>
 
-                    </ul>
-                    <div id="all_view_id">
-                        <!--        tab视图             遍历循环 此处用php动态生成-->
-                        <?php echo $view_id ;?>
+                        </ul>
+                        <div id="all_view_id">
+                            <!--        tab视图             遍历循环 此处用php动态生成-->
+                            <?php echo $view_id ;?>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <?php
+            <?php
         }?>
     </div>
 </div>
 <?php
 if($all_data[0]){
-?>
-<!-- PAGE HEADER-->
-<div class="box border orange">
-    <div class="box-body">
+    var_dump($all_data) ;
+    ?>
+    <!-- PAGE HEADER-->
+    <div class="box border orange">
+        <div class="box-body">
 
-        <div style="margin-left: 800px;margin-bottom: 2px;">
-            <button class="btn btn-info">excel下载</button>
-        </div>
-        <div id="tab_all">
-            <?php
+            <div style="margin-left: 800px;margin-bottom: 2px;">
+                <button class="btn btn-info">excel下载</button>
+            </div>
+            <div id="tab_all">
+                <?php
                 for($i=1;$i<=count($all_data);$i++){
                     echo " <div id=\"tabdata$i\"></div>" ;
                 }
-            ?>
-            <div id="smart-paginator" style="width: 800px" > </div>
+                ?>
+                <div id="smart-paginator" style="width: 800px" > </div>
+            </div>
         </div>
     </div>
-</div>
 <?php }?>
 </body>
 </html>
@@ -106,13 +107,13 @@ if($all_data[0]){
         var allpage =       <?php echo ceil($v['count']/10)?> ; //总共多少页
         var tab_key =       <?php echo $k?> ;
         initTabData(tab_data,allpage,tab_key);
-            <?php
-             if($v['series']){
-            ?>
-            var series =        <?php echo $v['series']?> ;
-            var categories =    <?php echo $v['categories']?> ;
+        <?php
+         if($v['series']){
+        ?>
+        var series =        <?php echo $v['series']?> ;
+        var categories =    <?php echo $v['categories']?> ;
 
-            initViewDatas(series,categories,tab_key);
+        initViewDatas(series,categories,tab_key);
 
         <?php }}?>
     })

@@ -10,6 +10,12 @@ namespace frontend\controllers;
 
 use Yii;
 use app\models\BiCountCustomerChurn ;
+require_once '../lib/analyisData.php' ;
+use mss ;
+use analyisData ;
+
+
+
 
 /**
  * Index     controller
@@ -17,13 +23,23 @@ use app\models\BiCountCustomerChurn ;
 class IndexController extends CommController
 {
 
+
+    public $sqlser = '' ;
+
+    public function init()
+    {
+        $this->sqlser =  new analyisData() ;
+    }
+
     /**
      * Displays homepage.
      * @return mixed
      */
     public function actionIndex()
     {
-        $action = isset($_GET['action']) ? $_GET['action'] : 'character';
+
+
+        $action = isset($_GET['action']) ? $_GET['action'] : 'general_daily"';
         return $this->render('index',
             array('action' => $action));
     }
@@ -36,8 +52,42 @@ class IndexController extends CommController
         if (isset($_GET['page'])) {//查询
             $this->getData();
         }
-        $allGame = $this->getData();
-        $allData = $this->createData($allGame);
+        $tableData = $this->sqlser->getData($_GET['action']) ;
+
+        $count     = ceil(count($tableData)/10) ;
+
+        switch($_GET['action']){
+            case "general_daily":
+                $conluArr = array("日期", "游戏id", "平台id", "区服id", "新增角色数", "新增设备数","日活跃用户数",
+                "新玩家活跃数","老玩家活跃数","最高同时在线","平均同时在线","充值收入rmb","充值用户数") ;
+            break ;
+
+            case "actuser_daily" :
+                $conluArr = array("日期", "游戏id", "平台id", "区服id","日活跃用户数","新玩家活跃数","老玩家活跃数","7日活跃数",
+                    "30日活跃数","1--3天","4--7天","8--14天","15--30天","31--90天","90天以上");
+            break;
+
+            case "newuser_remain_daily":///用户流失
+                $conluArr = array("日期", "游戏id", "平台id", "区服id","新增用户数","次日留存用户数","3日留存用户数","7日留存用户数","14日留存用户数",
+                    "30日留存用户数");
+            break;
+            case "consumption_daily":
+                $conluArr = array("日期", "游戏id", "平台id", "区服id","物品id","消费人数","消费数量","消费元宝数");
+            break ;
+
+
+
+
+        }
+
+        return $this->render('tabdata', array('all_data' => $tableData,
+                                              'all_colu'=> $conluArr,
+                                              'count'=>$count
+                                    ));
+
+//        $allGame = $this->getData();
+//        $allData = $this->createData($allGame);
+
         return $this->render('getdatas', array('all_data' => $allData));
     }
 
@@ -51,7 +101,8 @@ class IndexController extends CommController
         $tabName = "bi_log_" . $_GET['action'];
 
         $where = $this->where;
-        $funName = $this->getFuntionName();
+        $funName = $this->getFuntionName()
+        ;
         return $this->$funName($where, $tabName);
     }
     /**
