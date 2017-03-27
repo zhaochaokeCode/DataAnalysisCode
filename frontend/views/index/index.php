@@ -100,7 +100,7 @@
                     <ul class="sub" id="player">
                         <li><a id="tab_general_daily" href="#"><span class="sub-menu-text">游戏基本数据</span></a></li>
                         <li><a id="tab_actuser_daily" href="#"><span class="sub-menu-text">用户活跃</span></a></li>
-                        <li><a id="tab_newuser_remain_daily" href="#"><span class="sub-menu-text">新用户流失</span></a></li>
+                        <li><a id="tab_newuser_remain_daily" href="#"><span class="sub-menu-text">新用户留存</span></a></li>
                         <li><a id="tab_consumption_daily" href="#"><span class="sub-menu-text">商城统计</span></a></li>
                         <li><a id="tab_skill_up" href="#"><span class="sub-menu-text">技能功法消耗经验</span></a></li>
                         <li><a id="tab_jingjie_up" href="#"><span class="sub-menu-text">境界升级消耗经验</span></a></li>
