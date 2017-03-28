@@ -52,7 +52,6 @@ class analyisData
         //limit语句
         $sql ="select top 10 * from ( select id=row_number() over(order by f_time desc ), * from $tableName $where )b
               where id>$start and id<$end order by id asc " ;
-        echo $sql ;
         //----- 查询
         $dataArr = $this->db->query($sql) ;
 

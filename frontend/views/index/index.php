@@ -213,8 +213,8 @@
                                             <div style="margin-right:100px;margin-top:-25px;float:right;">
                                                 开始日期:<input class="datainp wicon" id="inpstart" name='start' type="text"
                                                             value="">
-                                                平台:<select id="dept_id">
-                                                    <option value ="1">1</option>
+                                                平台:<select id="dept_id" style="width: 100px">
+                                                    <optnbspion value ="1" style="width: 100px">1</optnbspion>
                                                     <option value ="2">2</option>
                                                 </select>
                                                 角色id:<input class="" name='role' id="" type="text">
