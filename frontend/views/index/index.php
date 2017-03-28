@@ -85,16 +85,10 @@
             <!--            </div>-->
             <!-- SIDEBAR MENU -->
             <ul>
-<!--                <li class="has-subhas-sub">-->
-<!--                    <a href="javascript:;" class="">-->
-<!--                        <i class="fa fa-bookmark-o fa-fw"></i> <span class="menu-text">游戏概况</span>-->
-<!--                        <span class="arrow"></span>-->
-<!--                    </a>-->
-<!--                </li>-->
                 <li class="has-sub">
                     <a href="javascript:;" class="">
                         <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">游戏概况<span
-                                class="badge pull-right">9</span></span>
+                                class="badge pull-right">5</span></span>
                         <span class="arrow"></span>
                     </a>
                     <ul class="sub" id="player">
@@ -119,50 +113,7 @@
                                </li>
                            </ul>
                        </li>
-                       <li class="has-sub">
-                           <a href="javascript:;" class="">
-                               <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">用户充值<span
-                                       class="badge pull-right">1</span></span>
-                               <span class="arrow"></span>
-                           </a>
-                           <ul class="sub">
-                               <li><a id="tab_urlcount/recharge" href="#"><span class="sub-menu-text">用户充值</span></a>
-                               </li>
-                           </ul>
-                       </li>
-                       <li class="has-sub">
-                           <a href="javascript:;" class="">
-                               <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">数据报表5<span
-                                       class="badge pull-right">1</span></span>
-                               <span class="arrow"></span>
-                           </a>
-                           <ul class="sub">
-                               <li><a class="" href="search_results.html"><span class="sub-menu-text">Search Results</span></a>
-                               </li>
-                           </ul>
-                       </li>
-                       <li class="has-sub">
-                           <a href="javascript:;" class="">
-                               <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">数据报表6<span
-                                       class="badge pull-right">1</span></span>
-                               <span class="arrow"></span>
-                           </a>
-                           <ul class="sub">
-                               <li><a class="" href="search_results.html"><span class="sub-menu-text">Search Results</span></a>
-                               </li>
-                           </ul>
-                       </li>
-                       <li class="has-sub">
-                           <a href="javascript:;" class="">
-                               <i class="fa fa-briefcase fa-fw"></i> <span class="menu-text">Other Pages <span
-                                       class="badge pull-right">1</span></span>
-                               <span class="arrow"></span>
-                           </a>
-                           <ul class="sub">
-                               <li><a class="" href="search_results.html"><span class="sub-menu-text">Search Results</span></a>
-                               </li>
-                           </ul>
-                       </li>
+
                    </ul>
                    --!>
                    <!-- /SIDEBAR MENU -->
@@ -213,9 +164,10 @@
                                             <div style="margin-right:100px;margin-top:-25px;float:right;">
                                                 开始日期:<input class="datainp wicon" id="inpstart" name='start' type="text"
                                                             value="">
-                                                平台:<select id="dept_id" style="width: 100px">
-                                                    <option value ="1" style="width: 100px">1</option>
-                                                    <option value ="2">2</option>
+                                                平台:<select id="dept_id" style="width: 100px;align:center">
+                                                    <option value ="0">全平台</option>
+                                                    <option value ="1">平台1</option>
+                                                    <option value ="2">平台2</option>
                                                 </select>
                                                 角色id:<input class="" name='role' id="" type="text">
                                             </div>
