@@ -59,11 +59,13 @@ class analyisData
         foreach($dataArr as $k=>$v){
             $tmpArr = array() ;
             $leng = count($v)/2 ;
-            for($i=0;$i<$leng;$i++){
+            for($i=1;$i<$leng;$i++){
                 if($i==1){
                     $tdate = str_replace("12:00:00:AM",'',$v[$i]) ;
                     $tmp = explode(" ",$tdate) ;
-                    $v[$i]  = $tmp[2]."-".$tmp[0]."-".$tmp[1] ;
+                    if($tmp[0]=='Mar') $mouth = 3 ;
+
+                    $v[$i]  = $tmp[2]."-".$mouth."-".$tmp[1] ;
                 }
                 $v[$i]=$v[$i]==null?0:$v[$i] ;
                 $tmpArr[] = $v[$i] ;

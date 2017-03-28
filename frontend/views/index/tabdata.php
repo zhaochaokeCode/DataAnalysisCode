@@ -146,7 +146,6 @@
 //            data_url += "&starttime="+start+"&endtime="+end+"&f_dept="+dept_id ;
 
             data_url+="&only=1";
-            console.log(data_url) ;
             getData(data_url)
         }
 
@@ -160,7 +159,6 @@
             success: function(data) {
                 data_arr= eval('a='+data);
                 $('#tabdata1 tr:not(:first)').remove();
-
 
                 for(i=0;i<data_arr.length;i++){
                     str = '<tr>';
