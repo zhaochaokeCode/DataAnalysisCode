@@ -102,12 +102,7 @@
                         <li><a id="tab_actuser_daily" href="#"><span class="sub-menu-text">用户活跃</span></a></li>
                         <li><a id="tab_newuser_remain_daily" href="#"><span class="sub-menu-text">新用户留存</span></a></li>
                         <li><a id="tab_consumption_daily" href="#"><span class="sub-menu-text">商城统计</span></a></li>
-                        <li><a id="tab_skill_up" href="#"><span class="sub-menu-text">技能功法消耗经验</span></a></li>
-                        <li><a id="tab_jingjie_up" href="#"><span class="sub-menu-text">境界升级消耗经验</span></a></li>
-                        <li><a id="tab_killboss" href="#"><span class="sub-menu-text">每日击杀boss数量</span></a></li>
-
-                        <li><a id="tab_yuanbao" href="#"><span class="sub-menu-text">每日获得元宝数量</span></a></li>
-<!--                        <li><a id="tab_killboss" href="#"><span class="sub-menu-text">每日击杀boss数量</span></a></li>-->
+                        <li><a id="tab_usergrade_daily" href="#"><span class="sub-menu-text">用户等级报表</span></a></li>
 
                     </ul>
                 </li>
@@ -218,8 +213,11 @@
                                             <div style="margin-right:100px;margin-top:-25px;float:right;">
                                                 开始日期:<input class="datainp wicon" id="inpstart" name='start' type="text"
                                                             value="">
-                                                平台:<input class="datainp wicon" id="inpstart1" type="text" value=>
-                                                角色id:<input class="" id="" type="text">
+                                                平台:<select id="dept_id">
+                                                    <option value ="1">1</option>
+                                                    <option value ="2">2</option>
+                                                </select>
+                                                角色id:<input class="" name='role' id="" type="text">
                                             </div>
                                             <div style="margin-right:100px;margin-top:10px;float:right;">
                                                 结束日期:<input class="datainp wicon" id="inpend" name="end" type="text" >

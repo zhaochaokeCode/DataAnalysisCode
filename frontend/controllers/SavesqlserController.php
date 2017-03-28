@@ -28,38 +28,6 @@ class SavesqlserController extends Controller
     }
 
     public function actionIndex(){
-        $str = '58c7e2ed36a5f34247e0fa7b
-58c8f81536a5f33e47e0fa81
-58c8fee936a5f34447e0fa82
-58cbf23636a5f327044480cc
-58c8fb4836a5f33147e0fa82
-58ca411f36a5f322044480c1
-58c95a5c36a5f31b53e0fa88
-58c81fd536a5f34047e0fa7c
-58c9f15836a5f34847e0fa89
-58c8c6b636a5f34d47e0fa7f
-58ca9ea536a5f322044480c4
-58caafde36a5f327044480c3
-58cb910536a5f3c3064480c6
-58ca1fb736a5f335044480bf
-58cbbd9a36a5f32d044480c6
-58cbe5e536a5f326044480cc
-58cb75b236a5f333044480cb
-58c8fb9a36a5f31b53e0fa84
-58cba15636a5f32a044480ca
-58c8f9d436a5f33847e0fa84
-58c901a036a5f34747e0fa85
-58ca953a36a5f334044480c2
-58c9fe2d36a5f33947e0fa86
-58cab04636a5f32a044480c3
-58ca298336a5f32e044480c0
-58c8d6ae36a5f33947e0fa7b' ;
-        $tmp = explode("\n",$str) ;
-        foreach($tmp as $k=>$v){
-            $tmp[$k] = str_replace("\n",'',$v) ;
-            $data = $this->table->findone(["_id" => new MongoId($k1)]);
-        }
-
 //        $this->mssdb->getUserInfo() ; die;
 //        $tabArr = $this->mssdb->getTabColumn('log_character') ;
         $this->getFileCont() ;

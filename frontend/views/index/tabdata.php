@@ -22,7 +22,7 @@
             </div>
             <div id="tab_all">
                 <div id="tabdata1">
-                    <table border="1"    class="datatable table table-striped table-bordered table-hover">
+                    <table border="1" id="data"   class="datatable table table-striped table-bordered table-hover">
                     <?php
                         echo "  <thead><tr>" ;
                         foreach($all_colu as $v){
@@ -30,14 +30,15 @@
                         }
                         echo "</tr></thead>" ;
 
-                    foreach ( $all_data as $item) {
-                        echo "<tr>" ;
-                        foreach($item as $v){
+                        foreach ( $all_data as $item) {
+                            echo "<tr>" ;
+                            foreach($item as $v){
                             echo "<td>$v</td>";
                         }
                         echo "</tr>" ;
                     }
                     ?>
+                   </div>
                     </table>
                 </div>
                 <div id="smart-paginator" style="width: 800px" > </div>
@@ -80,9 +81,6 @@
 <script src="/js/jedate/comm_date.js"></script>
 
 <script>
-
-
-
     function pagesAjax(page) {
 
         $('#smart-paginator').smartpaginator({
@@ -111,7 +109,9 @@
             var args=new Object();
             var query=location.search.substring(1);//获取查询串
             var pairs=query.split("&");//在逗号处断开
-
+            if(pairs.length==1){
+                pairs[1] ="page=1" ;
+            }
             data_url = window.location.pathname ;
             for(var i=0;i<pairs.length;i++)
             {
@@ -139,7 +139,48 @@
                 })
             }
 
+            start = $('#inpstart', parent.document).val() ;
+            end   = $('#inpend', parent.document).val() ;
+            dept_id = $("#dept_id",parent.document).val() ;
+
+            data_url += "&starttime="+start+"&endtime="+end+"&f_dept="+dept_id ;
+
+            data_url+="&only=1";
+            console.log(data_url) ;
+            getData(data_url)
         }
+
+    }
+    function getData(url){
+        $.ajax({
+            url:url,
+            type: 'GET',
+            async:false ,
+//            dataType:'json'
+            success: function(data) {
+                data_arr= eval('a='+data);
+                $('#tabdata1 tr:not(:first)').remove();
+
+
+                for(i=0;i<data_arr.length;i++){
+                    str = '<tr>';
+                    tabtd = data_arr[i] ;
+                    for(k=0;k<tabtd.length;k++){
+                        str+="<td>"+tabtd[k]+"</td>" ;
+                    }
+
+                    str += '</tr>' ;
+                    $(str).insertAfter($('#tabdata1 tr:eq('+i+')'));
+                }
+
+            }
+
+        });
+
+
+
+
+
 
     }
 </script>

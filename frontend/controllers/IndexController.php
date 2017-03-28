@@ -38,23 +38,33 @@ class IndexController extends CommController
     public function actionIndex()
     {
 
-
         $action = isset($_GET['action']) ? $_GET['action'] : 'general_daily"';
         return $this->render('index',
             array('action' => $action));
     }
 
     /**
+     * 不做分页
+     */
+    public function getWhere(){
+        $where = " where 1=1" ;
+
+        if($_GET['starttime'])$where.=" and f_time>='".$_GET['starttime']."'" ;
+
+        if($_GET['endtime']) $where.=" and f_time<='".$_GET['endtime']."'" ;
+
+
+        return $where ;
+
+    }
+
+
+    /**
      * 展示相关数据
      */
     public function actionGetdatas()
     {
-        if (isset($_GET['page'])) {//查询
-            $this->getData();
-        }
-        $tableData = $this->sqlser->getData($_GET['action']) ;
 
-        $count     = ceil(count($tableData)/10) ;
 
         switch($_GET['action']){
             case "general_daily":
@@ -75,9 +85,29 @@ class IndexController extends CommController
                 $conluArr = array("日期", "游戏id", "平台id", "区服id","物品id","消费人数","消费数量","消费元宝数");
             break ;
 
+            case "usergrade_daily":
+                $conluArr = array("日期", "游戏id", "平台id", "区服id","等级","累计注册用户数","活跃用户数","付费用户数","付费金额");
+            break ;
 
 
 
+
+
+        }
+
+        $where =$this->getWhere() ;
+        //如果是ajax请求刷新数据--不返回数据格式,致返回数据
+        if($_GET['only']){
+
+            $tableData = $this->sqlser->getData($_GET['action'],count($conluArr),$where) ;
+            echo json_encode($tableData) ;
+
+            //////////////————END-----////////////////
+        }else{
+            //----网站直接显示数据-----
+            $tableData = $this->sqlser->getData($_GET['action'],count($conluArr),$where) ;
+            //首页展示数据的总数
+            $count = ceil($this->sqlser->getDataNum($_GET['action'],$where)) ;
         }
 
         return $this->render('tabdata', array('all_data' => $tableData,
@@ -277,12 +307,6 @@ class IndexController extends CommController
                 $tabArr[] = array($k, $v);
 
             }
-
-
-
-
-
-
 
             //当日退出的场景
             $where = " f_time>=$stime and f_time<$etime and type=1 " ;
