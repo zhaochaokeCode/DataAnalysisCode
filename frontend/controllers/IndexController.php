@@ -53,7 +53,7 @@ class IndexController extends CommController
 
         if($_GET['endtime']) $where.=" and f_time<='".$_GET['endtime']."'" ;
 
-
+        if($_GET['f_dept']) $where.=" and f_dept=".$_GET['f_dept'];
         return $where ;
 
     }
@@ -100,7 +100,7 @@ class IndexController extends CommController
         if($_GET['only']){
 
             $tableData = $this->sqlser->getData($_GET['action'],count($conluArr),$where) ;
-            echo json_encode($tableData) ;
+            echo json_encode($tableData) ;die;
 
             //////////////————END-----////////////////
         }else{
@@ -108,17 +108,18 @@ class IndexController extends CommController
             $tableData = $this->sqlser->getData($_GET['action'],count($conluArr),$where) ;
             //首页展示数据的总数
             $count = ceil($this->sqlser->getDataNum($_GET['action'],$where)) ;
-        }
 
-        return $this->render('tabdata', array('all_data' => $tableData,
-                                              'all_colu'=> $conluArr,
-                                              'count'=>$count
-                                    ));
+            return $this->render('tabdata', array('all_data' => $tableData,
+                'all_colu'=> $conluArr,
+                'count'=>$count
+            ));
+
+        }
 
 //        $allGame = $this->getData();
 //        $allData = $this->createData($allGame);
 
-        return $this->render('getdatas', array('all_data' => $allData));
+//        return $this->render('getdatas', array('all_data' => $allData));
     }
 
 

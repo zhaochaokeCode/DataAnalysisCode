@@ -109,7 +109,7 @@
             var args=new Object();
             var query=location.search.substring(1);//获取查询串
             var pairs=query.split("&");//在逗号处断开
-            if(pairs.length==1){
+            if(!(query.indexOf("page")!=-1)){
                 pairs[1] ="page=1" ;
             }
             data_url = window.location.pathname ;
@@ -143,7 +143,7 @@
             end   = $('#inpend', parent.document).val() ;
             dept_id = $("#dept_id",parent.document).val() ;
 
-            data_url += "&starttime="+start+"&endtime="+end+"&f_dept="+dept_id ;
+//            data_url += "&starttime="+start+"&endtime="+end+"&f_dept="+dept_id ;
 
             data_url+="&only=1";
             console.log(data_url) ;
