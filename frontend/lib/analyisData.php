@@ -55,6 +55,9 @@ class analyisData
         //----- 查询
         $dataArr = $this->db->query($sql) ;
 
+        $monthArr =  array("Mar"=>3) ;
+
+        $newData = array() ;
         //--重新拼装数据------
         foreach($dataArr as $k=>$v){
             $tmpArr = array() ;
@@ -63,9 +66,8 @@ class analyisData
                 if($i==1){
                     $tdate = str_replace("12:00:00:AM",'',$v[$i]) ;
                     $tmp = explode(" ",$tdate) ;
-                    if($tmp[0]=='Mar') $mouth = 3 ;
 
-                    $v[$i]  = $tmp[2]."-".$mouth."-".$tmp[1] ;
+                    $v[$i]  = $tmp[2]."-".$monthArr[$tmp[0]]."-".$tmp[1] ;
                 }
                 $v[$i]=$v[$i]==null?0:$v[$i] ;
                 $tmpArr[] = $v[$i] ;

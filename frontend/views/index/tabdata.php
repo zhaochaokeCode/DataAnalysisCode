@@ -29,13 +29,14 @@
                             echo "<th style='height:38px; align:center'> $v</th>" ;
                         }
                         echo "</tr></thead>" ;
-
+                        if($all_data){
                         foreach ( $all_data as $item) {
-                            echo "<tr>" ;
-                            foreach($item as $v){
-                            echo "<td>$v</td>";
+                            echo "<tr>";
+                            foreach ($item as $v) {
+                                echo "<td>$v</td>";
+                            }
+                            echo "</tr>";
                         }
-                        echo "</tr>" ;
                     }
                     ?>
                    </div>
