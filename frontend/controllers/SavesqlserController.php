@@ -52,7 +52,7 @@ class SavesqlserController extends Controller
                             "f_dept"=>$tmpData['f_dept'],
                             "f_server_address_id"=>$tmpData['f_server_address_id'] ,
                             "f_game_id"=>$tmpData['f_game_id'],
-                            "f_time"=>date("Y-m-d H:i:s,$time") ,
+                            "f_time"=>"'".date("Y-m-d H:i:s,$time")."'" ,
                             "f_num"=>$tmpData['f_num'] ,
                             "f_vip_num"=>$tmpData['f_VIP_num'],
                         ) ;
