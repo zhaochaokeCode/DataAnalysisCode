@@ -35,7 +35,7 @@ class SavesqlserController extends Controller
         $contFile = file_get_contents($sinkFile);
 
         $fileArr = explode("\n", $contFile);
-
+        var_dump($fileArr) ;
         $tmp2 = array();
         foreach($fileArr as $v) {
             $allData = array();
