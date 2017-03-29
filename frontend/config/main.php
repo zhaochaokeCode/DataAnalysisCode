@@ -40,6 +40,14 @@ return [
             'password' => 'Cthy@301*&',
             'charset' => 'utf8',
         ],
+        'db4' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=rm-bp1wyk2c43pcv45bm.mysql.rds.aliyuncs.com;dbname=data_pay_info',
+            'username' => 'slth',
+            'password' => 'Cthy@301*&',
+            'charset' => 'utf8',
+        ],
+
         'request' => [
             'csrfParam' => '_csrf-frontend',
             "enableCsrfValidation"=>false,

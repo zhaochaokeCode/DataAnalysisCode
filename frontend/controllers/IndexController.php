@@ -9,9 +9,7 @@ namespace frontend\controllers;
 
 
 use Yii;
-use app\models\BiCountCustomerChurn ;
 require_once '../lib/analyisData.php' ;
-use mss ;
 use analyisData ;
 
 
@@ -53,7 +51,16 @@ class IndexController extends CommController
 
         if($_GET['endtime']) $where.=" and f_time<='".$_GET['endtime']."'" ;
 
-        if($_GET['f_dept']) $where.=" and f_dept=".$_GET['f_dept'];
+        if($_GET['f_dept']){
+            $where.=" and f_dept=".$_GET['f_dept'];
+        }else{
+            $where.=" and f_dept=-1 " ;
+        }
+        if($_GET['f_sid']){
+            $where.=" and f_sid=".$_GET['f_sid'];
+        }else{
+            $where.=" and f_sid=-1 " ;
+        }
         return $where ;
 
     }

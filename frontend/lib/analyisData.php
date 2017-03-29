@@ -70,8 +70,17 @@ class analyisData
 
                     $v[$i]  = $tmp[2]."-".$monthArr[$tmp[0]]."-".$tmp[1] ;
                 }
+                if($i==3&&$v[$i]==-1){
+                    $v[$i]  = '全平台' ;
+                }
+                if($i==4&&$v[$i]==-1){
+                    $v[$i]  = '全服务器' ;
+                }
+
+
                 $v[$i]=$v[$i]==null?0:$v[$i] ;
                 $tmpArr[] = $v[$i] ;
+
 
             }
             for($k=0;$k<=$num-$leng;$k++){

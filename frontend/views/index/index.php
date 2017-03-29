@@ -169,7 +169,10 @@
                                                     <option value ="1">平台1</option>
                                                     <option value ="2">平台2</option>
                                                 </select>
-                                                角色id:<input class="" name='role' id="" type="text">
+                                                服务器:<select id="f_sid" style="width: 100px;align:center">
+                                                    <option value ="0">全服务器</option>
+                                                    <option value ="1">服务器1</option>
+                                                </select>
                                             </div>
                                             <div style="margin-right:100px;margin-top:10px;float:right;">
                                                 结束日期:<input class="datainp wicon" id="inpend" name="end" type="text" >

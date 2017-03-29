@@ -20,7 +20,8 @@ $(function(){
         start = $("#inpstart").val() ;
         end   = $("#inpend").val() ;
         dept_id = $("#dept_id").val() ;
-        str = "&starttime="+start+"&endtime="+end+"&f_dept="+dept_id ;
+        f_sid= $("#f_sid").val() ;
+        str = "&starttime="+start+"&endtime="+end+"&f_dept="+dept_id+"&f_sid="+f_sid  ;
         action = $("#hide_action").attr('name');
         var url = "/index/getdatas?action="+action+str ;
         $('#ifrm').attr("src",url);
