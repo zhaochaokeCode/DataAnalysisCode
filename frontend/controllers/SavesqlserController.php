@@ -27,10 +27,60 @@ class SavesqlserController extends Controller
         $this->mssdb = new mss();
     }
 
+    public function actionOnline(){
+
+        $str = '{"f_time":1490784960,"f_params":{"f_dept":"1","f_server_address_id":"1","f_num":"5","f_time":"2017-03-29 18:56:00","f_VIP_num":"0","f_game_id":"1"},"f_game_id":1,"f_log_name":"log_onlineinfo"}' ;
+        $tmp = $this->objeToArr(json_decode($str)) ;
+
+
+
+
+
+        var_dump($tmp) ; die;
+
+        ini_set('memory_limit', '1024M');
+        $sinkFile = Yii::$app->params['online'];//中间通道数据文件路径
+        $logPath = Yii::$app->params['onlinePath']; //文件保存目录
+        $contFile = file_get_contents($sinkFile);
+
+        $fileArr = explode("\n", $contFile);
+
+        $tmp2 = array();
+        foreach($fileArr as $v) {
+            $allData = array();
+            $fileName = $logPath . $v;
+            $cont = file_get_contents($fileName);
+            $datas = explode("\n", $cont);
+            unset($cont);
+
+            foreach ($datas as $k => $v) {
+                if ($v) {
+                    if ($json = json_decode($v)) {
+                        $tmpData = $this->objeToArr($json);
+                        $time =$tmpData['f_time'] ;
+                        $data = array(
+                            "f_dept"=>$tmpData['f_dept'],
+                            "f_server_address_id"=>$tmpData['f_server_address_id'] ,
+                            "f_game_id"=>$tmpData['f_game_id'],
+                            "f_time"=>date("Y-m-d H:i:s,$time") ,
+                            "f_num"=>$tmpData['f_num'] ,
+                            "f_vip_num"=>$tmpData['f_VIP_num'],
+                        ) ;
+
+                    }
+                }
+            }
+
+        }
+
+    }
+
+
     public function actionIndex(){
 //        $this->mssdb->getUserInfo() ; die;
 //        $tabArr = $this->mssdb->getTabColumn('log_character') ;
         $this->getFileCont() ;
+
 //
 
     }
@@ -96,7 +146,7 @@ class SavesqlserController extends Controller
                     if($valStr) {
                         $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
                         echo $sql ;
-//                        $tabArr = $this->mssdb->runSql($sql) ;
+                        $tabArr = $this->mssdb->runSql($sql) ;
 
                     }
                 }
