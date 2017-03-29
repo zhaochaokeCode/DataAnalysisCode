@@ -29,15 +29,6 @@ class SavesqlserController extends Controller
 
     public function actionOnline(){
 
-        $str = '{"f_time":1490784960,"f_params":{"f_dept":"1","f_server_address_id":"1","f_num":"5","f_time":"2017-03-29 18:56:00","f_VIP_num":"0","f_game_id":"1"},"f_game_id":1,"f_log_name":"log_onlineinfo"}' ;
-        $tmp = $this->objeToArr(json_decode($str)) ;
-
-
-
-
-
-        var_dump($tmp) ; die;
-
         ini_set('memory_limit', '1024M');
         $sinkFile = Yii::$app->params['online'];//中间通道数据文件路径
         $logPath = Yii::$app->params['onlinePath']; //文件保存目录
