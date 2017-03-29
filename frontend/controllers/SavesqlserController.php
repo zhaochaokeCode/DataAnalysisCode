@@ -35,7 +35,6 @@ class SavesqlserController extends Controller
         $contFile = file_get_contents($sinkFile);
 
         $fileArr = explode("\n", $contFile);
-        var_dump($sinkFile) ;
         $tmp2 = array();
         foreach($fileArr as $v) {
             $allData = array();
@@ -57,7 +56,7 @@ class SavesqlserController extends Controller
                             "f_num"=>$tmpData['f_num'] ,
                             "f_vip_num"=>$tmpData['f_VIP_num'],
                         ) ;
-                        $str = explode(',',array_values($data)) ;
+                        $str = implode(',',array_values($data)) ;
                         $sql = "insert into log_onlineinfo VALUES ($str )" ;
                         echo $sql ; die;
 
