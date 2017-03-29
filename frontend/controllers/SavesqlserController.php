@@ -60,6 +60,7 @@ class SavesqlserController extends Controller
 
                         $sql = "insert into log_onlineinfo ($str2) VALUES ($str)" ;
                         $this->mssdb->runSql($sql) ;
+                        sleep(0.1);
                     }
                 }
             }
