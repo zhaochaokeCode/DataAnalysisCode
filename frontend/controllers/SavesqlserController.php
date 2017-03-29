@@ -57,7 +57,9 @@ class SavesqlserController extends Controller
                             "f_vip_num"=>$tmpData['f_VIP_num'],
                         ) ;
                         $str = implode(',',array_values($data)) ;
-                        $sql = "insert into log_onlineinfo VALUES ($str )" ;
+                        $str2 =  implode(',',array_keys($data)) ;
+
+                        $sql = "insert into log_onlineinfo ($str2) VALUES ($str )" ;
                         echo $sql ; die;
 
                     }
