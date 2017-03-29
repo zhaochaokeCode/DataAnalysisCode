@@ -28,7 +28,6 @@ class SavesqlserController extends Controller
     }
 
     public function actionOnline(){
-
         ini_set('memory_limit', '1024M');
         $sinkFile = Yii::$app->params['online'];//中间通道数据文件路径
         $logPath = Yii::$app->params['onlinePath']; //文件保存目录
@@ -59,9 +58,8 @@ class SavesqlserController extends Controller
                         $str = implode(',',array_values($data)) ;
                         $str2 =  implode(',',array_keys($data)) ;
 
-                        $sql = "insert into log_onlineinfo ($str2) VALUES ($str )" ;
-                        echo $sql ; die;
-
+                        $sql = "insert into log_onlineinfo ($str2) VALUES ($str)" ;
+                        $this->mssdb->runSql($sql) ;
                     }
                 }
             }
