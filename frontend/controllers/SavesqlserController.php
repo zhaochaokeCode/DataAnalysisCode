@@ -21,6 +21,7 @@ class SavesqlserController extends Controller
     public $days = 7;
 
     public $mssdb = '';
+    public $tabname ='log_marry' ;
 
     public function init()
     {
@@ -80,7 +81,7 @@ class SavesqlserController extends Controller
     }
     public function actionGetcol(){
 
-        $tabArr = $this->mssdb->getTabColumn('log_consumption') ;
+        $tabArr = $this->mssdb->getTabColumn($this->tabname) ;
     }
     public function getFileCont(){
         ini_set('memory_limit', '1024M');
@@ -105,20 +106,29 @@ class SavesqlserController extends Controller
                         $tmpData = $this->objeToArr($json);
                         $name =   $tmpData['f_log_name'] ;
 
-                      if($name == 'log_account'||$name == 'log_character'||$name == 'log_login'||$name == 'log_logout'
-                        ||$name == 'log_stage'||$name=='log_dungeon'){
-                        if($name == 'log_consumption') {
-                            if ($tmpData['f_stage_ns'] == 'n') {
-                                $tmpData['f_stage_ns'] = 0;
-                            }
-                            if ($tmpData['f_stage_ns'] == 's') {
-                                $tmpData['f_stage_ns'] = 1;
-                            }
-                        }
-//                        if($name == 'log_ item') {
-//                            var_dump($tmpData) ; die ;
-//
+                        $logArr = array(
+                            'log_account', 'log_character', 'log_login','log_logout',
+                            'log_stage','log_dungeon','log_jinbi','log_consumption','log_item','log_yuanbao',
+                            'log_jinbi','log_uplevel','log_horse_tame','log_equip','log_jingjie_up',
+//                            'log_killboss',
+                            'log_dungeon',
+                        ) ;
+                        //log_horse_tame  log_equip log_skill_up 没数据 log_card_gain有错误
 
+                        //log_card_gain有错误,log_card_train 为空
+
+//                      if($name == 'log_account'||$name == 'log_character'||$name == 'log_login'||$name == 'log_logout'
+//                        ||$name == 'log_stage'||$name=='log_dungeon'||log_jinbi||log_consumption){
+                        if(in_array($name,$logArr)){
+                            if($name == 'log_consumption') {
+                                if ($tmpData['f_stage_ns'] == 'n') {
+                                    $tmpData['f_stage_ns'] = 0;
+                                }
+                                if ($tmpData['f_stage_ns'] == 's') {
+                                    $tmpData['f_stage_ns'] = 1;
+                                }
+                            }
+//                        if($name == $this->tabname) {
                             $allData[$name][] = $this->createData($name,$tmpData ) ;
                         }else{
                             continue ;
@@ -126,7 +136,6 @@ class SavesqlserController extends Controller
                     }
                 }
             }
-            die;
             foreach($allData as $k=>$v) {
                 if (count($v[0])>1) {
                     $valStr = '';
@@ -144,8 +153,8 @@ class SavesqlserController extends Controller
                     $keyStr = $this->getCol($k) ;
                     if($valStr) {
                         $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-                        echo $sql ;
-//                        $tabArr = $this->mssdb->runSql($sql) ;
+//                        echo $sql ;die;
+                        $tabArr = $this->mssdb->runSql($sql) ;
 
                     }
                 }
@@ -201,6 +210,36 @@ class SavesqlserController extends Controller
             case 'log_consumption'://商城消费分析日志
                 $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_goods_model_id,f_goods_price,f_goods_num,f_consume_yuanbao_num,f_overplus_yuanbao_num,f_yuanbao_channel";
                 break ;
+            case 'log_item'://道具日志
+                $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_goods,f_num,f_opt_type,f_note" ;
+                break ;
+            case 'log_yuanbao'://元宝日志
+                $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_opt_type,f_yuanbao,f_yuanbao_after" ;
+                break ;
+            case 'log_jinbi': //金币日志
+                $keyStr ="f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_opt_type,f_jinbi,f_jinbi_after";
+                break ;
+            case 'log_uplevel': //等级日志
+                $keyStr ="f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip";
+                break ;
+            case 'log_card_gain'://出错了
+                $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_model_id,f_id,f_card_color,f_yuanbao_num" ;
+                break ;
+            case 'log_horse_tame': //驭风强化日志
+                $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_horse_model_id,f_horse_modelAfter_id,f_goodsParam,f_code,f_status";
+                break;
+            case 'log_equip': //装备强化日志
+                $keyStr = 'f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_model_id,f_id,f_level_num,f_goods_num';
+                break;
+            case 'log_jingjie_up': //境界修练日志
+                $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_model_id,f_jingjie_num,f_zhenqi_num,f_jinbi_num";
+                break ;
+            case 'log_killboss': //野外boss
+                $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_boss_id" ;
+                break ;
+            case 'log_marry':
+                $keyStr ="f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_m_yunying_id,f_w_yunying_id,f_m_character_id,f_w_character_id,f_m_character_grade,f_w_character_grade,f_m_character_ip,f_w_character_ip,f_lovetoken_id";
+                break ;
         }
         return $keyStr ;
     }
@@ -211,7 +250,7 @@ class SavesqlserController extends Controller
         switch ($name) {
             case 'log_account'://新开账户
                // array(9) { ["f_time"]=> int(1489812269) ["f_dept"]=> string(1) "0" ["f_server_address_id"]=> string(1) "0" ["f_aaccount_id"]=> string(6) "242341" ["f_phone_id"]=> string(32) "72226046ce6db0415881d3c61e7cdfb2" ["f_sid"]=> string(1) "0" ["f_yunying_id"]=> string(24) "58ccbb1d36a5f33d044480d6" ["f_game_id"]=> int(1) ["f_log_name"]=> string(11) "log_account" }
-                $data = array(
+                $data2 = array(
                             $data['f_aaccount_id'],
                             $data['f_dept'],
                             $data['f_server_address_id'],
@@ -224,9 +263,8 @@ class SavesqlserController extends Controller
                         );
                 break ;
             case 'log_character'://新增角色  11
-                //f_uid,f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_account_id,f_character_id,f_character_ip,f_character_type,f_insert_time
-                //f_time,f_dept,f_server_address_id,f_account_id,f_character_ip,f_character_type,f_sf_character_id,f_game_id,f_log_name,
-                $data = array(
+
+                $data2 = array(
                     $data['f_account_id'],
                     $data['f_dept'],
                     $data['f_server_address_id'],
@@ -243,7 +281,7 @@ class SavesqlserController extends Controller
                 break ;
             case 'log_login'://12
                 //f_uid,f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_vip_grade,f_fightin
-                $data = array(
+                $data2 = array(
                     $data['f_dept'],
                     $data['f_server_address_id'],
                     $data['f_game_id'],
@@ -262,7 +300,7 @@ class SavesqlserController extends Controller
                 break ;
             case 'log_logout'://12
                 //f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_nstage_id,f_sstage_id,f_jinbi,f_yuanbao,f_zhenqi,f_online_time,f_insert_time,17
-                $data = array(
+                $data2 = array(
                     $data['f_dept'],
                     $data['f_server_address_id'],
                     $data['f_game_id'],
@@ -286,7 +324,7 @@ class SavesqlserController extends Controller
                 break ;
             case 'log_recharge'://12
                 //f_uid,f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_rechage_yuanbao,f_orderid,f_discount
-                $data = array(
+                $data2 = array(
                     $data['f_dept'],
                     $data['f_server_address_id'],
                     $data['f_game_id'],
@@ -306,7 +344,7 @@ class SavesqlserController extends Controller
                 break ;
                // $keyStr = "f_character_grade,f_character_ip,f_stage_id,f_stage_ns,f_code";
                 case 'log_stage'://12
-                    $data = array(
+                    $data2 = array(
                         $data['f_dept'],
                         $data['f_server_address_id'],
                         $data['f_game_id'],
@@ -327,7 +365,7 @@ class SavesqlserController extends Controller
             //f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_dungeon_id,f_nandu_id,f_success
             case 'log_dungeon'://12
                 //  "f_character_grade,f_character_ip,f_dungeon_id,f_nandu_id,f_success";
-                $data = array(
+                $data2 = array(
                     $data['f_dept'],
                     $data['f_server_address_id'],
                     $data['f_game_id'],
@@ -347,7 +385,7 @@ class SavesqlserController extends Controller
                 break ;
             case 'log_consumption':
                 //"f_goods_model_id,f_goods_price,f_goods_num,f_consume_yuanbao_num,f_overplus_yuanbao_num,f_yuanbao_channel";
-                $data = array(
+                $data2 = array(
                     $data['f_dept'],
                     $data['f_server_address_id'],
                     $data['f_game_id'],
@@ -370,8 +408,182 @@ class SavesqlserController extends Controller
                 );
                 break ;
 
+
+            case 'log_item'://道具日志
+            //    $keyStr = "f_character_grade,f_character_ip,f_goods,f_num,f_opt_type,f_note"
+                $data2 = array(
+                    $data['f_dept'],
+                    $data['f_server_address_id'],
+                    $data['f_game_id'],
+                    "'".date("Y-m-d H:i:s",$data['f_time'])."'",
+                    $data['f_sid'],
+                    "'".$data['f_yunying_id']."'",
+                    $data['f_character_id'],
+                    $data['f_character_grade'],
+                    $t.$data['f_character_ip'].$t,
+
+                    $data['f_goods'],
+                    $data['f_num'],
+                    $data['f_opt_type'],
+                    $t.$data['f_note'].$t
+                );
+                break ;
+
+
+            case 'log_yuanbao'://元宝日志
+            //    $keyStr = "f_opt_type,f_yuanbao,f_yuanbao_after"
+            $data2 = array(
+                    $data['f_dept'],
+                    $data['f_server_address_id'],
+                    $data['f_game_id'],
+                    "'".date("Y-m-d H:i:s",$data['f_time'])."'",
+                    $data['f_sid'],
+                    "'".$data['f_yunying_id']."'",
+                    $data['f_character_id'],
+                    $data['f_character_grade'],
+                    $t.$data['f_character_ip'].$t,
+
+                    $data['f_opt_type'],
+                    $data['f_yuanbao'],
+                    $data['f_yuanbao_after'],
+                );
+                break ;
+
+            case 'log_jinbi'://金币日志
+                //_opt_type,f_jinbi,f_jinbi_after
+                $data2 = array(
+                    $data['f_dept'],
+                    $data['f_server_address_id'],
+                    $data['f_game_id'],
+                    "'".date("Y-m-d H:i:s",$data['f_time'])."'",
+                    $data['f_sid'],
+                    "'".$data['f_yunying_id']."'",
+                    $data['f_character_id'],
+                    $data['f_character_grade'],
+                    $t.$data['f_character_ip'].$t,
+
+                    $data['f_opt_type'],
+                    $data['f_jinbi'],
+                    $data['f_jinbi_after'],
+                );
+                break ;
+            case 'log_uplevel'://等级日志
+            //f_yunying_id,f_character_id,f_character_grade,f_character_ip";
+                $data2 = array(
+                    $data['f_dept'],
+                    $data['f_server_address_id'],
+                    $data['f_game_id'],
+                    "'".date("Y-m-d H:i:s",$data['f_time'])."'",
+                    $data['f_sid'],
+                    "'".$data['f_yunying_id']."'",
+                    $data['f_character_id'],
+                    $data['f_character_grade'],
+                    $t.$data['f_character_ip'].$t,
+                );
+                break ;
+            case 'log_card_gain'://灵偶抽卡日志
+            // f_model_id,f_id,f_card_color,f_yuanbao_num" ;
+                $data2 = array(
+                    $data['f_dept'],
+                    $data['f_server_address_id'],
+                    $data['f_game_id'],
+                    "'".date("Y-m-d H:i:s",$data['f_time'])."'",
+                    $data['f_sid'],
+                    "'".$data['f_yunying_id']."'",
+                    $data['f_character_id'],
+                    $data['f_character_grade'],
+                    $t.$data['f_character_ip'].$t,
+
+                    $data['f_model_id'],
+                    $data['f_id'],
+                    $data['f_card_color'],
+                    $data['f_yuanbao_num'],
+
+                );
+                break ;
+            //f_horse_model_id,f_horse_modelAfter_id,f_goodsParam,f_code,,";
+            case 'log_horse_tame'://玉峰强化日志
+                $data2 = array(
+                    $data['f_dept'],
+                    $data['f_server_address_id'],
+                    $data['f_game_id'],
+                    "'".date("Y-m-d H:i:s",$data['f_time'])."'",
+                    $data['f_sid'],
+                    "'".$data['f_yunying_id']."'",
+                    $data['f_character_id'],
+                    $data['f_character_grade'],
+                    $t.$data['f_character_ip'].$t,
+
+                    $data['f_horse_model_id'],
+                    $data['f_horse_modelAfter_id'],
+                    $t.$data['f_goodsParam'].$t,
+                    $data['f_code'],
+                    $data['f_status'],
+
+                );
+                break ;
+
+            case 'log_equip': //装备强化日志
+
+                $data2 = array(
+                    $data['f_dept'],
+                    $data['f_server_address_id'],
+                    $data['f_game_id'],
+                    "'".date("Y-m-d H:i:s",$data['f_time'])."'",
+                    $data['f_sid'],
+                    "'".$data['f_yunying_id']."'",
+                    $data['f_character_id'],
+                    $data['f_character_grade'],
+                    $t.$data['f_character_ip'].$t,
+
+                    $data['f_model_id'],
+                    $t.$data['f_id'].$t,
+                    $data['f_level_num'],
+                    $t.$data['f_goods_num'].$t,
+                );
+                break ;
+
+            case 'log_jingjie_up': //装备强化日志
+                //   f_model_id,f_jingjie_num,f_zhenqi_num,f_jinbi_num";
+                $data2 = array(
+                    $data['f_dept'],
+                    $data['f_server_address_id'],
+                    $data['f_game_id'],
+                    "'".date("Y-m-d H:i:s",$data['f_time'])."'",
+                    $data['f_sid'],
+                    "'".$data['f_yunying_id']."'",
+                    $data['f_character_id'],
+                    $data['f_character_grade'],
+                    $t.$data['f_character_ip'].$t,
+
+                    $data['f_model_id'],
+                    $data['f_jingjie_num'],
+                    $data['f_zhenqi_num'],
+                    $data['f_jinbi_num'],
+                );
+                break ;
+
+            //       de,f_character_ip,f_boss_id" ;
+            case 'log_killboss': //装备强化日志
+
+                $data2 = array(
+                    $data['f_dept'],
+                    $data['f_server_address_id'],
+                    $data['f_game_id'],
+                    "'".date("Y-m-d H:i:s",$data['f_time'])."'",
+                    $data['f_sid'],
+                    "'".$data['f_yunying_id']."'",
+                    $data['f_character_id'],
+                    $data['f_character_grade'],
+                    $t.$data['f_character_ip'].$t,
+                    $data['f_boss_id'],
+                );
+                break ;
+            case 'log_marry':
+                $keyStr ="f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_m_yunying_id,f_w_yunying_id,f_m_character_id,f_w_character_id,f_m_character_grade,f_w_character_grade,f_m_character_ip,f_w_character_ip,f_lovetoken_id";
+                break ;
         }
-        return $data ;
+        return $data2 ;
     }
     public function actionCleardata(){
 
