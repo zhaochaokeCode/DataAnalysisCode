@@ -115,6 +115,10 @@ class SavesqlserController extends Controller
                                 $tmpData['f_stage_ns'] = 1;
                             }
                         }
+//                        if($name == 'log_ item') {
+//                            var_dump($tmpData) ; die ;
+//
+
                             $allData[$name][] = $this->createData($name,$tmpData ) ;
                         }else{
                             continue ;
@@ -122,7 +126,7 @@ class SavesqlserController extends Controller
                     }
                 }
             }
-
+            die;
             foreach($allData as $k=>$v) {
                 if (count($v[0])>1) {
                     $valStr = '';
@@ -141,7 +145,7 @@ class SavesqlserController extends Controller
                     if($valStr) {
                         $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
                         echo $sql ;
-                        $tabArr = $this->mssdb->runSql($sql) ;
+//                        $tabArr = $this->mssdb->runSql($sql) ;
 
                     }
                 }
