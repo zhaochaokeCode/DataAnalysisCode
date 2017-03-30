@@ -233,7 +233,7 @@ class PayController extends Controller
                 "nonce_str" => mt_rand(1,1000000),
                 "notify_url" => $NOTIFY_URL,
                 "out_trade_no" => $_POST['order_id'],
-                "spbill_create_ip" => "101.37.35.211",//$this->input->ip_address(),
+                "spbill_create_ip" => "116.62.177.51",//$this->input->ip_address(),
                 "total_fee" => $_POST['total_amount'],//注意：前方有坑！！！最小单位是分，跟支付宝不一样。1表示1分钱。只能是整形。
                 "trade_type" => "APP"
             );

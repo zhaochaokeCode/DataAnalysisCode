@@ -26,6 +26,15 @@ class IndexController extends CommController
 
     public function init()
     {
+        $str = '{"f_time":1490859973,"f_user_id":"58ca955936a5f338044480c5","f_game_id":"bw1001","f_sid":1,"f_character_id":111362,"f_activate":1}' ;
+        $tmp =  json_decode($str) ;
+        $array = array(
+            "f_user_id"=>$tmp->f_user_id,
+            "f_snid"=>$tmp->f_sid,
+            "f_character_id"=>$tmp->f_character_id,
+            "f_activate"=>$tmp->f_activate,
+        ) ;
+
         $this->sqlser =  new analyisData() ;
     }
 

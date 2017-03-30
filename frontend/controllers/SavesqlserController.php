@@ -105,15 +105,16 @@ class SavesqlserController extends Controller
                         $tmpData = $this->objeToArr($json);
                         $name =   $tmpData['f_log_name'] ;
 
-//                      if($name == 'log_account'||$name == 'log_character'||$name == 'log_login'||$name == 'log_logout'
-//                        ||$name == 'log_stage'||$name=='log_dungeon'){
-                        if($name == 'log_consumption'){
-                            if($tmpData['f_stage_ns']=='n'){
-                                $tmpData['f_stage_ns']=0;
+                      if($name == 'log_account'||$name == 'log_character'||$name == 'log_login'||$name == 'log_logout'
+                        ||$name == 'log_stage'||$name=='log_dungeon'){
+                        if($name == 'log_consumption') {
+                            if ($tmpData['f_stage_ns'] == 'n') {
+                                $tmpData['f_stage_ns'] = 0;
                             }
-                            if($tmpData['f_stage_ns']=='s'){
-                                $tmpData['f_stage_ns']=1;
+                            if ($tmpData['f_stage_ns'] == 's') {
+                                $tmpData['f_stage_ns'] = 1;
                             }
+                        }
                             $allData[$name][] = $this->createData($name,$tmpData ) ;
                         }else{
                             continue ;
