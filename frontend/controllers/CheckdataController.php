@@ -32,23 +32,23 @@ class CheckdataController extends Controller
 
             $datas = explode("\n", $data);
             unset($cont);
-            echo $str = "时间      人数     服务器"."<br>" ;
+            echo $str = "时间            人数   服务器"."<br>" ;
 
             foreach ($datas as $k => $v) {
                 if ($json = json_decode($v)) {
                     $tmpData = $this->objeToArr($json);
                     if($tmpData['f_dept']==2){
-                    var_dump($tmpData) ;
-                        echo date("Y-m-d H:i:s",$tmp['f_time'])."  ".$tmp['f_num']."   ".$tmp['f_server_address_id']."<br>" ;
-
+                         $newArr = $tmpData;
 
                     }
                 }
             }
-            var_dump($tmp) ;
-            die;
+            for($i=count($newArr);$i>count($newArr)-3;$i--){
+                echo date("Y-m-d H:i:s",$newArr[$i]['f_time'])."  ".$newArr[$i]['f_num']."   ".$newArr[$i]['f_server_address_id']."<br>" ;
+            }
 
-            die;
+
+            die ;
         }
         die;
 
