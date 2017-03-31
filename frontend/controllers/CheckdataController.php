@@ -18,13 +18,13 @@ class CheckdataController extends Controller
             {
                     $tmp = explode('-',$file) ;
 
-                $res[$tmp[0]] =$file ;
+                $res[$tmp[0]][] =$file ;
 
             }
         }
-        $data = rsort(array_keys($res)) ;
+         rsort(array_keys($res)) ;
 
-        var_dump($data) ;
+        var_dump($res) ;
         die ;
 
 
