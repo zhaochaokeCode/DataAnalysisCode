@@ -31,12 +31,15 @@ class CheckdataController extends Controller
 
             $datas = explode("\n", $data);
             unset($cont);
+            $data['f_time'] = '0';
+            $str = "时间      人数"."<br>" ;
+
+
             foreach ($datas as $k => $v) {
                 if ($json = json_decode($v)) {
                     $tmpData = $this->objeToArr($json);
-
                     if($tmpData['f_dept']==2){
-                        var_dump($tmpData) ;die;
+                        echo date("Y-m-d H:i:s",$tmpData['f_time'])."  ".$tmpData['f_num']."<br>" ;
                     }
 
                 }
