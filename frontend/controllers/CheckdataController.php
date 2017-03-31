@@ -36,7 +36,6 @@ class CheckdataController extends Controller
             foreach ($datas as $k => $v) {
                 if ($json = json_decode($v)) {
                     $tmpData = $this->objeToArr($json);
-                    var_dump($tmpData) ;
                     if($tmpData['f_dept']==2){
                         var_dump($tmpData) ;
 
