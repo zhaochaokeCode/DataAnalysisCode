@@ -27,7 +27,7 @@ class CheckdataController extends Controller
         foreach($res as $k=>$v){
             rsort($v) ;
 
-            $data =file_get_contents($k."-".$v) ;
+            $data =file_get_contents($k."-".$v[0]) ;
             var_dump($data) ;
             die;
         }
