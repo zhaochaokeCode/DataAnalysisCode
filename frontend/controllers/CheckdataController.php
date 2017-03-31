@@ -44,9 +44,7 @@ class CheckdataController extends Controller
                 }
             }
             $a =count($newArr) ;
-            var_dump($newArr[$a]) ;
-            for($i=count($newArr)-1;$i>count($newArr)-4;$i--){
-
+            for($i=count($newArr)-1;$i>count($newArr)-3;$i--){
                 echo date("Y-m-d H:i:s",$newArr[$i]['f_time'])."  ".$newArr[$i]['f_num']."   ".$newArr[$i]['f_server_address_id']."<br>" ;
             }
 
