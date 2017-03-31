@@ -23,7 +23,7 @@ class CheckdataController extends Controller
             }
         }
          rsort(array_keys($res)) ;
-
+        $tmp = array("f_time"=>0);
         foreach($res as $k=>$v){
             rsort($v) ;
 
@@ -31,19 +31,22 @@ class CheckdataController extends Controller
 
             $datas = explode("\n", $data);
             unset($cont);
-            echo $str = "时间      人数"."<br>" ;
+            echo $str = "时间      人数     服务器"."<br>" ;
 
             foreach ($datas as $k => $v) {
                 if ($json = json_decode($v)) {
                     $tmpData = $this->objeToArr($json);
                     if($tmpData['f_dept']==2){
-
-                        echo date("Y-m-d H:i:s",$tmpData['f_time'])."  ".$tmpData['f_num']."<br>" ;
+                        $tmp=  $tmpData;
                     }
+//                    if($tmpData['f_dept']==2){
+//                        $tmp=  $tmpData;
+//                    }
 
                 }
 
             }
+            echo date("Y-m-d H:i:s",$tmp['f_time'])."  ".$tmp['f_num']."   ".$tmp['f_server_address_id']."<br>" ;
 
             die;
         }
