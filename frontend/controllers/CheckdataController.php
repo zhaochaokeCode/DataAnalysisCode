@@ -21,9 +21,10 @@ class CheckdataController extends Controller
                 $res[$tmp[0]] =$file ;
 
             }
-            var_dump($res) ;
-
         }
+        $data = rsort(array_keys($res)) ;
+
+        var_dump($data) ;
         die ;
 
 
