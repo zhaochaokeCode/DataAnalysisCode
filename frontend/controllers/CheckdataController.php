@@ -26,7 +26,9 @@ class CheckdataController extends Controller
         $tmp = array("f_time"=>0);
         foreach($res as $k=>$v){
             rsort($v) ;
-            $data =file_get_contents($dir."/".$k."-".$v[0]) ;
+            if(!($data =file_get_contents($dir."/".$k."-".$v[0]))) {
+                continue ;
+            }
 
             $datas = explode("\n", $data);
             unset($cont);
