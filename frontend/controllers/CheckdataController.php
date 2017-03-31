@@ -11,6 +11,22 @@ class CheckdataController extends Controller
 {
     public function actionIndex()
     {
+        $dir = '/data/flume_logs/on_line_log';
+        $fp=opendir($dir);
+        while(false!=$file=readdir($fp)){
+            if($file!='.' &&$file!='..')
+            {
+                    $tmp = explode('-',$file) ;
+
+                $res[$tmp[0]] =$file ;
+
+            }
+            var_dump($res) ;
+
+        }
+        die ;
+
+
 
 
 
