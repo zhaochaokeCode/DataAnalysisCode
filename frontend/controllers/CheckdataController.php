@@ -27,7 +27,7 @@ class CheckdataController extends Controller
         foreach($res as $k=>$v){
             rsort($v) ;
             if(!($data =file_get_contents($dir."/".$k."-".$v[0]))) {
-                continue ;
+                $data =file_get_contents($dir."/".$k."-".$v[1]) ;
             }
 
             $datas = explode("\n", $data);
