@@ -172,6 +172,8 @@
                                                 服务器:<select id="f_sid" style="width: 100px;align:center">
                                                     <option value ="0">全服务器</option>
                                                     <option value ="1">服务器1</option>
+                                                    <option value ="2">服务器2</option>
+                                                    <option value ="3">服务器3</option>
                                                 </select>
                                             </div>
                                             <div style="margin-right:100px;margin-top:10px;float:right;">
