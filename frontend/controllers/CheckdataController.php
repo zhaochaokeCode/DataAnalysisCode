@@ -39,11 +39,11 @@ class CheckdataController extends Controller
                     $tmpData = $this->objeToArr($json);
                     if($tmpData['f_dept']==2){
                          $newArr[] = $tmpData;
-
+                            echo  $newArr['f_server_address_id'];
                     }
                 }
             }
-            var_dump($newArr) ;
+
             $tmpArr = array() ;
             $a =count($newArr) ;
             for($i=count($newArr)-1;$i>count($newArr)-4;$i--){
