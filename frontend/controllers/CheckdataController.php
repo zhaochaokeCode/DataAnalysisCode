@@ -26,7 +26,6 @@ class CheckdataController extends Controller
         $tmp = array("f_time"=>0);
         foreach($res as $k=>$v){
             rsort($v) ;
-
             $data =file_get_contents($dir."/".$k."-".$v[0]) ;
 
             $datas = explode("\n", $data);
@@ -38,14 +37,14 @@ class CheckdataController extends Controller
                     $tmpData = $this->objeToArr($json);
                     if($tmpData['f_dept']==2){
 
-                        $tmp[] = $tmpData ;
+                        echo date("Y-m-d H:i:s",$tmp['f_time'])."  ".$tmp['f_num']."   ".$tmp['f_server_address_id']."<br>" ;
+
 
                     }
                 }
             }
             var_dump($tmp) ;
             die;
-            echo date("Y-m-d H:i:s",$tmp['f_time'])."  ".$tmp['f_num']."   ".$tmp['f_server_address_id']."<br>" ;
 
             die;
         }
