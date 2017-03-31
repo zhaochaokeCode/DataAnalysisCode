@@ -38,7 +38,7 @@ class CheckdataController extends Controller
                 if ($json = json_decode($v)) {
                     $tmpData = $this->objeToArr($json);
                     if($tmpData['f_dept']==2){
-
+                    var_dump($tmpData) ;
                         echo date("Y-m-d H:i:s",$tmp['f_time'])."  ".$tmp['f_num']."   ".$tmp['f_server_address_id']."<br>" ;
 
 
