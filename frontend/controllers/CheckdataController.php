@@ -31,9 +31,7 @@ class CheckdataController extends Controller
 
             $datas = explode("\n", $data);
             unset($cont);
-            $data['f_time'] = '0';
-            $str = "时间      人数"."<br>" ;
-
+            echo $str = "时间      人数"."<br>" ;
 
             foreach ($datas as $k => $v) {
                 if ($json = json_decode($v)) {
