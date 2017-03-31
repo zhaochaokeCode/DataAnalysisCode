@@ -43,9 +43,28 @@ class CheckdataController extends Controller
                     }
                 }
             }
+            $tmpArr = array() ;
             $a =count($newArr) ;
-            for($i=count($newArr)-1;$i>count($newArr)-3;$i--){
-                echo date("Y-m-d H:i:s",$newArr[$i]['f_time'])."  ".$newArr[$i]['f_num']."   ".$newArr[$i]['f_server_address_id']."<br>" ;
+            for($i=count($newArr)-1;$i>count($newArr)-4;$i--){
+                if($newArr){
+                    if(count($tmpArr)==0){
+                        $tmpArr[] =$newArr[$i] ;
+                    }else{
+                        if($tmpArr[0]['f_server_address_id']!=$newArr['f_server_address_id']){
+                            $tmpArr[] = $newArr[$i] ;
+                            break ;
+                        }
+
+                    }
+
+
+                }
+
+
+            }
+
+            foreach($tmpArr as $v){
+                echo date("Y-m-d H:i:s",$v[$i]['f_time'])."  ".$v[$i]['f_num']."   ".$v[$i]['f_server_address_id']."<br>" ;
             }
 
 
