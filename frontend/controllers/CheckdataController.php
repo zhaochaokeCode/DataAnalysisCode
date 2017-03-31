@@ -52,7 +52,10 @@ class CheckdataController extends Controller
                     }else{
                         if($tmpArr[0]['f_server_address_id']!=$newArr[$i]['f_server_address_id']){
                             $tmpArr[] =$newArr[$i] ;
-                            break ;
+                        }
+                        if($tmpArr[0]['f_server_address_id']!=$newArr[$i]['f_server_address_id']&&
+                            $tmpArr[1]['f_server_address_id']!=$newArr[$i]['f_server_address_id']){
+                            $tmpArr[] =$newArr[$i] ;
                         }
 
                     }
