@@ -43,10 +43,12 @@ class CheckdataController extends Controller
                     }
                 }
             }
+            var_dump($newArr) ;
             $tmpArr = array() ;
             $a =count($newArr) ;
             for($i=count($newArr)-1;$i>count($newArr)-4;$i--){
                 if($newArr){
+
                     if(count($tmpArr)==0){
                         $tmpArr[] =$newArr[$i] ;
                     }else{
