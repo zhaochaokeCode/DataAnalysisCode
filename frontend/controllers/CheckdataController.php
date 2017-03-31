@@ -28,7 +28,21 @@ class CheckdataController extends Controller
             rsort($v) ;
 
             $data =file_get_contents($dir."/".$k."-".$v[0]) ;
-            var_dump($data) ;
+
+            $datas = explode("\n", $data);
+            unset($cont);
+            foreach ($datas as $k => $v) {
+                if ($json = json_decode($v)) {
+                    $tmpData = $this->objeToArr($json);
+
+                    if($tmpData['f_dept']==2){
+                        var_dump($tmpData) ;die;
+                    }
+
+                }
+
+            }
+
             die;
         }
         die;
@@ -70,14 +84,14 @@ class CheckdataController extends Controller
         }
         var_dump($add) ;
     }
-    function objeToArr($object)
+    public function objeToArr($object)
     {
         $array = array();
         if (is_object($object)) {
             foreach ($object as $key => $value) {
                 if ($key == 'f_params') {
                     if ($value) {
-                        $array = array_merge($array, $this->objeToArr($value));
+                        $array = $array + $this->objeToArr($value);
                     }
                 } else {
                     $array[$key] = $value;
@@ -87,9 +101,9 @@ class CheckdataController extends Controller
             $array = $object;
         }
 
-//        print_r($array) ;die;
         return $array;
-
     }
+
+
 
 }
