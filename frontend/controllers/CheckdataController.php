@@ -64,7 +64,7 @@ class CheckdataController extends Controller
             }
 
             foreach($tmpArr as $v){
-                echo date("Y-m-d H:i:s",$v[$i]['f_time'])."  ".$v[$i]['f_num']."   ".$v[$i]['f_server_address_id']."<br>" ;
+                echo date("Y-m-d H:i:s",$v['f_time'])."  ".$v['f_num']."   ".$v['f_server_address_id']."<br>" ;
             }
 
 
