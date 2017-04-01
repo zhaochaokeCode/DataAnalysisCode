@@ -112,6 +112,7 @@ class SavesqlserController extends Controller
                             'log_jinbi', 'log_uplevel', 'log_horse_tame', 'log_equip', 'log_jingjie_up',
 //                            'log_killboss',
                         );
+//                        $logArr = array('log_recharge') ;
                         //log_horse_tame  log_equip log_skill_up 没数据 log_card_gain有错误
 
                         //log_card_gain有错误,log_card_train 为空
@@ -119,6 +120,7 @@ class SavesqlserController extends Controller
 //                      if($name == 'log_account'||$name == 'log_character'||$name == 'log_login'||$name == 'log_logout'
 //                        ||$name == 'log_stage'||$name=='log_dungeon'||log_jinbi||log_consumption){
                         if(in_array($name,$logArr)){
+                            if($name == 'log_recharge') echo "1"."<br>" ;
                             if ($name == 'log_consumption') {
                                 if ($tmpData['f_stage_ns'] == 'n') {
                                     $tmpData['f_stage_ns'] = 0;
