@@ -87,7 +87,7 @@ class SavesqlserController extends Controller
         $tabArr = $this->mssdb->getTabColumn($this->tabname) ;
     }
     public function getFileCont(){
-        ini_set('memory_limit', '3000M');
+        ini_set('memory_limit', '1500M');
         $sinkFile = Yii::$app->params['runFile'];//中间通道数据文件路径
         $logPath = Yii::$app->params['filePath']; //文件保存目录
         $contFile = file_get_contents($sinkFile);
