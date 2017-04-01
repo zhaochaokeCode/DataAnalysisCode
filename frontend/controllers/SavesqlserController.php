@@ -139,7 +139,7 @@ class SavesqlserController extends Controller
                     if ($valStr) {
                         $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
 //                        $tabArr = $this->mssdb->runSql($sql);
-                    sleep(1) ;
+                    sleep(4) ;
                     }
                 }
                 unset($allData) ;
