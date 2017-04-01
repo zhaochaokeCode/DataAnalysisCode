@@ -87,8 +87,9 @@ class SavesqlserController extends Controller
 
         $tabArr = $this->mssdb->getTabColumn($this->tabname) ;
     }
-    public function getFileCont(){
-        $p = 0 ;
+    public function getFileCont()
+    {
+        $p = 0;
         ini_set('memory_limit', '1000M');
         $sinkFile = Yii::$app->params['runFile'];//中间通道数据文件路径
         $logPath = Yii::$app->params['filePath']; //文件保存目录
@@ -98,147 +99,57 @@ class SavesqlserController extends Controller
 
         $tmp2 = array();
 //        foreach($fileArr as $v){
-            $allData =array() ;
-            $fileName = $logPath. $_GET['file'] ;
-            $cont = file_get_contents($fileName);
+        $allData = array();
+        $fileName = $logPath . $_GET['file'];
+        $cont = file_get_contents($fileName);
 //            echo $fileName."<br>" ;
-            $datas = explode("\n", $cont);
-            unset($cont);
-            $p += count($datas)  ;
-            $newArr =array_chunk($datas,20000) ;
-            $logArr = array(
-                            'log_account', 'log_character', 'log_login', 'log_logout','log_recharge',
-                            'log_stage', 'log_dungeon', 'log_jinbi', 'log_consumption', 'log_item', 'log_yuanbao',
-                            'log_jinbi', 'log_uplevel', 'log_horse_tame', 'log_equip', 'log_jingjie_up',
+        $datas = explode("\n", $cont);
+        unset($cont);
+        $p += count($datas);
+        $newArr = array_chunk($datas, 20000);
+        $logArr = array(
+            'log_account', 'log_character', 'log_login', 'log_logout', 'log_recharge',
+            'log_stage', 'log_dungeon', 'log_jinbi', 'log_consumption', 'log_item', 'log_yuanbao',
+            'log_jinbi', 'log_uplevel', 'log_horse_tame', 'log_equip', 'log_jingjie_up',
 //                            'log_killboss',
-                        );
-            foreach($newArr as $k=>$v) {
-                $allData =array() ;
-                foreach($v as $v1) {
-                    if ($json = json_decode($v1)) {
-                        $tmpData = $this->objeToArr($json);
-                        $name = $tmpData['f_log_name'];
-                        if(in_array($name,$logArr)){
-                            $allData[$name][] = $this->createData($name, $tmpData);
-                        }
-                    }
-
-
-                }
-                foreach($allData as $tabName=>$v){
-                    $keyStr = $this->getCol($tabName) ;
-                    $valStr = '' ;
-                    foreach ($v as $item) {
-                        $tmpStr = implode(',', $item);
-                        if ($valStr != null) {
-                            $valStr .= ",($tmpStr)";
-                        } else {
-                            $valStr .= "($tmpStr)";
-                        }
-                    }
-                    if ($valStr) {
-                        $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-                        $tabArr = $this->mssdb->runSql($sql);
-                    sleep(0.02) ;
+        );
+        foreach ($newArr as $k => $v) {
+            $allData = array();
+            foreach ($v as $v1) {
+                if ($json = json_decode($v1)) {
+                    $tmpData = $this->objeToArr($json);
+                    $name = $tmpData['f_log_name'];
+                    if (in_array($name, $logArr)) {
+                        $allData[$name][] = $this->createData($name, $tmpData);
                     }
                 }
-                unset($allData) ;
+
 
             }
+            foreach ($allData as $tabName => $v) {
+                $keyStr = $this->getCol($tabName);
+                $valStr = '';
+                foreach ($v as $item) {
+                    $tmpStr = implode(',', $item);
+                    if ($valStr != null) {
+                        $valStr .= ",($tmpStr)";
+                    } else {
+                        $valStr .= "($tmpStr)";
+                    }
+                }
+                if ($valStr) {
+                    $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
+                    $tabArr = $this->mssdb->runSql($sql);
+                    sleep(0.02);
+                }
+            }
+            unset($allData);
 
-            echo $p.'   #' ;
-
-
-
-
-
-//            foreach ($datas as $k => $v) {
-//                if ($v) {
-//                    if ($json = json_decode($v)) {
-//                        $tmpData[] = $this->objeToArr($json);
-//                        continue ;
-//                        $name = $tmpData['f_log_name'];
-//
-//                        $logArr = array(
-//                            'log_account', 'log_character', 'log_login', 'log_logout','log_recharge',
-//                            'log_stage', 'log_dungeon', 'log_jinbi', 'log_consumption', 'log_item', 'log_yuanbao',
-//                            'log_jinbi', 'log_uplevel', 'log_horse_tame', 'log_equip', 'log_jingjie_up',
-////                            'log_killboss',
-//                        );
-//
-////                        $logArr = array('log_recharge') ;
-//                        //log_horse_tame  log_equip log_skill_up 没数据 log_card_gain有错误
-//
-//                        //log_card_gain有错误,log_card_train 为空
-//
-////                      if($name == 'log_account'||$name == 'log_character'||$name == 'log_login'||$name == 'log_logout'
-////                        ||$name == 'log_stage'||$name=='log_dungeon'||log_jinbi||log_consumption){
-//                        if(in_array($name,$logArr)){
-//
-//                            if ($name == 'log_consumption') {
-//                                if ($tmpData['f_stage_ns'] == 'n') {
-//                                    $tmpData['f_stage_ns'] = 0;
-//                                }
-//                                if ($tmpData['f_stage_ns'] == 's') {
-//                                    $tmpData['f_stage_ns'] = 1;
-//                                }
-//                            }
-//                            $allData[$name][] = $this->createData($name, $tmpData);
-//                        } else {
-//                            continue;
-//                        }
-//                    }
-////                }
-//            }
-
-//            $tmpAllKey = array_keys($allData) ;
-//            $numLen =50 ;
-//            foreach ($tmpAllKey as $tabName) {
-//                $tabDataLen = count($allData[$tabName]);
-//                $valStr = '' ;
-//                $keyStr = $this->getCol($tabName);
-//
-//                if($tabDataLen>$numLen) {
-//
-//                    $newArr =array_chunk($allData[$tabName],50) ;
-//
-//                    foreach($newArr as $k=>$v){
-//                        foreach ($v as $item) {
-//                            $tmpStr = implode(',', $item);
-//                            if ($valStr != null) {
-//                                $valStr .= ",($tmpStr)";
-//                            } else {
-//                                $valStr .= "($tmpStr)";
-//                            }
-//                        }
-//                        if ($valStr) {
-//                            $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-//                            $tabArr = $this->mssdb->runSql($sql);
-//                            sleep(0.2) ;
-//                        }
-//                    }
-//                }else {
-//                    foreach ($allData[$tabName] as $v3) {
-//                        if($v3) {
-//                            $tmpStr = implode(',', $v3);
-//                            if ($valStr != null) {
-//                                $valStr .= ",($tmpStr)";
-//                            } else {
-//                                $valStr .= "($tmpStr)";
-//                            }
-//                        }
-//                    }
-//                    if ($valStr) {
-//                        $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-//                        $tabArr = $this->mssdb->runSql($sql);
-//                        sleep(0.2) ;
-//                    }
-//                }
-//            }
-//            sleep(1) ;
         }
-//    }
+        $date = date("Y-m-d H:i:s", time());
+        file_put_contents('/data/num.txt', $date . "---" . $_GET['file'] . "---" . $p . "\n", FILE_APPEND);
 
+    }
 
 
     public function objeToArr($object)
