@@ -105,7 +105,7 @@ class SavesqlserController extends Controller
             $datas = explode("\n", $cont);
             unset($cont);
             $p += count($datas)  ;
-            $newArr =array_chunk($datas,9000) ;
+            $newArr =array_chunk($datas,20000) ;
             $logArr = array(
                             'log_account', 'log_character', 'log_login', 'log_logout','log_recharge',
                             'log_stage', 'log_dungeon', 'log_jinbi', 'log_consumption', 'log_item', 'log_yuanbao',
@@ -138,8 +138,8 @@ class SavesqlserController extends Controller
                     }
                     if ($valStr) {
                         $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-//                        $tabArr = $this->mssdb->runSql($sql);
-                    sleep(4) ;
+                        $tabArr = $this->mssdb->runSql($sql);
+                    sleep(0.02) ;
                     }
                 }
                 unset($allData) ;
