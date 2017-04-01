@@ -120,7 +120,7 @@ class SavesqlserController extends Controller
 //                      if($name == 'log_account'||$name == 'log_character'||$name == 'log_login'||$name == 'log_logout'
 //                        ||$name == 'log_stage'||$name=='log_dungeon'||log_jinbi||log_consumption){
                         if(in_array($name,$logArr)){
-                            if($name == 'log_recharge') echo "1"."<br>" ;
+//                            if($name == 'log_recharge'){
                             if ($name == 'log_consumption') {
                                 if ($tmpData['f_stage_ns'] == 'n') {
                                     $tmpData['f_stage_ns'] = 0;
@@ -371,7 +371,7 @@ class SavesqlserController extends Controller
                     $tmp = $data['f_recharge_yuanbao']? $data['f_recharge_yuanbao']:0,
                     $t.$data['f_orderid'].$t,
                     $data['f_discount'],
-                    $t.$data['f_rechage_money'].$t,
+                    $data['f_rechage_money'],
                 );
                 break ;
                // $keyStr = "f_character_grade,f_character_ip,f_stage_id,f_stage_ns,f_code";
