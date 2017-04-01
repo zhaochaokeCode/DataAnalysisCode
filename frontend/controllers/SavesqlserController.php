@@ -120,6 +120,7 @@ class SavesqlserController extends Controller
 //                        ||$name == 'log_stage'||$name=='log_dungeon'||log_jinbi||log_consumption){
                         if(in_array($name,$logArr)){
 //                        if($name == 'log_recharge'){
+//                            var_dump($tmpData) ;die;
                             if ($name == 'log_consumption') {
                                 if ($tmpData['f_stage_ns'] == 'n') {
                                     $tmpData['f_stage_ns'] = 0;
@@ -182,7 +183,6 @@ class SavesqlserController extends Controller
                     }
                     if ($valStr) {
                         $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-//                        echo $sql."<br>" ;die;
                         $tabArr = $this->mssdb->runSql($sql);
                     }
                 }
@@ -227,7 +227,7 @@ class SavesqlserController extends Controller
                 $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_nstage_id,f_sstage_id,f_jinbi,f_yuanbao,f_zhenqi,f_online_time" ;
                 break ;
             case 'log_recharge': //充值
-                $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_rechage_yuanbao,f_orderid,f_discount" ;
+                $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_rechage_yuanbao,f_orderid,f_discount,f_rechage_money" ;
                 break ;
             case 'log_stage':	//剧情关卡开始及完成日志
                 $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_stage_id,f_stage_ns,f_code";
@@ -365,9 +365,10 @@ class SavesqlserController extends Controller
                     //,f_character_ip,f_rechage_yuanbao,f_orderid,f_discount
                     $data['f_character_grade'],
                     $t.$data['f_character_ip'].$t,
-                    $tmp = $data['f_rechage_yuanbao']? $data['f_rechage_yuanbao']:0,
+                    $tmp = $data['f_recharge_yuanbao']? $data['f_recharge_yuanbao']:0,
                     $t.$data['f_orderid'].$t,
-                    $data['f_discount']
+                    $data['f_discount'],
+                    $t.$data['f_rechage_money'].$t,
                 );
                 break ;
                // $keyStr = "f_character_grade,f_character_ip,f_stage_id,f_stage_ns,f_code";
