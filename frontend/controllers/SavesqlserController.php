@@ -119,7 +119,7 @@ class SavesqlserController extends Controller
 //                      if($name == 'log_account'||$name == 'log_character'||$name == 'log_login'||$name == 'log_logout'
 //                        ||$name == 'log_stage'||$name=='log_dungeon'||log_jinbi||log_consumption){
                         if(in_array($name,$logArr)){
-
+//                        if($name == 'log_recharge'){
                             if ($name == 'log_consumption') {
                                 if ($tmpData['f_stage_ns'] == 'n') {
                                     $tmpData['f_stage_ns'] = 0;
@@ -142,7 +142,6 @@ class SavesqlserController extends Controller
                 $valStr = '' ;
                 $keyStr = $this->getCol($tabName);
 
-
                 if($tabDataLen>$numLen) {
                     $leng = floor($tabDataLen/$numLen) ;
                     for($i=0;$i<=$numLen;$i++){
@@ -163,7 +162,6 @@ class SavesqlserController extends Controller
                                 }
 
                             }
-//                            echo $keyVal."<br>" ;
                         }
                         if ($valStr) {
                             $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
@@ -184,7 +182,7 @@ class SavesqlserController extends Controller
                     }
                     if ($valStr) {
                         $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-//                        echo $sql."<br>" ;
+//                        echo $sql."<br>" ;die;
                         $tabArr = $this->mssdb->runSql($sql);
                     }
                 }
@@ -367,7 +365,7 @@ class SavesqlserController extends Controller
                     //,f_character_ip,f_rechage_yuanbao,f_orderid,f_discount
                     $data['f_character_grade'],
                     $t.$data['f_character_ip'].$t,
-                    $data['f_rechage_yuanbao'],
+                    $tmp = $data['f_rechage_yuanbao']? $data['f_rechage_yuanbao']:0,
                     $t.$data['f_orderid'].$t,
                     $data['f_discount']
                 );
