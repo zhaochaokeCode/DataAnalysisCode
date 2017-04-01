@@ -104,15 +104,15 @@ class SavesqlserController extends Controller
                 if ($v) {
                     if ($json = json_decode($v)) {
                         $tmpData = $this->objeToArr($json);
-                        $name =   $tmpData['f_log_name'] ;
+                        $name = $tmpData['f_log_name'];
 
                         $logArr = array(
-                            'log_account', 'log_character', 'log_login','log_logout',
-                            'log_stage','log_dungeon','log_jinbi','log_consumption','log_item','log_yuanbao',
-                            'log_jinbi','log_uplevel','log_horse_tame','log_equip','log_jingjie_up',
+                            'log_account', 'log_character', 'log_login', 'log_logout',
+                            'log_stage', 'log_dungeon', 'log_jinbi', 'log_consumption', 'log_item', 'log_yuanbao',
+                            'log_jinbi', 'log_uplevel', 'log_horse_tame', 'log_equip', 'log_jingjie_up',
 //                            'log_killboss',
                             'log_dungeon',
-                        ) ;
+                        );
                         //log_horse_tame  log_equip log_skill_up 没数据 log_card_gain有错误
 
                         //log_card_gain有错误,log_card_train 为空
@@ -120,7 +120,8 @@ class SavesqlserController extends Controller
 //                      if($name == 'log_account'||$name == 'log_character'||$name == 'log_login'||$name == 'log_logout'
 //                        ||$name == 'log_stage'||$name=='log_dungeon'||log_jinbi||log_consumption){
                         if(in_array($name,$logArr)){
-                            if($name == 'log_consumption') {
+
+                            if ($name == 'log_consumption') {
                                 if ($tmpData['f_stage_ns'] == 'n') {
                                     $tmpData['f_stage_ns'] = 0;
                                 }
@@ -128,34 +129,64 @@ class SavesqlserController extends Controller
                                     $tmpData['f_stage_ns'] = 1;
                                 }
                             }
-//                        if($name == $this->tabname) {
-                            $allData[$name][] = $this->createData($name,$tmpData ) ;
-                        }else{
-                            continue ;
+                            $allData[$name][] = $this->createData($name, $tmpData);
+                        } else {
+                            continue;
                         }
                     }
                 }
             }
-            foreach($allData as $k=>$v) {
-                if (count($v[0])>1) {
-                    $valStr = '';
-                    $tabName = $k;
+            $tmpAllKey = array_keys($allData) ;
+            $numLen =10 ;
+            foreach ($tmpAllKey as $tabName) {
+                $tabDataLen = count($allData[$tabName]);
+                $valStr = '' ;
+                $keyStr = $this->getCol($tabName);
 
-                    foreach ($v as $v3) {
-                        $tmpStr = implode(',', $v3);
-                        if ($valStr!=null) {
-                            $valStr .= ",($tmpStr)";
-                        } else {
-                            $valStr .= "($tmpStr)";
+
+                if($tabDataLen>$numLen) {
+                    $leng = floor($tabDataLen/$numLen) ;
+                    for($i=0;$i<=10;$i++){
+
+                        $valStr ='' ;
+                        for($k=0;$k<$numLen;$k++){
+                            if($i==0){
+                                $keyVal = $k ;
+                            }else{
+                                $keyVal = $k+($i*$numLen) ;
+                            }
+                            if($v3=$allData[$tabName][$keyVal]){
+                                $tmpStr = implode(',', $v3);
+                                if ($valStr != null) {
+                                    $valStr .= ",($tmpStr)";
+                                } else {
+                                    $valStr .= "($tmpStr)";
+                                }
+
+                            }
+//                            echo $keyVal."<br>" ;
+                        }
+                        if ($valStr) {
+                            $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
+//                            echo $sql."<br>" ;
+                        $tabArr = $this->mssdb->runSql($sql);
                         }
                     }
-
-                    $keyStr = $this->getCol($k) ;
-                    if($valStr) {
+                }else {
+                    foreach ($allData[$tabName] as $v3) {
+                        if($v3) {
+                            $tmpStr = implode(',', $v3);
+                            if ($valStr != null) {
+                                $valStr .= ",($tmpStr)";
+                            } else {
+                                $valStr .= "($tmpStr)";
+                            }
+                        }
+                    }
+                    if ($valStr) {
                         $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-//                        echo $sql ;die;
-                        $tabArr = $this->mssdb->runSql($sql) ;
-
+//                        echo $sql."<br>" ;
+                        $tabArr = $this->mssdb->runSql($sql);
                     }
                 }
             }
@@ -258,7 +289,7 @@ class SavesqlserController extends Controller
                             "'".date("Y-m-d H:i:s",$data['f_time'])."'",
                             $data['f_sid'],
                             "'".$data['f_yunying_id']."'",
-                            $tmp = $data['f_aaccount_id']?$data['f_account_id']:0,
+                            $tmp = $data['f_aaccount_id']?$data['f_aaccount_id']:0,
                             "'".$data['f_phone_id']."'",
                         );
                 break ;
