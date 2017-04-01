@@ -148,6 +148,7 @@ class SavesqlserController extends Controller
                 $keyStr = $this->getCol($tabName);
 
                 if($tabDataLen>$numLen) {
+                    echo $tabDataLen;continue ;
 
                     $newArr =array_chunk($allData[$tabName],50) ;
 
@@ -184,7 +185,7 @@ class SavesqlserController extends Controller
                     }
                 }
             }
-            sleep(3) ;
+            sleep(1) ;
         }
     }
 
