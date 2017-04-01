@@ -141,7 +141,6 @@ class mss
     public function runSql($sql){
         $sql = iconv("utf-8", "gbk", $sql);
         $result =  $this->db->query($sql) ;
-        print_r($result) ;
         return $result ;
 
     }
