@@ -88,6 +88,7 @@ class SavesqlserController extends Controller
         $tabArr = $this->mssdb->getTabColumn($this->tabname) ;
     }
     public function getFileCont(){
+        $p = 0 ;
         ini_set('memory_limit', '1000M');
         $sinkFile = Yii::$app->params['runFile'];//中间通道数据文件路径
         $logPath = Yii::$app->params['filePath']; //文件保存目录
@@ -103,7 +104,7 @@ class SavesqlserController extends Controller
 //            echo $fileName."<br>" ;
             $datas = explode("\n", $cont);
             unset($cont);
-            echo count($datas)."<br>" ;
+            $p += count($datas)  ;
             $newArr =array_chunk($datas,2000) ;
             $logArr = array(
                             'log_account', 'log_character', 'log_login', 'log_logout','log_recharge',
@@ -146,7 +147,7 @@ class SavesqlserController extends Controller
 
             }
 
-
+            echo $p ;
 
 
 
