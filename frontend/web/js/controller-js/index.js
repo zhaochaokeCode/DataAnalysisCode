@@ -12,7 +12,7 @@ $(function(){
             var url = "/index/getdatas?action=" + action;
         }
         $('#ifrm').attr("src", url);
-        $("#hide_action").attr('name', id);
+        $("#hide_action").attr('name', action);
     });
 
 
