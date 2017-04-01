@@ -47,7 +47,8 @@ class SavesqlserController extends Controller
             foreach ($datas as $k => $v) {
                 if ($v) {
                     if ($json = json_decode($v)) {
-                        $tmpData = $this->objeToArr($json);
+                        $tmpData[] = $this->objeToArr($json);
+
                         $time =$tmpData['f_time'] ;
                         $data = array(
                             "f_dept"=>$tmpData['f_dept'],
@@ -102,91 +103,141 @@ class SavesqlserController extends Controller
 //            echo $fileName."<br>" ;
             $datas = explode("\n", $cont);
             unset($cont);
-
-            foreach ($datas as $k => $v) {
-                if ($v) {
-                    if ($json = json_decode($v)) {
-                        $tmpData = $this->objeToArr($json);
-                        $name = $tmpData['f_log_name'];
-
-                        $logArr = array(
+            echo count($datas)."<br>" ;
+            $newArr =array_chunk($datas,2000) ;
+            $logArr = array(
                             'log_account', 'log_character', 'log_login', 'log_logout','log_recharge',
                             'log_stage', 'log_dungeon', 'log_jinbi', 'log_consumption', 'log_item', 'log_yuanbao',
                             'log_jinbi', 'log_uplevel', 'log_horse_tame', 'log_equip', 'log_jingjie_up',
 //                            'log_killboss',
                         );
-
-//                        $logArr = array('log_recharge') ;
-                        //log_horse_tame  log_equip log_skill_up 没数据 log_card_gain有错误
-
-                        //log_card_gain有错误,log_card_train 为空
-
-//                      if($name == 'log_account'||$name == 'log_character'||$name == 'log_login'||$name == 'log_logout'
-//                        ||$name == 'log_stage'||$name=='log_dungeon'||log_jinbi||log_consumption){
+            foreach($newArr as $k=>$v) {
+                $allData =array() ;
+                foreach($v as $v1) {
+                    if ($json = json_decode($v1)) {
+                        $tmpData = $this->objeToArr($json);
+                        $name = $tmpData['f_log_name'];
                         if(in_array($name,$logArr)){
-
-                            if ($name == 'log_consumption') {
-                                if ($tmpData['f_stage_ns'] == 'n') {
-                                    $tmpData['f_stage_ns'] = 0;
-                                }
-                                if ($tmpData['f_stage_ns'] == 's') {
-                                    $tmpData['f_stage_ns'] = 1;
-                                }
-                            }
                             $allData[$name][] = $this->createData($name, $tmpData);
+                        }
+                    }
+
+
+                }
+                foreach($allData as $tabName=>$v){
+                    $keyStr = $this->getCol($tabName) ;
+                    $valStr = '' ;
+                    foreach ($v as $item) {
+                        $tmpStr = implode(',', $item);
+                        if ($valStr != null) {
+                            $valStr .= ",($tmpStr)";
                         } else {
-                            continue;
-                        }
-                    }
-//                }
-            }
-            $tmpAllKey = array_keys($allData) ;
-            $numLen =50 ;
-            foreach ($tmpAllKey as $tabName) {
-                $tabDataLen = count($allData[$tabName]);
-                $valStr = '' ;
-                $keyStr = $this->getCol($tabName);
-
-                if($tabDataLen>$numLen) {
-
-                    $newArr =array_chunk($allData[$tabName],50) ;
-
-                    foreach($newArr as $k=>$v){
-                        foreach ($v as $item) {
-                            $tmpStr = implode(',', $item);
-                            if ($valStr != null) {
-                                $valStr .= ",($tmpStr)";
-                            } else {
-                                $valStr .= "($tmpStr)";
-                            }
-                        }
-                        if ($valStr) {
-                            $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-                            $tabArr = $this->mssdb->runSql($sql);
-                            sleep(0.2) ;
-                        }
-                    }
-                }else {
-                    foreach ($allData[$tabName] as $v3) {
-                        if($v3) {
-                            $tmpStr = implode(',', $v3);
-                            if ($valStr != null) {
-                                $valStr .= ",($tmpStr)";
-                            } else {
-                                $valStr .= "($tmpStr)";
-                            }
+                            $valStr .= "($tmpStr)";
                         }
                     }
                     if ($valStr) {
                         $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
+
                         $tabArr = $this->mssdb->runSql($sql);
                         sleep(0.2) ;
                     }
                 }
+                unset($allData) ;
+
             }
-            sleep(1) ;
+
+
+
+
+
+
+
+//            foreach ($datas as $k => $v) {
+//                if ($v) {
+//                    if ($json = json_decode($v)) {
+//                        $tmpData[] = $this->objeToArr($json);
+//                        continue ;
+//                        $name = $tmpData['f_log_name'];
+//
+//                        $logArr = array(
+//                            'log_account', 'log_character', 'log_login', 'log_logout','log_recharge',
+//                            'log_stage', 'log_dungeon', 'log_jinbi', 'log_consumption', 'log_item', 'log_yuanbao',
+//                            'log_jinbi', 'log_uplevel', 'log_horse_tame', 'log_equip', 'log_jingjie_up',
+////                            'log_killboss',
+//                        );
+//
+////                        $logArr = array('log_recharge') ;
+//                        //log_horse_tame  log_equip log_skill_up 没数据 log_card_gain有错误
+//
+//                        //log_card_gain有错误,log_card_train 为空
+//
+////                      if($name == 'log_account'||$name == 'log_character'||$name == 'log_login'||$name == 'log_logout'
+////                        ||$name == 'log_stage'||$name=='log_dungeon'||log_jinbi||log_consumption){
+//                        if(in_array($name,$logArr)){
+//
+//                            if ($name == 'log_consumption') {
+//                                if ($tmpData['f_stage_ns'] == 'n') {
+//                                    $tmpData['f_stage_ns'] = 0;
+//                                }
+//                                if ($tmpData['f_stage_ns'] == 's') {
+//                                    $tmpData['f_stage_ns'] = 1;
+//                                }
+//                            }
+//                            $allData[$name][] = $this->createData($name, $tmpData);
+//                        } else {
+//                            continue;
+//                        }
+//                    }
+////                }
+//            }
+
+//            $tmpAllKey = array_keys($allData) ;
+//            $numLen =50 ;
+//            foreach ($tmpAllKey as $tabName) {
+//                $tabDataLen = count($allData[$tabName]);
+//                $valStr = '' ;
+//                $keyStr = $this->getCol($tabName);
+//
+//                if($tabDataLen>$numLen) {
+//
+//                    $newArr =array_chunk($allData[$tabName],50) ;
+//
+//                    foreach($newArr as $k=>$v){
+//                        foreach ($v as $item) {
+//                            $tmpStr = implode(',', $item);
+//                            if ($valStr != null) {
+//                                $valStr .= ",($tmpStr)";
+//                            } else {
+//                                $valStr .= "($tmpStr)";
+//                            }
+//                        }
+//                        if ($valStr) {
+//                            $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
+//                            $tabArr = $this->mssdb->runSql($sql);
+//                            sleep(0.2) ;
+//                        }
+//                    }
+//                }else {
+//                    foreach ($allData[$tabName] as $v3) {
+//                        if($v3) {
+//                            $tmpStr = implode(',', $v3);
+//                            if ($valStr != null) {
+//                                $valStr .= ",($tmpStr)";
+//                            } else {
+//                                $valStr .= "($tmpStr)";
+//                            }
+//                        }
+//                    }
+//                    if ($valStr) {
+//                        $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
+//                        $tabArr = $this->mssdb->runSql($sql);
+//                        sleep(0.2) ;
+//                    }
+//                }
+//            }
+//            sleep(1) ;
         }
-    }
+//    }
 
 
 
@@ -197,7 +248,10 @@ class SavesqlserController extends Controller
             foreach ($object as $key => $value) {
                 if ($key == 'f_params') {
                     if ($value) {
-                        $array = $array + $this->objeToArr($value);
+                        foreach ($value as $key1 => $value1) {
+                            $tmp[$key] = $value;
+                        }
+                        $array = $array + $tmp ;
                     }
                 } else {
                     $array[$key] = $value;
@@ -209,6 +263,8 @@ class SavesqlserController extends Controller
 
         return $array;
     }
+
+
     public function getCol($tab){
         switch ($tab) {
             case 'log_account':  //创建用户
