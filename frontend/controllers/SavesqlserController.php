@@ -34,7 +34,7 @@ class SavesqlserController extends Controller
         $logPath = Yii::$app->params['onlinePath']; //文件保存目录
         $contFile = file_get_contents($sinkFile);
 
-        $fileName = $logPath . $_GET['file'];
+        $fileName = $logPath.$_GET['file'];
         $cont = file_get_contents($fileName);
 
 
@@ -45,22 +45,23 @@ class SavesqlserController extends Controller
             foreach ($datas as $k => $v) {
                 if ($v) {
                     if ($json = json_decode($v)) {
-                        $tmpData[] = $this->objeToArr($json);
+                        $tmpData = $this->objeToArr($json);
 
                         $time =$tmpData['f_time'] ;
                         $data = array(
                             "f_dept"=>$tmpData['f_dept'],
                             "f_server_address_id"=>$tmpData['f_server_address_id'] ,
                             "f_game_id"=>$tmpData['f_game_id'],
-                            "f_time"=>"'".date("Y-m-d H:i:s",$time)."'" ,
+                            "f_time"=>"'".date("Y-m-d H:i:s",$tmpData['f_time'])."'" ,
                             "f_num"=>$tmpData['f_num'] ,
-                            "f_vip_num"=>$tmpData['f_VIP_num'],
+                            "f_vip_num"=>$tmpData['f_VIP_num']?$tmpData['f_VIP_num']:0,
                         ) ;
                         $str = implode(',',array_values($data)) ;
                         $str2 =  implode(',',array_keys($data)) ;
 
                         $sql = "insert into log_onlineinfo ($str2) VALUES ($str)" ;
                         $this->mssdb->runSql($sql) ;
+
                         sleep(0.1);
                     }
                 }
