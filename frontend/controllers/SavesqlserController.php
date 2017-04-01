@@ -77,8 +77,7 @@ class SavesqlserController extends Controller
 
 //        $this->mssdb->getUserInfo() ; die;
 //        $tabArr = $this->mssdb->getTabColumn('log_character') ;
-//        $this->getFileCont() ;
-        echo $_GET['file'] ;die ;
+        $this->getFileCont() ;
 
 //
 
@@ -96,9 +95,9 @@ class SavesqlserController extends Controller
         $fileArr = explode("\n", $contFile);
 
         $tmp2 = array();
-        foreach($fileArr as $v){
+//        foreach($fileArr as $v){
             $allData =array() ;
-            $fileName = $logPath. $v;
+            $fileName = $logPath. $_GET['file'] ;
             $cont = file_get_contents($fileName);
 //            echo $fileName."<br>" ;
             $datas = explode("\n", $cont);
@@ -139,7 +138,7 @@ class SavesqlserController extends Controller
                             continue;
                         }
                     }
-                }
+//                }
             }
             $tmpAllKey = array_keys($allData) ;
             $numLen =50 ;
