@@ -112,6 +112,8 @@ class SavesqlserController extends Controller
                             'log_jinbi', 'log_uplevel', 'log_horse_tame', 'log_equip', 'log_jingjie_up',
 //                            'log_killboss',
                         );
+                        var_dump($logArr) ;
+
 //                        $logArr = array('log_recharge') ;
                         //log_horse_tame  log_equip log_skill_up 没数据 log_card_gain有错误
 
@@ -145,7 +147,7 @@ class SavesqlserController extends Controller
 
                 if($tabDataLen>$numLen) {
                     $leng = floor($tabDataLen/$numLen) ;
-                    for($i=0;$i<=$numLen;$i++){
+                    for($i=0;$i<=$leng;$i++){
 
                         $valStr ='' ;
                         for($k=0;$k<$numLen;$k++){
