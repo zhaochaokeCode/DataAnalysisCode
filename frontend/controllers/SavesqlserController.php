@@ -39,6 +39,7 @@ class SavesqlserController extends Controller
         foreach($fileArr as $v) {
             $allData = array();
             $fileName = $logPath . $v;
+
             $cont = file_get_contents($fileName);
             $datas = explode("\n", $cont);
             unset($cont);
@@ -72,6 +73,8 @@ class SavesqlserController extends Controller
 
 
     public function actionIndex(){
+
+
 //        $this->mssdb->getUserInfo() ; die;
 //        $tabArr = $this->mssdb->getTabColumn('log_character') ;
         $this->getFileCont() ;
@@ -84,7 +87,7 @@ class SavesqlserController extends Controller
         $tabArr = $this->mssdb->getTabColumn($this->tabname) ;
     }
     public function getFileCont(){
-        ini_set('memory_limit', '1024M');
+        ini_set('memory_limit', '3000M');
         $sinkFile = Yii::$app->params['runFile'];//中间通道数据文件路径
         $logPath = Yii::$app->params['filePath']; //文件保存目录
         $contFile = file_get_contents($sinkFile);
@@ -145,30 +148,20 @@ class SavesqlserController extends Controller
                 $keyStr = $this->getCol($tabName);
 
                 if($tabDataLen>$numLen) {
-                    $leng = floor($tabDataLen/$numLen) ;
-                    for($i=0;$i<=$leng;$i++){
 
-                        $valStr ='' ;
-                        for($k=0;$k<$numLen;$k++){
-                            if($i==0){
-                                $keyVal = $k ;
-                            }else{
-                                $keyVal = $k+($i*$numLen) ;
-                            }
-                            if($v3=$allData[$tabName][$keyVal]){
-                                $tmpStr = implode(',', $v3);
-                                if ($valStr != null) {
-                                    $valStr .= ",($tmpStr)";
-                                } else {
-                                    $valStr .= "($tmpStr)";
-                                }
+                    $newArr =array_chunk($allData[$tabName],50) ;
 
+                    foreach($newArr as $k=>$v){
+                        foreach ($v as $item) {
+                            $tmpStr = implode(',', $item);
+                            if ($valStr != null) {
+                                $valStr .= ",($tmpStr)";
+                            } else {
+                                $valStr .= "($tmpStr)";
                             }
                         }
                         if ($valStr) {
                             $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-
-                            if(stristr($keyStr ,'log_recharge')) echo $sql."<br>" ;
                             $tabArr = $this->mssdb->runSql($sql);
                             sleep(0.2) ;
                         }
@@ -185,7 +178,6 @@ class SavesqlserController extends Controller
                         }
                     }
                     if ($valStr) {
-                        if(stristr($keyStr ,'log_recharge')) echo $sql."<br>" ;
                         $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
                         $tabArr = $this->mssdb->runSql($sql);
                         sleep(0.2) ;
