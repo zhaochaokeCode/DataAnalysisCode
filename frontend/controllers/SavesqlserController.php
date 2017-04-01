@@ -107,11 +107,10 @@ class SavesqlserController extends Controller
                         $name = $tmpData['f_log_name'];
 
                         $logArr = array(
-                            'log_account', 'log_character', 'log_login', 'log_logout',
+                            'log_account', 'log_character', 'log_login', 'log_logout','log_recharge',
                             'log_stage', 'log_dungeon', 'log_jinbi', 'log_consumption', 'log_item', 'log_yuanbao',
                             'log_jinbi', 'log_uplevel', 'log_horse_tame', 'log_equip', 'log_jingjie_up',
 //                            'log_killboss',
-                            'log_dungeon',
                         );
                         //log_horse_tame  log_equip log_skill_up 没数据 log_card_gain有错误
 
