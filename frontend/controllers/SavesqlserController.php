@@ -137,7 +137,7 @@ class SavesqlserController extends Controller
                 }
             }
             $tmpAllKey = array_keys($allData) ;
-            $numLen =10 ;
+            $numLen =50 ;
             foreach ($tmpAllKey as $tabName) {
                 $tabDataLen = count($allData[$tabName]);
                 $valStr = '' ;
@@ -146,7 +146,7 @@ class SavesqlserController extends Controller
 
                 if($tabDataLen>$numLen) {
                     $leng = floor($tabDataLen/$numLen) ;
-                    for($i=0;$i<=10;$i++){
+                    for($i=0;$i<=$numLen;$i++){
 
                         $valStr ='' ;
                         for($k=0;$k<$numLen;$k++){
@@ -169,7 +169,7 @@ class SavesqlserController extends Controller
                         if ($valStr) {
                             $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
 //                            echo $sql."<br>" ;
-                        $tabArr = $this->mssdb->runSql($sql);
+                            $tabArr = $this->mssdb->runSql($sql);
                         }
                     }
                 }else {
