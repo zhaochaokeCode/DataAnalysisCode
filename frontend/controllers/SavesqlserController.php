@@ -34,13 +34,11 @@ class SavesqlserController extends Controller
         $logPath = Yii::$app->params['onlinePath']; //文件保存目录
         $contFile = file_get_contents($sinkFile);
 
-        $fileArr = explode("\n", $contFile);
-        $tmp2 = array();
-        foreach($fileArr as $v) {
-            $allData = array();
-            $fileName = $logPath . $v;
+        $fileName = $logPath . $_GET['file'];
+        $cont = file_get_contents($fileName);
 
-            $cont = file_get_contents($fileName);
+
+
             $datas = explode("\n", $cont);
             unset($cont);
 
@@ -66,7 +64,6 @@ class SavesqlserController extends Controller
                         sleep(0.1);
                     }
                 }
-            }
 
         }
 
