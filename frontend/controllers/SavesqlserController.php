@@ -138,7 +138,6 @@ class SavesqlserController extends Controller
                     }
                     if ($valStr) {
                         $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-
                         $tabArr = $this->mssdb->runSql($sql);
                         sleep(0.2) ;
                     }
@@ -249,10 +248,10 @@ class SavesqlserController extends Controller
             foreach ($object as $key => $value) {
                 if ($key == 'f_params') {
                     if ($value) {
-                        foreach ($value as $key1 => $value1) {
-                            $tmp[$key] = $value;
+                        foreach($value as $k1=>$v1){
+                            $tmpArr[$k1] =$v1 ;
                         }
-                        $array = $array + $tmp ;
+                        $array = $array + $tmpArr;
                     }
                 } else {
                     $array[$key] = $value;
