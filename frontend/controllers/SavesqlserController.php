@@ -112,7 +112,6 @@ class SavesqlserController extends Controller
                             'log_jinbi', 'log_uplevel', 'log_horse_tame', 'log_equip', 'log_jingjie_up',
 //                            'log_killboss',
                         );
-                        var_dump($logArr) ;
 
 //                        $logArr = array('log_recharge') ;
                         //log_horse_tame  log_equip log_skill_up 没数据 log_card_gain有错误
