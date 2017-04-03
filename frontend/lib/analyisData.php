@@ -56,7 +56,7 @@ class analyisData
         //----- 查询
         $dataArr = $this->db->query($sql) ;
 
-        $monthArr =  array("Mar"=>3) ;
+        $monthArr =  array("Mar"=>3,"Apr"=>"4") ;
 
         $newData = array() ;
         //--重新拼装数据------
@@ -67,8 +67,7 @@ class analyisData
                 if($i==1){
                     $tdate = str_replace("12:00:00:AM",'',$v[$i]) ;
                     $tmp = explode(" ",$tdate) ;
-
-                    $v[$i]  = $tmp[2]."-".$monthArr[$tmp[0]]."-".$tmp[1] ;
+                    $v[$i]  = "2017"."-".$monthArr[$tmp[0]]."-".$tmp[1] ;
                 }
                 if($i==3&&$v[$i]==-1){
                     $v[$i]  = '全平台' ;
@@ -90,6 +89,7 @@ class analyisData
             //---补齐所缺少的字段
 
             $newData[] = $tmpArr ;
+
 
 
         }
