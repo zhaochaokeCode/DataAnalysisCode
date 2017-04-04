@@ -7,7 +7,68 @@ use Yii ;
 
 class CountController extends CommController
 {
-    public function actionRecharge()
+
+    public function actionIndex()
+    {
+        ini_set('memory_limit', '1000M');
+
+        $filesnames = '/data/flume_logs/skill_log';
+
+        $dp = dir($filesnames);
+        while ($file = $dp ->read()){
+            if($file !="." && $file !=".."){
+                echo $file ;
+                $cont = file_get_contents($filesnames."/".$file);
+
+
+                $datas = explode("\n", $cont);
+                $data = array_chunk($datas,10000);
+                foreach($data as $v) {
+                    foreach ($v as $v2) {
+                        if ($json = json_decode($v2)) {
+                            $tmpData = $this->objeToArr($json);
+                            if ($allInfo[$tmpData['log_name']]) {
+                                $allInfo[$tmpData['log_name']]++;
+
+                            } else {
+                                $allInfo[$tmpData['log_name']] = 0;
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+        public function objeToArr($object)
+    {
+        $array = array();
+        if (is_object($object)) {
+            foreach ($object as $key => $value) {
+                if ($key == 'f_params') {
+                    if ($value) {
+                        foreach($value as $k1=>$v1){
+                            $tmpArr[$k1] =$v1 ;
+                        }
+                        $array = $array + $tmpArr;
+                    }
+                } else {
+                    $array[$key] = $value;
+                }
+            }
+        } else {
+            $array = $object;
+        }
+
+        return $array;
+    }
+
+
+
+
+        public function actionRecharge()
     {
         $etime = $this->getStrart() ;
         $stime =   $etime-86400*31  ;
