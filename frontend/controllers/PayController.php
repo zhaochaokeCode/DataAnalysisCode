@@ -513,7 +513,7 @@ class PayController extends Controller
             "other"=>"1"
         );
         ksort($data) ;
-        $recallUrl = "pay.slth0.chuntianhuyugame.com:40200/notify/002070000?" ;
+        $recallUrl = "pay.slth1.chuntianhuyugame.com:40200/notify/002070000?" ;
         $condition = $this->getSignContent($data) ;
         $str = '' ;
         foreach($data as $k=>$v){

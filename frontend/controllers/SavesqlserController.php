@@ -107,25 +107,28 @@ class SavesqlserController extends Controller
         $newArr = array_chunk($datas, 20000);
         $logArr = array(
             'log_account', 'log_character', 'log_login', 'log_logout', 'log_recharge',
-            'log_stage', 'log_dungeon', 'log_jinbi', 'log_consumption', 'log_item', 'log_yuanbao',
-            'log_jinbi', 'log_uplevel', 'log_horse_tame', 'log_equip', 'log_jingjie_up',
-//                            'log_killboss',
+            'log_stage', 'log_dungeon', 'log_jinbi', 'log_consumption', 'log_item',
+            'log_yuanbao', 'log_jinbi', 'log_uplevel', 'log_horse_tame', 'log_equip',
+            'log_jingjie_up', 'log_skill_up','log_killboss','log_marry','log_card_train',
+
         );
         foreach ($newArr as $k => $v) {
             $allData = array();
             foreach ($v as $v1) {
                 if ($json = json_decode($v1)) {
                     $tmpData = $this->objeToArr($json);
-                    $name = $tmpData['f_log_name'];
-                    if (in_array($name, $logArr)) {
-                        $allData[$name][] = $this->createData($name, $tmpData);
+                    $name = $tmpData['f_log_name'];//
+                    if ($name=='log_marry') {
+//                        $allData[$name][] = $this->createData($name, $tmpData);
+                        var_dump($tmpData);
+                        die;
                     }
                 }
 
-
             }
+            continue ;
             foreach ($allData as $tabName => $v) {
-                $keyStr = $this->getCol($tabName);
+                 $keyStr = $this->getCol($tabName);
                 $valStr = '';
                 foreach ($v as $item) {
                     $tmpStr = implode(',', $item);
@@ -135,11 +138,11 @@ class SavesqlserController extends Controller
                         $valStr .= "($tmpStr)";
                     }
                 }
-                if ($valStr) {
-                    $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-                    $tabArr = $this->mssdb->runSql($sql);
-                    sleep(0.02);
-                }
+//                if ($valStr) {
+//                    $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
+//                    $tabArr = $this->mssdb->runSql($sql);
+//                    sleep(0.02);
+//                }
             }
             unset($allData);
 
@@ -571,7 +574,20 @@ class SavesqlserController extends Controller
                 );
                 break ;
             case 'log_marry':
-                $keyStr ="f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_m_yunying_id,f_w_yunying_id,f_m_character_id,f_w_character_id,f_m_character_grade,f_w_character_grade,f_m_character_ip,f_w_character_ip,f_lovetoken_id";
+             //   $keyStr ="f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_m_yunying_id,f_w_yunying_id,f_m_character_id,f_w_character_id,f_m_character_grade,f_w_character_grade,f_m_character_ip,f_w_character_ip,f_lovetoken_id";
+                $data2 = array(
+                    $data['f_dept'],
+                    $data['f_server_address_id'],
+                    $data['f_game_id'],
+                    "'".date("Y-m-d H:i:s",$data['f_time'])."'",
+                    $data['f_sid'],
+                    "'".$data['f_yunying_id']."'",
+                    $data['f_character_id'],
+                    $data['f_character_grade'],
+                    $t.$data['f_character_ip'].$t,
+                    $data['f_boss_id'],
+                );
+                break ;
                 break ;
         }
         return $data2 ;
