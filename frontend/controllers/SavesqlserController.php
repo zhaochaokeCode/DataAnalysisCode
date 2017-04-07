@@ -91,13 +91,6 @@ class SavesqlserController extends Controller
         ini_set('memory_limit', '1000M');
         $sinkFile = Yii::$app->params['runFile'];//中间通道数据文件路径
         $logPath = Yii::$app->params['filePath']; //文件保存目录
-        $contFile = file_get_contents($sinkFile);
-
-        $fileArr = explode("\n", $contFile);
-
-        $tmp2 = array();
-//        foreach($fileArr as $v){
-        $allData = array();
         $fileName = $logPath . $_GET['file'];
         $cont = file_get_contents($fileName);
 //            echo $fileName."<br>" ;
@@ -118,15 +111,13 @@ class SavesqlserController extends Controller
                 if ($json = json_decode($v1)) {
                     $tmpData = $this->objeToArr($json);
                     $name = $tmpData['f_log_name'];//
-                    if ($name=='log_marry') {
-//                        $allData[$name][] = $this->createData($name, $tmpData);
-                        var_dump($tmpData);
-                        die;
+                    if(in_array($logArr,$name)){
+//                    if ($name=='log_marry') {
+                        $allData[$name][] = $this->createData($name, $tmpData);
                     }
                 }
 
             }
-            continue ;
             foreach ($allData as $tabName => $v) {
                  $keyStr = $this->getCol($tabName);
                 $valStr = '';
@@ -138,18 +129,14 @@ class SavesqlserController extends Controller
                         $valStr .= "($tmpStr)";
                     }
                 }
-//                if ($valStr) {
-//                    $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-//                    $tabArr = $this->mssdb->runSql($sql);
-//                    sleep(0.02);
-//                }
+                if ($valStr) {
+                    $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
+                    $tabArr = $this->mssdb->runSql($sql);
+                    sleep(0.02);
+                }
             }
             unset($allData);
-
         }
-        $date = date("Y-m-d H:i:s", time());
-        file_put_contents('/data/num.txt', $date . "---" . $_GET['file'] . "---" . $p . "\n", FILE_APPEND);
-
     }
 
 
