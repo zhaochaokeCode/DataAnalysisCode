@@ -102,7 +102,8 @@ class SavesqlserController extends Controller
             'log_account', 'log_character', 'log_login', 'log_logout', 'log_recharge',
             'log_stage', 'log_dungeon', 'log_jinbi', 'log_consumption', 'log_item',
             'log_yuanbao', 'log_jinbi', 'log_uplevel', 'log_horse_tame', 'log_equip',
-            'log_jingjie_up', 'log_skill_up','log_killboss','log_marry','log_card_train',
+            'log_jingjie_up',
+// 'log_skill_up','log_killboss','log_marry','log_card_train',
 
         );
         foreach ($newArr as $k => $v) {
@@ -217,9 +218,9 @@ class SavesqlserController extends Controller
             case 'log_killboss': //野外boss
                 $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_boss_id" ;
                 break ;
-            case 'log_marry':
-                $keyStr ="f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_m_yunying_id,f_w_yunying_id,f_m_character_id,f_w_character_id,f_m_character_grade,f_w_character_grade,f_m_character_ip,f_w_character_ip,f_lovetoken_id";
-                break ;
+//            case 'log_marry':
+//                $keyStr ="f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_m_yunying_id,f_w_yunying_id,f_m_character_id,f_w_character_id,f_m_character_grade,f_w_character_grade,f_m_character_ip,f_w_character_ip,f_lovetoken_id";
+//                break ;
         }
         return $keyStr ;
     }
