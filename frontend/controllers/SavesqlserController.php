@@ -109,7 +109,7 @@ class SavesqlserController extends Controller
                 if ($json = json_decode($v1)) {
                     $tmpData = $this->objeToArr($json);
                     $name = $tmpData['f_log_name'];//
-                    if(in_array($logArr,$name)){
+                    if(in_array($name,$logArr)){
                         $allData[$name][] = $this->createData($name, $tmpData);
                     }
                 }
@@ -127,7 +127,7 @@ class SavesqlserController extends Controller
                 }
                 if ($valStr) {
                     $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-//                    $tabArr = $this->mssdb->runSql($sql);
+                    $tabArr = $this->mssdb->runSql($sql);
                     sleep(0.02);
                 }
             }
