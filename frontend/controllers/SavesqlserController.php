@@ -89,22 +89,19 @@ class SavesqlserController extends Controller
     {
         $p = 0;
         ini_set('memory_limit', '1000M');
-        $sinkFile = Yii::$app->params['runFile'];//中间通道数据文件路径
         $logPath = Yii::$app->params['filePath']; //文件保存目录
+
         $fileName = $logPath . $_GET['file'];
         $cont = file_get_contents($fileName);
-//            echo $fileName."<br>" ;
         $datas = explode("\n", $cont);
         unset($cont);
-        $p += count($datas);
         $newArr = array_chunk($datas, 20000);
         $logArr = array(
             'log_account', 'log_character', 'log_login', 'log_logout', 'log_recharge',
             'log_stage', 'log_dungeon', 'log_jinbi', 'log_consumption', 'log_item',
             'log_yuanbao', 'log_jinbi', 'log_uplevel', 'log_horse_tame', 'log_equip',
             'log_jingjie_up',
-// 'log_skill_up','log_killboss','log_marry','log_card_train',
-
+//            'log_skill_up','log_killboss','log_marry'
         );
         foreach ($newArr as $k => $v) {
             $allData = array();
@@ -113,11 +110,9 @@ class SavesqlserController extends Controller
                     $tmpData = $this->objeToArr($json);
                     $name = $tmpData['f_log_name'];//
                     if(in_array($logArr,$name)){
-//                    if ($name=='log_marry') {
                         $allData[$name][] = $this->createData($name, $tmpData);
                     }
                 }
-
             }
             foreach ($allData as $tabName => $v) {
                  $keyStr = $this->getCol($tabName);
@@ -137,6 +132,7 @@ class SavesqlserController extends Controller
                 }
             }
             unset($allData);
+
         }
     }
 
@@ -218,9 +214,9 @@ class SavesqlserController extends Controller
             case 'log_killboss': //野外boss
                 $keyStr = "f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_boss_id" ;
                 break ;
-//            case 'log_marry':
-//                $keyStr ="f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_m_yunying_id,f_w_yunying_id,f_m_character_id,f_w_character_id,f_m_character_grade,f_w_character_grade,f_m_character_ip,f_w_character_ip,f_lovetoken_id";
-//                break ;
+            case 'log_marry':
+                $keyStr ="f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_m_yunying_id,f_w_yunying_id,f_m_character_id,f_w_character_id,f_m_character_grade,f_w_character_grade,f_m_character_ip,f_w_character_ip,f_lovetoken_id";
+                break ;
         }
         return $keyStr ;
     }
@@ -562,20 +558,7 @@ class SavesqlserController extends Controller
                 );
                 break ;
             case 'log_marry':
-             //   $keyStr ="f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_m_yunying_id,f_w_yunying_id,f_m_character_id,f_w_character_id,f_m_character_grade,f_w_character_grade,f_m_character_ip,f_w_character_ip,f_lovetoken_id";
-                $data2 = array(
-                    $data['f_dept'],
-                    $data['f_server_address_id'],
-                    $data['f_game_id'],
-                    "'".date("Y-m-d H:i:s",$data['f_time'])."'",
-                    $data['f_sid'],
-                    "'".$data['f_yunying_id']."'",
-                    $data['f_character_id'],
-                    $data['f_character_grade'],
-                    $t.$data['f_character_ip'].$t,
-                    $data['f_boss_id'],
-                );
-                break ;
+                $keyStr ="f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_m_yunying_id,f_w_yunying_id,f_m_character_id,f_w_character_id,f_m_character_grade,f_w_character_grade,f_m_character_ip,f_w_character_ip,f_lovetoken_id";
                 break ;
         }
         return $data2 ;
