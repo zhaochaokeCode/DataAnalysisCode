@@ -28,10 +28,6 @@ class IndexController extends CommController
     {
         $ip = $_SERVER["REMOTE_ADDR"];
 
-        if($ip!='210.12.129.178'){
-            echo "<h1 align='center'>禁止登录</h1>" ;die;
-        }
-
         $session = Yii::$app->session;
         if(!isset($session['user_name'])&&!isset($_GET['create_data'])){
             $this->render("//login/index") ;
