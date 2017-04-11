@@ -26,14 +26,20 @@ class IndexController extends CommController
 
     public function init()
     {
-        $str = '{"f_time":1490859973,"f_user_id":"58ca955936a5f338044480c5","f_game_id":"bw1001","f_sid":1,"f_character_id":111362,"f_activate":1}' ;
-        $tmp =  json_decode($str) ;
-        $array = array(
-            "f_user_id"=>$tmp->f_user_id,
-            "f_snid"=>$tmp->f_sid,
-            "f_character_id"=>$tmp->f_character_id,
-            "f_activate"=>$tmp->f_activate,
-        ) ;
+        $ip = $_SERVER["REMOTE_ADDR"];
+
+        if($ip!='210.12.129.178'){
+            echo "<h1 align='center'>禁止登录</h1>" ;die;
+        }
+
+        $session = Yii::$app->session;
+        if(!isset($session['user_name'])&&!isset($_GET['create_data'])){
+            $this->render("//login/index") ;
+        }
+        if($session['user_name']!='baiwen100'){
+            $this->render("//login/index") ;
+        }
+
 
         $this->sqlser =  new analyisData() ;
     }
@@ -44,7 +50,6 @@ class IndexController extends CommController
      */
     public function actionIndex()
     {
-
         $action = isset($_GET['action']) ? $_GET['action'] : 'general_daily"';
         return $this->render('index',
             array('action' => $action));

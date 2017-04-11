@@ -27,7 +27,11 @@ class LoginController extends Controller{
         if(isset($_POST['name'])&&isset($_POST['password'])){
             if($_POST['name']&&$_POST['password']){
                 $session['user_name']= $_POST['name'] ;
-                echo true ;
+                if($_POST['name']=='baiwen100'&&$_POST['password']=='Bs0ASasd19*'){
+                    echo true ;
+                }else{
+                    echo false ;
+                }
             }else{
                 echo false ;
             }

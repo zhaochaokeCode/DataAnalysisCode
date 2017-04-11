@@ -22,6 +22,9 @@ class CommController extends Controller
         if(!isset($session['user_name'])&&!isset($_GET['create_data'])){
             $this->render("//login/index") ;
         }
+        if($session['user_name']!='baiwen100'){
+            $this->render("//login/index") ;
+        }
 //        else{
 //            echo $session['user_name'] ;
 //        }

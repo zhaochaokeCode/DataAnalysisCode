@@ -10,7 +10,7 @@ function submitBut(id_var){
             location.href = "http://"+ window.location.host ;
             //    alert("http://"+ window.location.host) ;
             }else{
-                alert('验证失败') ;
+                alert('用户名或者密码错误,请重新输入') ;
                 return false ;
             }
         }
