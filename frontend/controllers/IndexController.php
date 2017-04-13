@@ -26,16 +26,11 @@ class IndexController extends CommController
 
     public function init()
     {
-        $ip = $_SERVER["REMOTE_ADDR"];
 
         $session = Yii::$app->session;
-        if(!isset($session['user_name'])&&!isset($_GET['create_data'])){
+        if(!isset($session['user_name'])){
             $this->render("//login/index") ;
         }
-        if($session['user_name']!='baiwen100'){
-            $this->render("//login/index") ;
-        }
-
 
         $this->sqlser =  new analyisData() ;
     }
