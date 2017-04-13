@@ -87,11 +87,22 @@ class SavesqlserController extends Controller
     }
     public function getFileCont()
     {
-        $p = 0;
         ini_set('memory_limit', '1000M');
         $logPath = Yii::$app->params['filePath']; //文件保存目录
 
+
+        if(isset($_GET['type'])){
+            $type = $_GET['type'] ;
+            if($type==1){
+                $logPath =  Yii::$app->params['path1'];
+            }
+            if($type==2){
+                $logPath =  Yii::$app->params['path2'];
+            }
+        }
+
         $fileName = $logPath . $_GET['file'];
+
         $cont = file_get_contents($fileName);
         $datas = explode("\n", $cont);
 
@@ -106,8 +117,6 @@ class SavesqlserController extends Controller
 
         foreach ($newArr as $k => $v) {
             $allData = array();
-
-
             foreach ($v as $k1=>$v1) {
                 if ($json = json_decode($v1)) {
 
@@ -131,7 +140,6 @@ class SavesqlserController extends Controller
                 }
                 if ($valStr) {
                     $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-//                    echo $sql ;
                     $tabArr = $this->mssdb->runSql($sql);
                     sleep(0.02);
                 }
