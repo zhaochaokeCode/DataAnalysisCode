@@ -35,10 +35,10 @@ class PayController extends Controller
     public function actionIndex()
     {
 
-        $this->checkSign() ;
+//        $this->checkSign() ;
         $app_id = "2017011205020547" ;
         $time =time() ;
-        if($this->saveOrder($_POST,1,$time)) {
+        if($this->saveOrder($_GET,1,$time)) {
             $parameter = array(
                 "app_id" => $app_id,
                 "biz_content" => json_encode(array(
@@ -377,6 +377,11 @@ class PayController extends Controller
             "f_os"=>$data['os'],
             "f_status"=>0
         ) ;
+        if(isset($data['user_name'])){
+            $data2['f_user_name'] = $data['user_name'] ;
+            $data2['f_user_id'] = $data['user_id'] ;
+        }
+        var_dump($data2) ;die;
 
         return $this->saveToMysql('create_order_info',$data2) ;
 
