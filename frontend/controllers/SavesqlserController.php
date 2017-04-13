@@ -21,7 +21,7 @@ class SavesqlserController extends Controller
     public $days = 7;
 
     public $mssdb = '';
-    public $tabname ='log_marry' ;
+    public $tabname ='log_card_train' ;
 
     public function init()
     {
@@ -94,19 +94,23 @@ class SavesqlserController extends Controller
         $fileName = $logPath . $_GET['file'];
         $cont = file_get_contents($fileName);
         $datas = explode("\n", $cont);
+
         unset($cont);
         $newArr = array_chunk($datas, 20000);
         $logArr = array(
             'log_account', 'log_character', 'log_login', 'log_logout', 'log_recharge',
-            'log_stage', 'log_dungeon', 'log_jinbi', 'log_consumption', 'log_item',
-            'log_yuanbao', 'log_jinbi', 'log_uplevel', 'log_horse_tame', 'log_equip',
-            'log_jingjie_up',
-//            'log_skill_up','log_killboss','log_marry'
+            'log_yuanbao',  'log_jinbi',    'log_item','log_uplevel','log_consumption',
+            'log_stage',    'log_card_gain','log_card_train','log_horse_tame','log_equip',
+            'log_skill_up', 'log_jingjie_up','log_killboss', 'log_dungeon', 'log_marry',
         );
+
         foreach ($newArr as $k => $v) {
             $allData = array();
-            foreach ($v as $v1) {
+
+
+            foreach ($v as $k1=>$v1) {
                 if ($json = json_decode($v1)) {
+
                     $tmpData = $this->objeToArr($json);
                     $name = $tmpData['f_log_name'];//
                     if(in_array($name,$logArr)){
@@ -127,11 +131,13 @@ class SavesqlserController extends Controller
                 }
                 if ($valStr) {
                     $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
+//                    echo $sql ;
                     $tabArr = $this->mssdb->runSql($sql);
                     sleep(0.02);
                 }
             }
             unset($allData);
+            sleep(1);
 
         }
     }
@@ -156,7 +162,6 @@ class SavesqlserController extends Controller
         } else {
             $array = $object;
         }
-
         return $array;
     }
 
@@ -216,6 +221,12 @@ class SavesqlserController extends Controller
                 break ;
             case 'log_marry':
                 $keyStr ="f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_m_yunying_id,f_w_yunying_id,f_m_character_id,f_w_character_id,f_m_character_grade,f_w_character_grade,f_m_character_ip,f_w_character_ip,f_lovetoken_id";
+                break ;
+            case 'log_skill_up':
+                $keyStr ="f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_model_id,f_level_num,f_goods_num";
+                break ;
+            case 'log_card_train':
+                $keyStr ="f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_yunying_id,f_character_id,f_character_grade,f_character_ip,f_model_id,f_id,f_card_color,f_card_num,f_jingyan_num,f_card_before,f_card_after";
                 break ;
         }
         return $keyStr ;
@@ -475,7 +486,7 @@ class SavesqlserController extends Controller
                     $data['f_model_id'],
                     $data['f_id'],
                     $data['f_card_color'],
-                    $data['f_yuanbao_num'],
+                    $tmp = $data['f_yuanbao_num']?$data['f_yuanbao_num']:0,
 
                 );
                 break ;
@@ -558,7 +569,63 @@ class SavesqlserController extends Controller
                 );
                 break ;
             case 'log_marry':
-                $keyStr ="f_dept,f_server_address_id,f_game_id,f_time,f_sid,f_m_yunying_id,f_w_yunying_id,f_m_character_id,f_w_character_id,f_m_character_grade,f_w_character_grade,f_m_character_ip,f_w_character_ip,f_lovetoken_id";
+//                $keyStr ="f_m_yunying_id,f_w_yunying_id,f_m_character_id,f_w_character_id,f_m_character_grade,f_w_character_grade,f_m_character_ip,f_w_character_ip,f_lovetoken_id";
+
+                $data2 = array(
+                    $data['f_dept'],
+                    $data['f_server_address_id'],
+                    $data['f_game_id'],
+                    "'".date("Y-m-d H:i:s",$data['f_time'])."'",
+                    $data['f_sid'],
+
+                    "'".$data['f_m_yunying_id']."'",
+                    "'".$data['f_w_yunying_id']."'",
+                    $data['f_m_character_id'],
+                    $data['f_w_character_id'],
+                    $data['f_m_character_grade'],
+                    $data['f_w_character_grade'],
+                    $t.$data['f_m_character_ip'].$t,
+                    $t.$data['f_w_character_ip'].$t,
+                    $data['f_lovetoken_id'],
+                );
+                break ;
+            //f_model_id,f_level_num,f_goods_num
+            case 'log_skill_up':
+                $data2 = array(
+                    $data['f_dept'],
+                    $data['f_server_address_id'],
+                    $data['f_game_id'],
+                    "'".date("Y-m-d H:i:s",$data['f_time'])."'",
+                    $data['f_sid'],
+                    "'".$data['f_yunying_id']."'",
+                    $data['f_character_id'],
+                    $data['f_character_grade'],
+                    $t.$data['f_character_ip'].$t,
+                    $data['f_model_id'],
+                    $data['f_level_num'],
+                    $data['f_goods_num']
+                );
+                break ;
+            case 'log_card_train':
+                //f_model_id,f_id,f_card_color,f_card_num,f_jingyan_num,f_card_before,f_card_after";
+                $data2 = array(
+                    $data['f_dept'],
+                    $data['f_server_address_id'],
+                    $data['f_game_id'],
+                    "'".date("Y-m-d H:i:s",$data['f_time'])."'",
+                    $data['f_sid'],
+                    "'".$data['f_yunying_id']."'",
+                    $data['f_character_id'],
+                    $data['f_character_grade'],
+                    $t.$data['f_character_ip'].$t,
+                    $data['f_model_id'],
+                    $t.$data['f_id'].$t,
+                    $data['f_card_color'],
+                    $data['f_card_num'],
+                    $data['f_jingyan_num'],
+                    $data['f_card_before'],
+                    $tmp = $data['f_card_after']?$data['f_card_after']:0,
+                );
                 break ;
         }
         return $data2 ;
