@@ -98,7 +98,9 @@ class SavesqlserController extends Controller
             if($type==2){
                 $logPath =  Yii::$app->params['path2'];
             }
-          
+            if($type==3){
+                $logPath =  Yii::$app->params['path3'];
+            }
 
         }
 
