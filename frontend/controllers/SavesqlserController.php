@@ -107,7 +107,7 @@ class SavesqlserController extends Controller
         $datas = explode("\n", $cont);
 
         unset($cont);
-        $newArr = array_chunk($datas, 20000);
+        $newArr = array_chunk($datas, 10000);
         $logArr = array(
             'log_account', 'log_character', 'log_login', 'log_logout', 'log_recharge',
             'log_yuanbao',  'log_jinbi',    'log_item','log_uplevel','log_consumption',
@@ -115,7 +115,7 @@ class SavesqlserController extends Controller
             'log_skill_up', 'log_jingjie_up','log_killboss', 'log_dungeon', 'log_marry',
         );
 
-        foreach ($newArr as $k => $v) {
+        foreach ($datas as $k => $v) {
             $allData = array();
             foreach ($v as $k1=>$v1) {
                 if ($json = json_decode($v1)) {
@@ -127,10 +127,10 @@ class SavesqlserController extends Controller
                     }
                 }
             }
-            foreach ($allData as $tabName => $v) {
+            foreach ($allData as $tabName => $v2) {
                  $keyStr = $this->getCol($tabName);
                 $valStr = '';
-                foreach ($v as $item) {
+                foreach ($v2 as $item) {
                     $tmpStr = implode(',', $item);
                     if ($valStr != null) {
                         $valStr .= ",($tmpStr)";
