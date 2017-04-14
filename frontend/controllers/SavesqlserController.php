@@ -107,7 +107,20 @@ class SavesqlserController extends Controller
         $datas = explode("\n", $cont);
 
         unset($cont);
-        $newArr = array_chunk($datas, 10000);
+        $nums = count($datas) ;
+        if($nums>10000){
+            $length = ceil($nums/10000);
+            for($i=0;$i<$length;$i++){
+                for($k=0;$k<10000;$k++){
+                    $start = $k+$i*10000;
+                    $newArr[$i][]=$datas[$start];
+                }
+            }
+        }else{
+            $newArr = array($datas) ;
+        }
+        unset($datas) ;
+
         $logArr = array(
             'log_account', 'log_character', 'log_login', 'log_logout', 'log_recharge',
             'log_yuanbao',  'log_jinbi',    'log_item','log_uplevel','log_consumption',
@@ -115,7 +128,7 @@ class SavesqlserController extends Controller
             'log_skill_up', 'log_jingjie_up','log_killboss', 'log_dungeon', 'log_marry',
         );
 
-        foreach ($datas as $k => $v) {
+        foreach ($newArr as $k => $v) {
             $allData = array();
             foreach ($v as $k1=>$v1) {
                 if ($json = json_decode($v1)) {
