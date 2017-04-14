@@ -161,8 +161,6 @@ class SavesqlserController extends Controller
                 }
             }
             unset($allData);
-            sleep(0.3);
-
         }
     }
 
