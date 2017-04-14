@@ -102,13 +102,13 @@ class SavesqlserController extends Controller
         }
 
         $fileName = $logPath . $_GET['file'];
-
         $cont = file_get_contents($fileName);
         $datas = explode("\n", $cont);
 
+
         unset($cont);
         $nums = count($datas) ;
-        if($nums>10000){
+        if($nums>20000){
             $length = ceil($nums/10000);
             for($i=0;$i<$length;$i++){
                 for($k=0;$k<10000;$k++){
@@ -135,16 +135,6 @@ class SavesqlserController extends Controller
 
                     $tmpData = $this->objeToArr($json);
                     $name = $tmpData['f_log_name'];//
-
-                    if($name =='log_stage'){
-//                        var_dump($tmpData) ;die;
-                        $allData[$name][] = $this->createData($name, $tmpData);
-                    }else{
-                        continue ;
-                    }
-
-
-
                     if(in_array($name,$logArr)){
                         $allData[$name][] = $this->createData($name, $tmpData);
                     }
@@ -168,7 +158,7 @@ class SavesqlserController extends Controller
                 }
             }
             unset($allData);
-            sleep(1);
+            sleep(0.3);
 
         }
     }
