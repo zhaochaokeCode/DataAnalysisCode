@@ -135,6 +135,16 @@ class SavesqlserController extends Controller
 
                     $tmpData = $this->objeToArr($json);
                     $name = $tmpData['f_log_name'];//
+
+                    if($name =='log_stage'){
+//                        var_dump($tmpData) ;die;
+                        $allData[$name][] = $this->createData($name, $tmpData);
+                    }else{
+                        continue ;
+                    }
+
+
+
                     if(in_array($name,$logArr)){
                         $allData[$name][] = $this->createData($name, $tmpData);
                     }
@@ -368,7 +378,7 @@ class SavesqlserController extends Controller
                         $data['f_character_grade'],
                         $t.$data['f_character_ip'].$t,
                         $data['f_stage_id'],
-                        $data['f_stage_ns'],
+                        $tmp =$data['f_stage_ns']=='n'?1:2,
                         $data['f_code']
                     );
                 break ;
