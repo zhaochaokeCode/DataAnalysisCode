@@ -147,7 +147,7 @@ class SavesqlserController extends Controller
                 foreach ($v2 as $item) {
                     $tmpStr = implode(',', $item);
                     if ($valStr != null) {
-                        $valStr .= ",($tmpStr)";
+//                        $valStr .= ",($tmpStr)";
                     } else {
                         $valStr .= "($tmpStr)";
                     }
