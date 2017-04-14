@@ -62,7 +62,6 @@ class SavesqlserController extends Controller
                         $sql = "insert into log_onlineinfo ($str2) VALUES ($str)" ;
                         $this->mssdb->runSql($sql) ;
 
-                        sleep(0.1);
                     }
                 }
 
@@ -99,9 +98,7 @@ class SavesqlserController extends Controller
             if($type==2){
                 $logPath =  Yii::$app->params['path2'];
             }
-            if($type==3){
-                $logPath =  Yii::$app->params['path3'];
-            }
+          
 
         }
 
