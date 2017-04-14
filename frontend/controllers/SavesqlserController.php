@@ -108,7 +108,7 @@ class SavesqlserController extends Controller
 
         unset($cont);
         $nums = count($datas) ;
-        if($nums>20000){
+        if($nums>10000){
             $length = ceil($nums/10000);
             for($i=0;$i<$length;$i++){
                 for($k=0;$k<10000;$k++){
@@ -135,7 +135,8 @@ class SavesqlserController extends Controller
 
                     $tmpData = $this->objeToArr($json);
                     $name = $tmpData['f_log_name'];//
-                    if(in_array($name,$logArr)){
+//                    if(in_array($name,$logArr)){
+                    if($name=='log_jinbi'){
                         $allData[$name][] = $this->createData($name, $tmpData);
                     }
                 }
@@ -153,6 +154,7 @@ class SavesqlserController extends Controller
                 }
                 if ($valStr) {
                     $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
+                    echo $sql ;die;
                     $tabArr = $this->mssdb->runSql($sql);
                     sleep(0.02);
                 }
