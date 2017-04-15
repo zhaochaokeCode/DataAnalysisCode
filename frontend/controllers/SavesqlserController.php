@@ -68,7 +68,31 @@ class SavesqlserController extends Controller
         }
 
     }
+    public function actionDelesomeorder()
+    {
+        $sql = "select f_orderid,f_dept,f_sid from log_recharge group by f_orderid ,
+                f_dept,f_sid having count(1) >= 2" ;
+        $data = $this->mssdb->runSql($sql) ;
+        if($data){
+            foreach($data as $newVal){
 
+                $oderid = $newVal['f_orderid'] ;
+                $deptid = $newVal['f_dept'];
+                $snid   = $newVal['f_sid'];
+
+
+                $sql = "select max(id)a from log_recharge where
+                      f_orderid='$oderid' and f_dept=$deptid AND
+                      f_sid = $snid ";
+                $data2 = $this->mssdb->runSql($sql) ;
+                $id = $data2[0]['a'] ;
+
+                $sql = "DELETE from log_recharge  where    f_orderid='$oderid' and f_dept=$deptid AND
+                      f_sid = $snid  and id!=$id" ;
+                $data3 = $this->mssdb->runSql($sql) ;
+            }
+        }
+    }
 
     public function actionIndex(){
 

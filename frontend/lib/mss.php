@@ -140,8 +140,10 @@ class mss
 
     public function runSql($sql){
         $sql = iconv("utf-8", "gbk", $sql);
-        $result =  $this->db->query($sql) ;
-        return $result ;
+        foreach($this->db->query($sql) as $row){
+            $tmp[] = $row ;
+        }
+        return $tmp ;
 
     }
     public function getData($type){
