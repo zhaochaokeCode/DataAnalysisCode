@@ -168,12 +168,18 @@
                                                     <option value ="0">全平台</option>
                                                     <option value ="1">平台1</option>
                                                     <option value ="2">平台2</option>
+                                                    <option value ="3">平台3</option>
+                                                    <option value ="4">平台4</option>
+                                                    <option value ="5">平台5</option>
                                                 </select>
                                                 服务器:<select id="f_sid" style="width: 100px;align:center">
                                                     <option value ="0">全服务器</option>
                                                     <option value ="1">服务器1</option>
                                                     <option value ="2">服务器2</option>
                                                     <option value ="3">服务器3</option>
+                                                    <option value ="4">服务器4</option>
+                                                    <option value ="5">服务器5</option>
+                                                    <option value ="6">服务器6</option>
                                                 </select>
                                             </div>
                                             <div style="margin-right:100px;margin-top:10px;float:right;">
