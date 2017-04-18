@@ -124,10 +124,14 @@ class SavesqlserController extends Controller
 
         $tmpKey = array_keys($fileArr) ;
         $key    = $tmpKey[0] ;
+        $valArr = array_values($fileArr[$key]) ;
 
-        sort($tmpKey) ;
         var_dump($tmpKey) ;
-        var_dump(array_keys($fileArr)) ;
+        sort($valArr) ;
+        echo "<br>" ;
+        var_dump($valArr) ;
+
+
 
     }
 
