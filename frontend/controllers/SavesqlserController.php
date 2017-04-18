@@ -133,7 +133,7 @@ class SavesqlserController extends Controller
         sort($valArr) ;
 
         foreach($valArr as $val){
-            $str .= $val."\n" ;
+            $str .= $key.'-'.$val."\n" ;
         }
         file_put_contents('/data/file_name.txt',$str,FILE_APPEND) ;
     }
