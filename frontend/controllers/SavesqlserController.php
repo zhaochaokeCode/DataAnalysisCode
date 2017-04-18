@@ -135,7 +135,7 @@ class SavesqlserController extends Controller
         foreach($valArr as $val){
             $str .= $key.'-'.$val."\n" ;
         }
-        file_put_contents('/data/file_name.txt',$str,FILE_APPEND) ;
+        file_put_contents('/data/file_name_bei1.txt',$str,FILE_APPEND) ;
     }
 
     public function actionBudata(){
