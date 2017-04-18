@@ -146,6 +146,15 @@ class mss
         return $tmp ;
 
     }
+    public function runSqldata($sql)
+    {
+        $sql = iconv("utf-8", "gbk", $sql);
+        foreach($this->db->query($sql) as $row){
+            $tmp[] = $row ;
+        }
+        return $tmp ;
+    }
+
     public function getData($type){
 
 
