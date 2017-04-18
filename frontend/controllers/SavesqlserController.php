@@ -117,7 +117,6 @@ class SavesqlserController extends Controller
                         $fileArr[$key][] = $tmpFile[1] ;
                     }
                 }
-                closedir($dh);
             }
             var_dump(array_keys($fileArr)) ;
         }
