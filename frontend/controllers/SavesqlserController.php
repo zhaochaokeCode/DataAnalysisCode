@@ -106,8 +106,10 @@ class SavesqlserController extends Controller
     }
 
     public  function  actionCheckdata(){
+        $num =  $_GET['num'] ;
+        $path = $_GET['file'] ;
         ini_set('memory_limit', '1000M');
-        $dir = "/data/flume_logs/skill_tmp_log/" ;
+        $dir = "/data/flume_logs/$path/" ;
         $handle = opendir($dir);
         if ( $handle )
         {
@@ -117,7 +119,7 @@ class SavesqlserController extends Controller
                 {
                     $tmpFile = explode("-",$file) ;
                     $key = $tmpFile[0] ;
-                    if($tmpFile[1]>450)
+                    if($tmpFile[1]>$num)
                     $fileArr[$key][] = $tmpFile[1] ;
                 }
             }
@@ -128,81 +130,83 @@ class SavesqlserController extends Controller
         $key    = $tmpKey[0] ;
         $valArr = array_values($fileArr[$key]) ;
 
-        var_dump($tmpKey) ;
         sort($valArr) ;
-        echo "<br>" ;
-        var_dump($valArr) ;
 
-        foreach($valArr as $val) {
-
-            $fileName = $dir . $key . "-" . $val;
-            $cont = file_get_contents($fileName);
-            $datas = explode("\n", $cont);
-
-
-            echo $fileName ;
-            echo "<br>" ;
-
-            unset($cont);
-            $nums = count($datas);
-            $lenNum = 3000;
-
-            if ($nums > $lenNum) {
-                $length = ceil($nums / $lenNum);
-                for ($i = 0; $i < $length; $i++) {
-                    for ($k = 0; $k < $lenNum; $k++) {
-                        $start = $k + $i * $lenNum;
-                        $newArr[$i][] = $datas[$start];
-                    }
-                }
-            } else {
-                $newArr = array($datas);
-            }
-            unset($datas);
-
-            $logArr = array(
-                'log_account', 'log_character', 'log_login', 'log_logout', 'log_recharge',
-                'log_yuanbao', 'log_jinbi', 'log_item', 'log_uplevel', 'log_consumption',
-                'log_stage', 'log_card_gain', 'log_card_train', 'log_horse_tame', 'log_equip',
-                'log_skill_up', 'log_jingjie_up', 'log_killboss', 'log_dungeon', 'log_marry',
-            );
-
-            foreach ($newArr as $k => $v) {
-                $allData = array();
-                foreach ($v as $k1 => $v1) {
-                    if ($json = json_decode($v1)) {
-                        $tmpData = $this->objeToArr($json);
-                        $name = $tmpData['f_log_name'];//
-                        if (in_array($name, $logArr)) {
-                            if($tmpData['f_time']>=1492185600)
-                            $allData[$name][] = $this->createData($name, $tmpData);
-                        }
-                    }
-                }
-                foreach ($allData as $tabName => $v2) {
-                    $keyStr = $this->getCol($tabName);
-                    $valStr = '';
-                    foreach ($v2 as $item) {
-                        $tmpStr = implode(',', $item);
-                        if ($valStr != null) {
-                            $valStr .= ",($tmpStr)";
-                        } else {
-                            $valStr .= "($tmpStr)";
-                        }
-                    }
-                    if ($valStr) {
-                        $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-//                        echo $sql ;die;
-                        $tabArr = $this->mssdb->runSqldata($sql);
-
-                        sleep(0.002);
-                    }
-                }
-                unset($allData);
-            }
+        foreach($valArr as $val){
+            $str .= $val."\n" ;
         }
+        file_put_contents('/data/file_name.txt',$str,FILE_APPEND) ;
+    }
+
+    public function actionBudata(){
+
+
+        $path = $_GET['file'] ;
+        $dir = "/data/flume_logs/$path/" ;
+        ini_set('memory_limit', '1000M');
+
+         $cont = file_get_contents($dir.$_GET['name']);
+         $datas = explode("\n", $cont);
+
+         unset($cont);
+         $nums = count($datas);
+         $lenNum = 3000;
+
+         if ($nums > $lenNum) {
+             $length = ceil($nums / $lenNum);
+             for ($i = 0; $i < $length; $i++) {
+                 for ($k = 0; $k < $lenNum; $k++) {
+                     $start = $k + $i * $lenNum;
+                     $newArr[$i][] = $datas[$start];
+                 }
+             }
+         } else {
+             $newArr = array($datas);
+         }
+         unset($datas);
+
+         $logArr = array(
+             'log_account', 'log_character', 'log_login', 'log_logout', 'log_recharge',
+             'log_yuanbao', 'log_jinbi', 'log_item', 'log_uplevel', 'log_consumption',
+             'log_stage', 'log_card_gain', 'log_card_train', 'log_horse_tame', 'log_equip',
+             'log_skill_up', 'log_jingjie_up', 'log_killboss', 'log_dungeon', 'log_marry',
+         );
+         foreach ($newArr as $k => $v) {
+             $allData = array();
+             foreach ($v as $k1 => $v1) {
+                 if ($json = json_decode($v1)) {
+                     $tmpData = $this->objeToArr($json);
+                     $name = $tmpData['f_log_name'];//
+                     if (in_array($name, $logArr)) {
+                         if($tmpData['f_time']>=1492185600)
+                             $allData[$name][] = $this->createData($name, $tmpData);
+                     }
+                 }
+             }
+             foreach ($allData as $tabName => $v2) {
+                 $keyStr = $this->getCol($tabName);
+                 $valStr = '';
+                 foreach ($v2 as $item) {
+                     $tmpStr = implode(',', $item);
+                     if ($valStr != null) {
+                         $valStr .= ",($tmpStr)";
+                     } else {
+                         $valStr .= "($tmpStr)";
+                     }
+                 }
+                 if ($valStr) {
+                     $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
+                        echo $sql ;die;
+                     $tabArr = $this->mssdb->runSqldata($sql);
+
+                     sleep(0.0001);
+                 }
+             }
+             unset($allData);
+         }
 
     }
+
 
 
     public function actionGetcol(){
