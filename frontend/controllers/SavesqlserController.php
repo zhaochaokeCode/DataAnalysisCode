@@ -107,23 +107,27 @@ class SavesqlserController extends Controller
 
     public  function  actionCheckdata(){
         $dir = "/data/flume_logs/skill_tmp_log/" ;
-
-        if(is_dir($dir)) {
-            if ($dh = opendir($dir)) {
-                while (($file = readdir($dh)) !== false) {
-                    if($file!='.'&&$file!=".."){
-                        $tmpFile = explode("-",$file) ;
-                        $key = $tmpFile[0] ;
-                        $fileArr[$key][] = $tmpFile[1] ;
-                    }
+        $handle = opendir($dir);
+        if ( $handle )
+        {
+            while ( ( $file = readdir ( $handle ) ) !== false )
+            {
+                if ( $file != '.' && $file != '..')
+                {
+                    $tmpFile = explode("-",$file) ;
+                    $key = $tmpFile[0] ;
+                    $fileArr[$key][] = $tmpFile[1] ;
                 }
             }
-            var_dump(array_keys($fileArr)) ;
-            var_dump($fileArr) ;
+            closedir($handle);
         }
 
+        $tmpKey = array_keys($fileArr) ;
+        $key    = $tmpKey[0] ;
 
-
+        sort($tmpKey) ;
+        var_dump($tmpKey) ;
+        var_dump(array_keys($fileArr)) ;
 
     }
 
