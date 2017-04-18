@@ -140,6 +140,9 @@ class SavesqlserController extends Controller
             $datas = explode("\n", $cont);
 
 
+            echo $fileName ;
+            echo "<br>" ;
+
             unset($cont);
             $nums = count($datas);
             $lenNum = 3000;
@@ -226,6 +229,7 @@ class SavesqlserController extends Controller
         }
 
         $fileName = $logPath . $_GET['file'];
+
         $cont = file_get_contents($fileName);
         $datas = explode("\n", $cont);
 
