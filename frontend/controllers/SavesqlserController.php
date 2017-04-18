@@ -106,6 +106,7 @@ class SavesqlserController extends Controller
     }
 
     public  function  actionCheckdata(){
+        ini_set('memory_limit', '1000M');
         $dir = "/data/flume_logs/skill_tmp_log/" ;
         $handle = opendir($dir);
         if ( $handle )
@@ -135,7 +136,6 @@ class SavesqlserController extends Controller
         foreach($valArr as $val) {
 
             $fileName = $dir . $key . "-" . $val;
-
             $cont = file_get_contents($fileName);
             $datas = explode("\n", $cont);
 
@@ -168,10 +168,10 @@ class SavesqlserController extends Controller
                 $allData = array();
                 foreach ($v as $k1 => $v1) {
                     if ($json = json_decode($v1)) {
-
                         $tmpData = $this->objeToArr($json);
                         $name = $tmpData['f_log_name'];//
                         if (in_array($name, $logArr)) {
+                            if($tmpData['f_time']>=1492185600)
                             $allData[$name][] = $this->createData($name, $tmpData);
                         }
                     }
@@ -189,8 +189,8 @@ class SavesqlserController extends Controller
                     }
                     if ($valStr) {
                         $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
-//                        $tabArr = $this->mssdb->runSql($sql);
                         echo $sql ;die;
+//                        $tabArr = $this->mssdb->runSql($sql);
                         sleep(0.002);
                     }
                 }
