@@ -104,6 +104,30 @@ class SavesqlserController extends Controller
 //
 
     }
+
+    public  function  actionCheckdata(){
+        $dir = "/data/flume_logs/skill_tmp_log/" ;
+
+        if(is_dir($dir)) {
+            if ($dh = opendir($dir)) {
+                while (($file = readdir($dh)) !== false) {
+                    if($file!='.'&&$file!=".."){
+                        $tmpFile = explode("-",$file) ;
+                        $key = $tmpFile[0] ;
+                        $fileArr[$key][] = $tmpFile[1] ;
+                    }
+                }
+                closedir($dh);
+            }
+            var_dump(array_keys($fileArr)) ;
+        }
+
+
+
+
+    }
+
+
     public function actionGetcol(){
 
         $tabArr = $this->mssdb->getTabColumn($this->tabname) ;
