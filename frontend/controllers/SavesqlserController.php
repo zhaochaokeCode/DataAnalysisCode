@@ -116,6 +116,7 @@ class SavesqlserController extends Controller
                 {
                     $tmpFile = explode("-",$file) ;
                     $key = $tmpFile[0] ;
+                    if($tmpFile[1]>450)
                     $fileArr[$key][] = $tmpFile[1] ;
                 }
             }
@@ -131,7 +132,71 @@ class SavesqlserController extends Controller
         echo "<br>" ;
         var_dump($valArr) ;
 
+        foreach($valArr as $val) {
 
+            $fileName = $dir . $key . "-" . $val;
+
+            $cont = file_get_contents($fileName);
+            $datas = explode("\n", $cont);
+
+
+            unset($cont);
+            $nums = count($datas);
+            $lenNum = 3000;
+
+            if ($nums > $lenNum) {
+                $length = ceil($nums / $lenNum);
+                for ($i = 0; $i < $length; $i++) {
+                    for ($k = 0; $k < $lenNum; $k++) {
+                        $start = $k + $i * $lenNum;
+                        $newArr[$i][] = $datas[$start];
+                    }
+                }
+            } else {
+                $newArr = array($datas);
+            }
+            unset($datas);
+
+            $logArr = array(
+                'log_account', 'log_character', 'log_login', 'log_logout', 'log_recharge',
+                'log_yuanbao', 'log_jinbi', 'log_item', 'log_uplevel', 'log_consumption',
+                'log_stage', 'log_card_gain', 'log_card_train', 'log_horse_tame', 'log_equip',
+                'log_skill_up', 'log_jingjie_up', 'log_killboss', 'log_dungeon', 'log_marry',
+            );
+
+            foreach ($newArr as $k => $v) {
+                $allData = array();
+                foreach ($v as $k1 => $v1) {
+                    if ($json = json_decode($v1)) {
+
+                        $tmpData = $this->objeToArr($json);
+                        $name = $tmpData['f_log_name'];//
+                        if (in_array($name, $logArr)) {
+                            $allData[$name][] = $this->createData($name, $tmpData);
+                        }
+                    }
+                }
+                foreach ($allData as $tabName => $v2) {
+                    $keyStr = $this->getCol($tabName);
+                    $valStr = '';
+                    foreach ($v2 as $item) {
+                        $tmpStr = implode(',', $item);
+                        if ($valStr != null) {
+                            $valStr .= ",($tmpStr)";
+                        } else {
+                            $valStr .= "($tmpStr)";
+                        }
+                    }
+                    if ($valStr) {
+                        $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
+//                        $tabArr = $this->mssdb->runSql($sql);
+                        echo $sql ;die;
+                        sleep(0.002);
+                    }
+                }
+                unset($allData);
+            }
+        }
 
     }
 
