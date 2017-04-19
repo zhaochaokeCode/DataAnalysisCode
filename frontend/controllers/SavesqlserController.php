@@ -136,13 +136,15 @@ class SavesqlserController extends Controller
             $str .= $key.'-'.$val."\n" ;
         }
         if(isset($_GET['bu_fei1'])){
-            file_put_contents('/data/file_name_bei1.txt ',$str,FILE_APPEND) ;
+            file_put_contents('/data/file_name_bei1.txt',$str) ;
+            die;
         }
         if(isset($_GET['bu_fei2'])){
-            file_put_contents('/data/file_name_bei2.txt ',$str,FILE_APPEND) ;
+            file_put_contents('/data/file_name_bei2.txt',$str) ;
+            die;
         }
 
-        file_put_contents('/data/file_name.txt',$str,FILE_APPEND) ;
+        file_put_contents('/data/file_name.txt',$str) ;
     }
 
     public function actionBudata(){
