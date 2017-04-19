@@ -135,6 +135,13 @@ class SavesqlserController extends Controller
         foreach($valArr as $val){
             $str .= $key.'-'.$val."\n" ;
         }
+        if(isset($_GET['bu_fei1'])){
+            file_put_contents('/data/file_name_bei1.txt ',$str,FILE_APPEND) ;
+        }
+        if(isset($_GET['bu_fei2'])){
+            file_put_contents('/data/file_name_bei2.txt ',$str,FILE_APPEND) ;
+        }
+
         file_put_contents('/data/file_name.txt',$str,FILE_APPEND) ;
     }
 
