@@ -244,6 +244,7 @@ class SavesqlserController extends Controller
 
         $fileName = $logPath . $_GET['file'];
 
+        echo $fileName ;die;
         $cont = file_get_contents($fileName);
         $datas = explode("\n", $cont);
 
