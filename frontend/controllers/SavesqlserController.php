@@ -176,7 +176,7 @@ class SavesqlserController extends Controller
 
          $logArr = array(
              'log_account', 'log_character', 'log_login', 'log_logout', 'log_recharge',
-             'log_yuanbao', 'log_jinbi', 'log_item', 'log_uplevel', 'log_consumption',
+             'log_yuanbao', 'log_item', 'log_uplevel', 'log_consumption',
              'log_stage', 'log_card_gain', 'log_card_train', 'log_horse_tame', 'log_equip',
              'log_skill_up', 'log_jingjie_up', 'log_killboss', 'log_dungeon', 'log_marry',
          );
@@ -187,7 +187,7 @@ class SavesqlserController extends Controller
                      $tmpData = $this->objeToArr($json);
                      $name = $tmpData['f_log_name'];//
                      if (in_array($name, $logArr)) {
-                         if($tmpData['f_time']>=1492444800)
+                         if($tmpData['f_time']>=1492531200)
                              $allData[$name][] = $this->createData($name, $tmpData);
                      }
                  }
@@ -244,7 +244,6 @@ class SavesqlserController extends Controller
 
         $fileName = $logPath . $_GET['file'];
 
-        echo $fileName ;die;
         $cont = file_get_contents($fileName);
         $datas = explode("\n", $cont);
 
@@ -268,7 +267,7 @@ class SavesqlserController extends Controller
 
         $logArr = array(
             'log_account', 'log_character', 'log_login', 'log_logout', 'log_recharge',
-            'log_yuanbao',  'log_jinbi',    'log_item','log_uplevel','log_consumption',
+            'log_yuanbao',    'log_item','log_uplevel','log_consumption',
             'log_stage',    'log_card_gain','log_card_train','log_horse_tame','log_equip',
             'log_skill_up', 'log_jingjie_up','log_killboss', 'log_dungeon', 'log_marry',
         );
@@ -281,7 +280,6 @@ class SavesqlserController extends Controller
                     $tmpData = $this->objeToArr($json);
                     $name = $tmpData['f_log_name'];//
                     if(in_array($name,$logArr)){
-//                    if($name=='log_jinbi'){
                         $allData[$name][] = $this->createData($name, $tmpData);
                     }
                 }
