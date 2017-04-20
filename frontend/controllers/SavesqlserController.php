@@ -60,7 +60,7 @@ class SavesqlserController extends Controller
                         $str2 =  implode(',',array_keys($data)) ;
 
                         $sql = "insert into log_onlineinfo ($str2) VALUES ($str)" ;
-                        $this->mssdb->runSql($sql) ;
+                        $this->mssdb->runSqldata($sql) ;
 
                     }
                 }
@@ -89,7 +89,7 @@ class SavesqlserController extends Controller
 
                 $sql = "DELETE from log_recharge  where    f_orderid='$oderid' and f_dept=$deptid AND
                       f_sid = $snid  and id!=$id" ;
-                $data3 = $this->mssdb->runSql($sql) ;
+                $data3 = $this->mssdb->runSqldata($sql) ;
             }
         }
     }
@@ -298,7 +298,7 @@ class SavesqlserController extends Controller
                 if ($valStr) {
                     $sql = "INSERT INTO $tabName ($keyStr)  VALUES $valStr ";
 //                    echo $sql ;
-                    $tabArr = $this->mssdb->runSql($sql);
+                    $tabArr = $this->mssdb->runSqldata($sql);
                     sleep(0.002);
                 }
             }
