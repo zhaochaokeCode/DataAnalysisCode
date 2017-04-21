@@ -174,12 +174,12 @@
                                                 </select>
                                                 服务器:<select id="f_sid" style="width: 100px;align:center">
                                                     <option value ="0">全服务器</option>
-                                                    <option value ="1">服务器1</option>
-                                                    <option value ="2">服务器2</option>
-                                                    <option value ="3">服务器3</option>
-                                                    <option value ="4">服务器4</option>
-                                                    <option value ="5">服务器5</option>
-                                                    <option value ="6">服务器6</option>
+                                                    <?php
+
+                                                        for($i=0;$i<20;$i++){
+                                                            echo "<option value ='$i'>服务器$i</option>" ;
+                                                        }
+                                                    ?>
                                                 </select>
                                             </div>
                                             <div style="margin-right:100px;margin-top:10px;float:right;">
