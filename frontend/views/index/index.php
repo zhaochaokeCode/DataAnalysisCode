@@ -176,7 +176,7 @@
                                                     <option value ="0">全服务器</option>
                                                     <?php
 
-                                                        for($i=0;$i<20;$i++){
+                                                        for($i=0;$i<50;$i++){
                                                             echo "<option value ='$i'>服务器$i</option>" ;
                                                         }
                                                     ?>
