@@ -23,44 +23,63 @@ class CheckdataController extends Controller
             if($val) {
                 if ($tmp = json_decode($val)) {
                     $tmpData = $this->objeToArr($tmp);
+                    if($tmpData['f_time']<1492531200){
+                        echo 'time error' ;
+                        continue ;
+                    }
                     $newArr[] = $tmpData;
 
                     $logName = $tmpData['f_log_name'];
                     $time    = date("Y-m-d",$tmpData['f_time']) ;
-
-
                     $arrayNum[$logName][$time]++;
                 } else {
-                    echo $key;
-                    echo $val . "<br>";
-                    echo 'fail';
-                    sleep(10000);
-                    break;
+
                 }
             }
         }
+        $tabName='log_check' ;
 
         foreach($arrayNum as $key=> $value){
 
+            foreach($value as $date =>$num) {
 
-            $sql = 'select * from log_check where 1';
+                $sql = "select * from log_check where log_name ='$key' and time='$date'";
 
-            $command = Yii::$app->db5->createCommand($sql);
-            $datas2 =  $command->queryOne();
+                $command = Yii::$app->db5->createCommand($sql);
+                $datas2 = $command->queryOne();
+                if($datas2){
+                    $num = $datas2['log_num']+$num ;
+                    $data = array(
+                        'log_num'=>$num
+                    ) ;
+                    Yii::$app->db5->createCommand()->update($tabName, $data, array('id' => $datas2['id']))->execute();
+                }else{
+                    $array = array(
+                            "log_name"=>$key ,
+                            "log_num"=>$num ,
+                            "time"=>$date,
+                            ) ;
+                    $result= Yii::$app->db5->createCommand()->insert($tabName,$array)->execute() ;
+                    if(!$result){
+                        echo 'fail' ;
+                    }
 
-            var_dump($datas2) ;die;
+                }
+            }
 
 
-//            $result= Yii::$app->db3->createCommand()->insert($table,$data)->execute() ;
+
+
 
         }
-//        echo count($newArr)."<br>" ;
 //
-//        if(count($datas)>count($newArr)){
-//            echo 'error'."<br>" ;
-//            sleep(100);
-//        }
-//        var_dump($arrayNum) ;
+//
+        if(($tmp1 = count($datas)-count($newArr))>2){
+            $array = array(
+                "log_name"=>$_GET['file_name']  ,
+            ) ;
+            $result= Yii::$app->db5->createCommand()->insert($tabName,$array)->execute() ;
+        }
 
     }
 
