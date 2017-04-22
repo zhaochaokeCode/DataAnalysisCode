@@ -398,6 +398,7 @@ class SavesqlserController extends Controller
     public function createData($name,$data)
     {
         $t = "'" ;
+
 //        $log_account = array('f_uid', 'f_dept', 'f_server_address_id', 'f_game_id', 'f_time', 'f_sid', 'f_yunying_id', 'f_account_id', 'f_phone_id', 'f_insert_time');
         switch ($name) {
             case 'log_account'://新开账户
@@ -792,6 +793,12 @@ class SavesqlserController extends Controller
                 );
                 break ;
         }
+        foreach($data2 as $key=> $val){
+            if(!$val){
+                $data2[$key] ="''" ;
+            }
+        }
+
         return $data2 ;
     }
     public function actionCleardata(){
