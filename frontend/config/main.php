@@ -48,6 +48,13 @@ return [
             'charset' => 'utf8',
         ],
 
+        'db5' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=rm-bp10x743x352g459s.mysql.rds.aliyuncs.com;dbname=test',
+            'username' => 'cthy',
+            'password' => 'Cthy@301*&',
+            'charset' => 'utf8',
+        ],
         'request' => [
             'csrfParam' => '_csrf-frontend',
             "enableCsrfValidation"=>false,

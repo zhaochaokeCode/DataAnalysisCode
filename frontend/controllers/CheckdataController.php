@@ -11,109 +11,59 @@ class CheckdataController extends Controller
 {
     public function actionIndex()
     {
-        $dir = '/data/flume_logs/on_line_log';
-        $fp=opendir($dir);
-        while(false!=$file=readdir($fp)){
-            if($file!='.' &&$file!='..')
-            {
-                    $tmp = explode('-',$file) ;
+        $path = '/data/flume_logs/check/' ;
+        $file_name = $path.$_GET['file_name'] ;
+        $tmpFile = file_get_contents($file_name) ;
 
-                $res[$tmp[0]][] =$tmp[1] ;
+        $datas = explode("\n", $tmpFile);
 
-            }
-        }
-         rsort(array_keys($res)) ;
-        $tmp = array("f_time"=>0);
-        foreach($res as $k=>$v){
-            rsort($v) ;
-            if(!($data =file_get_contents($dir."/".$k."-".$v[0]))) {
-                $data =file_get_contents($dir."/".$k."-".$v[1]) ;
-            }
+        echo count($datas)."<br>" ;
 
-            $datas = explode("\n", $data);
-            unset($cont);
-            echo $str = "时间            人数   服务器"."<br>" ;
+        foreach($datas as $key=>$val){
+            if($val) {
+                if ($tmp = json_decode($val)) {
+                    $tmpData = $this->objeToArr($tmp);
+                    $newArr[] = $tmpData;
 
-            foreach ($datas as $k => $v) {
-                if ($json = json_decode($v)) {
-                    $tmpData = $this->objeToArr($json);
-                    if($tmpData['f_dept']==2){
-                         $newArr[] = $tmpData;
-//                            echo  $tmpData['f_server_address_id'];
-                    }
-                }
-            }
-
-            $tmpArr = array() ;
-            $a =count($newArr) ;
-            for($i=count($newArr)-1;$i>count($newArr)-4;$i--){
-                if($newArr){
-
-                    if(count($tmpArr)==0){
-                        $tmpArr[] =$newArr[$i] ;
-                    }else{
-                        if($tmpArr[0]['f_server_address_id']!=$newArr[$i]['f_server_address_id']){
-                            $tmpArr[] =$newArr[$i] ;
-                        }
-                        if($tmpArr[0]['f_server_address_id']!=$newArr[$i]['f_server_address_id']&&
-                            $tmpArr[1]['f_server_address_id']!=$newArr[$i]['f_server_address_id']){
-                            $tmpArr[] =$newArr[$i] ;
-                        }
-
-                    }
+                    $logName = $tmpData['f_log_name'];
+                    $time    = date("Y-m-d",$tmpData['f_time']) ;
 
 
-                }
-
-
-            }
-
-            foreach($tmpArr as $v){
-                echo date("Y-m-d H:i:s",$v['f_time'])."  ".$v['f_num']."   ".$v['f_server_address_id']."<br>" ;
-            }
-
-
-            die ;
-        }
-        die;
-
-
-
-
-        $array =array(
-            'buyer_id'=>1
-        ) ;
-        $time = time() ;
-        $sql = "select * from ali_repay_info" ;
-        $command = Yii::$app->db3->createCommand($sql);
-        $nsDatas = $command->queryAll();
-        echo time() -$time ;
-
-
-        die;
-
-
-
-        $data = '/data/flume_logs/skill_log/1486277205420-240' ;
-        $cont = file_get_contents($data) ;
-
-        $datas = explode("\n", $cont);
-        $tmp =array( );
-
-        foreach($datas as $v){
-            if ($json = json_decode($v)) {
-                $tmpData = $this->objeToArr($json);
-                if (!in_array($tmpData['f_log_name'],$tmp)){
-                    $tmp[] = $tmpData['f_log_name'];
-                    $add[$tmpData['f_log_name']] = 0 ;
-                    $res[] = $v ;
-                }else{
-                    $add[$tmpData['f_log_name']]++ ;
+                    $arrayNum[$logName][$time]++;
+                } else {
+                    echo $key;
+                    echo $val . "<br>";
+                    echo 'fail';
+                    sleep(10000);
+                    break;
                 }
             }
         }
-        var_dump($add) ;
+
+        foreach($arrayNum as $key=> $value){
+
+
+            $sql = 'select * from log_check where 1';
+
+            $command = Yii::$app->db5->createCommand($sql);
+            $datas2 =  $command->queryOne();
+
+            var_dump($datas2) ;die;
+
+
+//            $result= Yii::$app->db3->createCommand()->insert($table,$data)->execute() ;
+
+        }
+//        echo count($newArr)."<br>" ;
+//
+//        if(count($datas)>count($newArr)){
+//            echo 'error'."<br>" ;
+//            sleep(100);
+//        }
+//        var_dump($arrayNum) ;
+
     }
+
     public function objeToArr($object)
     {
         $array = array();
@@ -121,7 +71,10 @@ class CheckdataController extends Controller
             foreach ($object as $key => $value) {
                 if ($key == 'f_params') {
                     if ($value) {
-                        $array = $array + $this->objeToArr($value);
+                        foreach($value as $k1=>$v1){
+                            $tmpArr[$k1] =$v1 ;
+                        }
+                        $array = $array + $tmpArr;
                     }
                 } else {
                     $array[$key] = $value;
@@ -130,10 +83,7 @@ class CheckdataController extends Controller
         } else {
             $array = $object;
         }
-
         return $array;
     }
-
-
 
 }
