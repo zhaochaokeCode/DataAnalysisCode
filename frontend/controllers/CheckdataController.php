@@ -24,7 +24,6 @@ class CheckdataController extends Controller
                 if ($tmp = json_decode($val)) {
                     $tmpData = $this->objeToArr($tmp);
                     if($tmpData['f_time']<1492704000||$tmpData['f_time']>1492704000){
-                        echo 'time error' ;
                         continue ;
                     }
                     $newArr[] = $tmpData;
