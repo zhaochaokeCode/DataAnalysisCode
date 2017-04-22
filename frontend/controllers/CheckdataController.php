@@ -31,6 +31,10 @@ class CheckdataController extends Controller
                     $logName = $tmpData['f_log_name'];
                     $time    = date("Y-m-d",$tmpData['f_time']) ;
                     $arrayNum[$logName][$time]++;
+                    if($logName=='log_recharge'){
+                        $rechar[$logName][$time]['money'] = $tmpData['f_rechage_money'];
+
+                    }
                 } else {
 
                 }
@@ -51,6 +55,10 @@ class CheckdataController extends Controller
                     $data = array(
                         'log_num'=>$num
                     ) ;
+                    if($key=='log_recharge'){
+                        $newMoeny = $rechar[$key][$time]['money']  ;
+                        $data['log_money'] =$newMoeny + $datas2['log_money'] ;
+                    }
                     Yii::$app->db5->createCommand()->update($tabName, $data, array('id' => $datas2['id']))->execute();
                 }else{
                     $array = array(
@@ -58,6 +66,10 @@ class CheckdataController extends Controller
                             "log_num"=>$num ,
                             "time"=>$date,
                             ) ;
+                    if($key=='log_recharge'){
+                        $newMoeny = $rechar[$key][$time]['money']  ;
+                        $data['log_money'] =$newMoeny  ;
+                    }
                     $result= Yii::$app->db5->createCommand()->insert($tabName,$array)->execute() ;
                     if(!$result){
                         echo 'fail' ;
